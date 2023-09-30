@@ -32,12 +32,21 @@ class _MainLayoutState extends State<MainLayout> {
           currentIndex: currentPage,
           items: const <BottomNavigationBarItem>[
             BottomNavigationBarItem(
+              backgroundColor: Colors.lightBlueAccent,
+              icon: Icon(Icons.home),
+              label: 'Home',
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.message),
+              label: 'Message',
+            ),
+            BottomNavigationBarItem(
               icon: Icon(Icons.medication_sharp),
-              label: 'Chuyên mục',
+              label: 'Appointment',
             ),
             BottomNavigationBarItem(
               icon: Icon(Icons.settings),
-              label: 'Đặt bác sĩ',
+              label: 'Setting',
             ),
           ]),
     );

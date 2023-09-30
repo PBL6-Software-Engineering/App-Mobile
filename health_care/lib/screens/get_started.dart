@@ -5,6 +5,7 @@ import 'package:health_care/screens/home_page.dart';
 import 'package:health_care/screens/signup_page.dart';
 import 'package:health_care/utils/config.dart';
 import 'package:health_care/utils/text.dart';
+import 'package:health_care/main_layout.dart';
 
 class GetStarted extends StatelessWidget {
   const GetStarted({Key? key}) : super(key: key);
@@ -130,7 +131,7 @@ class GetStarted extends StatelessWidget {
                                   Navigator.push(
                                     context,
                                     MaterialPageRoute(
-                                      builder: (context) => const HomePage(),
+                                      builder: (context) => const MainLayout(),
                                     ),
                                   );
                                 },
