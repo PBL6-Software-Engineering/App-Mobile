@@ -250,32 +250,6 @@ class _HomePageState extends State<HomePage> {
           ],
         ),
       ),
-      // bottomNavigationBar: BottomNavigationBar(
-      //   //backgroundColor: Colors.lightBlue,
-      //   items: [
-      //     BottomNavigationBarItem(
-      //       backgroundColor: Colors.lightBlueAccent,
-      //       icon: Icon(Icons.home),
-      //       label: 'Home',
-      //     ),
-      //     BottomNavigationBarItem(
-      //       icon: Icon(Icons.message),
-      //       label: 'Message',
-      //     ),
-      //     // BottomNavigationBarItem(
-      //     //   icon: Icon(Icons.notifications),
-      //     //   label: 'Notifications',
-      //     // ),
-      //     BottomNavigationBarItem(
-      //       icon: Icon(Icons.calendar_month),
-      //       label: 'Calendar',
-      //     ),
-      //     BottomNavigationBarItem(
-      //       icon: Icon(Icons.person),
-      //       label: 'Profile',
-      //     ),
-      //   ],
-      // ),
     );
   }
 }
