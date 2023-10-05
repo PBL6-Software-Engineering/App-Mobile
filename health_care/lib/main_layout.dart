@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:health_care/screens/appointment_page.dart';
 import 'package:health_care/screens/home_page.dart';
+import 'package:health_care/screens/setting_page.dart';
 
 class MainLayout extends StatefulWidget {
   const MainLayout({super.key});
@@ -25,6 +26,8 @@ class _MainLayoutState extends State<MainLayout> {
             }),
         children: const <Widget>[
           HomePage(),
+          //MessageScreen(),
+          SettingPage(),
           AppointmentPage(),
         ],
       ),
