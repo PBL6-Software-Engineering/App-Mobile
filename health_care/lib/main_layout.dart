@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:health_care/screens/appointment_page.dart';
 import 'package:health_care/screens/home_page.dart';
+import 'package:health_care/utils/config.dart';
 
 class MainLayout extends StatefulWidget {
   const MainLayout({super.key});
@@ -15,6 +16,8 @@ class _MainLayoutState extends State<MainLayout> {
 
   @override
   Widget build(BuildContext context) {
+    Config().init(context);
+
     return Scaffold(
       body: PageView(
         controller: _page,
@@ -32,12 +35,21 @@ class _MainLayoutState extends State<MainLayout> {
           currentIndex: currentPage,
           items: const <BottomNavigationBarItem>[
             BottomNavigationBarItem(
+              backgroundColor: Colors.lightBlueAccent,
+              icon: Icon(Icons.home),
+              label: 'Trang chủ',
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.message),
+              label: 'Tin nhắn',
+            ),
+            BottomNavigationBarItem(
               icon: Icon(Icons.medication_sharp),
-              label: 'Chuyên mục',
+              label: 'Đặt lịch hẹn',
             ),
             BottomNavigationBarItem(
               icon: Icon(Icons.settings),
-              label: 'Đặt bác sĩ',
+              label: 'Cài đặt',
             ),
           ]),
     );

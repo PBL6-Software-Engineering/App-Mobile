@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:health_care/screens/login_page.dart';
-import 'package:health_care/screens/home_page.dart';
-import 'package:health_care/screens/signup_page.dart';
 import 'package:health_care/utils/config.dart';
 import 'package:health_care/utils/text.dart';
 
@@ -127,12 +125,9 @@ class GetStarted extends StatelessWidget {
                             Expanded(
                               child: ElevatedButton(
                                 onPressed: () {
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (context) => const HomePage(),
-                                    ),
-                                  );
+                                  {
+                                    Navigator.of(context).pushNamed('main');
+                                  }
                                 },
                                 child: Text(
                                   'Get Started',
