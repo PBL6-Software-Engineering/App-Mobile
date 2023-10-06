@@ -10,7 +10,8 @@ class SettingPage extends StatefulWidget {
 
 class _SettingPageState extends State<SettingPage> {
   User user = User(
-    image: '',
+    image:
+        'https://scontent.fdad1-3.fna.fbcdn.net/v/t39.30808-6/329955334_1312545392671404_3553447315934308919_n.jpg?_nc_cat=111&ccb=1-7&_nc_sid=a2f6c7&_nc_ohc=lAy4EDgnlYMAX_mJfWl&_nc_ht=scontent.fdad1-3.fna&oh=00_AfAfg4vsHSPWvHhXRCcyu6081Iwnr_2Li_RJQWoc91THxQ&oe=65242638',
     name: 'Quoc Tran',
     id: '123456',
     phone: '1234567890',
@@ -59,7 +60,7 @@ class _SettingPageState extends State<SettingPage> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 CircleAvatar(
-                  backgroundImage: AssetImage('assets\images\Ellipse-1.png'),
+                  backgroundImage: NetworkImage(user.image),
                   radius: 40.0,
                 ),
                 SizedBox(width: 16.0), // Khoảng cách giữa avatar và tên

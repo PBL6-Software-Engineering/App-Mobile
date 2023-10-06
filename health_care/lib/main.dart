@@ -6,6 +6,8 @@ import 'package:health_care/screens/signup_page.dart';
 import 'package:health_care/screens/splash.dart';
 import 'package:health_care/utils/config.dart';
 import 'package:health_care/screens/setting_page.dart';
+import 'package:health_care/screens/category_page.dart';
+import 'package:health_care/screens/article_page.dart';
 
 void main() {
   runApp(const MyApp());
@@ -54,7 +56,7 @@ class MyApp extends StatelessWidget {
       ),
       initialRoute: '/',
       routes: {
-        '/': (context) => const SettingPage(),
+        '/': (context) => const ArticlePage(),
         'main': (context) => const MainLayout(),
         'login': (context) => const LoginPage(),
         'signup': (context) => const SignUpPage(),
