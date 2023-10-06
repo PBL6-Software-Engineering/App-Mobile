@@ -54,3 +54,5 @@ class Config {
   static const lightBlueColor = Color(0xff59D4E9);
   static const blueColor = Color(0xFF11b3cf);
 }
+
+
