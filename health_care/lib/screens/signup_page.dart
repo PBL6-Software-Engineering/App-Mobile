@@ -1,6 +1,10 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:health_care/components/SignUp_form.dart';
+import 'package:health_care/components/message_dialog.dart';
 import 'package:health_care/components/social_button.dart';
+import 'package:health_care/providers/http_provider.dart';
 import 'package:health_care/screens/login_page.dart';
 import 'package:health_care/utils/config.dart';
 import 'package:health_care/utils/text.dart';
@@ -13,6 +17,30 @@ class SignUpPage extends StatefulWidget {
 }
 
 class _SignUpPageState extends State<SignUpPage> {
+  _signup(String email, String password, String passwordConfirm,
+      String fullName) async {
+    var data = {
+      'email': email,
+      'password': password,
+      'password_confirmation': passwordConfirm,
+      'name': fullName
+    };
+
+    try {
+      var res = await HttpProvider().postData(data, '/infor-user/register');
+      var body = json.decode(res.body);
+
+      if (res.statusCode == 200) {
+        MessageDialog.showSuccess(context, body['message']);
+        Navigator.of(context).pushNamed('login');
+      } else {
+        MessageDialog.showError(context, body['message']);
+      }
+    } catch (error) {
+      MessageDialog.showError(context, "Đã xảy ra lỗi khi đăng ký.");
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     Config().init(context);
@@ -22,7 +50,6 @@ class _SignUpPageState extends State<SignUpPage> {
         child: Container(
           color: Colors.white,
           width: Config.screenWidth,
-          height: Config.screenHeight,
           child: Padding(
             padding: const EdgeInsets.symmetric(
               horizontal: 15,
@@ -36,17 +63,17 @@ class _SignUpPageState extends State<SignUpPage> {
                     child: Image.asset(
                       'assets/images/signup1.jpg',
                       width: 250,
-                      height: 250,
+                      height: 200,
                       fit: BoxFit.contain,
                     ),
                   ),
                   const Text('Sign Up',
                       style: TextStyle(
-                        fontSize: 36,
+                        fontSize: 30,
                         fontWeight: FontWeight.bold,
                       )),
                   Config.spaceSmall,
-                  const SignUpForm(),
+                  SignUpForm(onPressed: _signup),
                   Config.spaceSmall,
                   GestureDetector(
                     onTap: () {
