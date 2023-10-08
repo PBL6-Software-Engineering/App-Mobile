@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:health_care/components/search_form.dart';
 import 'package:health_care/utils/config.dart';
+import 'package:health_care/utils/text.dart';
 import 'package:http/http.dart' as http;
 import "dart:convert";
 
@@ -11,6 +13,22 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  final _searchController = TextEditingController();
+
+  final List<String> catNames = [
+    "Đặt lịch hẹn",
+    "Kiểm tra sức khoẻ",
+    "Cửa hàng",
+    "Cộng đồng",
+  ];
+
+  final List<String> catImageUrls = [
+    'https://hhg-common.hellobacsi.com/common/nav-icons/shop.svg',
+    'https://hhg-common.hellobacsi.com/common/nav-icons/care.svg',
+    'https://hhg-common.hellobacsi.com/common/nav-icons/community.svg',
+    'https://hhg-common.hellobacsi.com/common/nav-icons/health-tools.svg',
+  ];
+
   List<Article> articles = [
     Article(
         image:
@@ -51,39 +69,26 @@ class _HomePageState extends State<HomePage> {
             Container(
               color: Colors.white,
               width: Config.screenWidth,
-              height: Config.screenHeight,
               child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 15),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 15, vertical: 30),
                 child: SafeArea(
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.start,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
-                      Config.spaceMedium,
-                      Center(
-                        child: Container(
-                          child: SvgPicture.asset(
-                            'assets/icons/logo.svg',
-                            width: 40,
-                            height: 40,
-                          ),
-                        ),
-                      ),
-                      Config.spaceMedium,
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: <Widget>[
-                          const Row(
-                            children: <Widget>[
-                              Icon(Icons.location_on_outlined),
-                              Text(
-                                'Da Nang',
-                                style: TextStyle(
-                                  color: Colors.black,
-                                  fontSize: 20.0,
-                                ),
-                              ),
-                            ],
+                          SvgPicture.asset(
+                            'assets/icons/menu-search.svg',
+                            width: 25,
+                            height: 25,
+                          ),
+                          SvgPicture.asset(
+                            'assets/icons/logo.svg',
+                            width: 40,
+                            height: 40,
                           ),
                           Container(
                             decoration: BoxDecoration(
@@ -104,148 +109,192 @@ class _HomePageState extends State<HomePage> {
                         ],
                       ),
                       Config.spaceSmall,
+                      const Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: <Widget>[
+                          Row(
+                            children: <Widget>[
+                              CircleAvatar(
+                                radius: 25,
+                                backgroundImage:
+                                    AssetImage("assets/images/Ellipse-1.png"),
+                              ),
+                              Config.gapSmall,
+                              Text(
+                                "Xin chào! \nProgram",
+                                style: TextStyle(
+                                  color: Colors.black,
+                                  fontSize: 14.0,
+                                ),
+                              ),
+                            ],
+                          ),
+                          Config.spaceSmall,
+                          Row(
+                            children: <Widget>[
+                              Icon(Icons.location_on_outlined),
+                              Text(
+                                'Da Nang',
+                                style: TextStyle(
+                                  color: Colors.black,
+                                  fontSize: 20.0,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                      Config.spaceSmall,
                       Container(
                         padding: const EdgeInsets.only(top: .5),
-                        child: Row(
+                        child: Column(
                           mainAxisAlignment: MainAxisAlignment.spaceAround,
                           children: [
                             Container(
-                              padding: const EdgeInsets.symmetric(
-                                horizontal: 5.0,
-                              ),
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 5.0),
                               width: Config.screenWidth! * 0.9,
                               decoration: BoxDecoration(
                                 color: Config.primaryColor.withOpacity(.1),
                                 borderRadius: BorderRadius.circular(20),
                               ),
-                              child: Row(
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Icon(
-                                    Icons.search,
-                                    color: Colors.black54.withOpacity(.6),
-                                  ),
-                                  const Expanded(
-                                    child: TextField(
-                                      showCursor: false,
-                                      decoration: InputDecoration(
-                                        hintText: ' Enter your keyword',
-                                        border: InputBorder.none,
-                                        focusedBorder: InputBorder.none,
-                                        enabledBorder: InputBorder.none,
-                                      ),
+                              child: SearchInput(
+                                hintText: AppText.enText['search_text']!,
+                                controller: _searchController,
+                              ),
+                            ),
+                            Padding(
+                              padding: EdgeInsets.only(top: 20),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment
+                                    .start, // Specify crossAxisAlignment
+                                children: <Widget>[
+                                  GridView.builder(
+                                    itemCount: catNames.length,
+                                    shrinkWrap: true,
+                                    physics:
+                                        const NeverScrollableScrollPhysics(),
+                                    gridDelegate:
+                                        const SliverGridDelegateWithFixedCrossAxisCount(
+                                      crossAxisCount: 2,
+                                      childAspectRatio: 2,
                                     ),
-                                  ),
-                                  Icon(
-                                    Icons.mic,
-                                    color: Colors.black54.withOpacity(.6),
-                                  ),
+                                    itemBuilder: (context, index) {
+                                      return Column(
+                                        children: [
+                                          Container(
+                                            height: 50,
+                                            width: 50,
+                                            decoration: BoxDecoration(
+                                              color:
+                                                  Colors.grey.withOpacity(0.5),
+                                              shape: BoxShape.circle,
+                                            ),
+                                            child: Center(
+                                              child: SvgPicture.network(
+                                                catImageUrls[index],
+                                                fit: BoxFit.contain,
+                                              ),
+                                            ),
+                                          ),
+                                          Text(
+                                            catNames[index],
+                                            style: const TextStyle(
+                                              color: Colors.black,
+                                            ),
+                                          ),
+                                        ],
+                                      );
+                                    },
+                                  )
                                 ],
+                              ),
+                            )
+                          ],
+                        ),
+                      ),
+                      Container(
+                        height: 300,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            const Text(
+                              "Category",
+                              style: TextStyle(
+                                fontSize: 15,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            Config.spaceSmall,
+                            Expanded(
+                              child: ListView.builder(
+                                scrollDirection: Axis.horizontal,
+                                itemCount: categories.length,
+                                itemBuilder: (BuildContext context, int index) {
+                                  return Container(
+                                    margin:
+                                        EdgeInsets.symmetric(horizontal: 8.0),
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(8.0),
+                                    ),
+                                    child: Column(
+                                      children: [
+                                        Image.network(
+                                          categories[index].image,
+                                        ),
+                                        Config.spaceSmall,
+                                        Text(categories[index].title),
+                                      ],
+                                    ),
+                                  );
+                                },
                               ),
                             ),
                           ],
                         ),
                       ),
-                      Config.spaceSmall,
-                      Center(
-                        child: Image.asset(
-                          'assets/images/eye.jpg',
-                          width: 350,
-                          height: 200,
-                          fit: BoxFit.contain,
-                        ),
-                      ),
                       Container(
-                        margin: const EdgeInsets.symmetric(vertical: 0.02),
-                        child: GridView.builder(
-                          gridDelegate:
-                              const SliverGridDelegateWithFixedCrossAxisCount(
-                            crossAxisCount: 3,
-                            childAspectRatio: 1.0,
-                          ),
-                          itemCount: 6,
-                          shrinkWrap: true,
-                          physics: NeverScrollableScrollPhysics(),
-                          itemBuilder: (BuildContext context, int index) {
-                            return GridItem(index: index);
-                          },
+                        height: 300,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            const Text(
+                              "Article",
+                              style: TextStyle(
+                                fontSize: 30,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            Config.spaceSmall,
+                            Expanded(
+                              child: ListView.builder(
+                                scrollDirection: Axis.horizontal,
+                                itemCount: articles.length,
+                                itemBuilder: (BuildContext context, int index) {
+                                  return Container(
+                                    margin:
+                                        EdgeInsets.symmetric(horizontal: 8.0),
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(8.0),
+                                    ),
+                                    child: Column(
+                                      children: [
+                                        Image.network(articles[index].image),
+                                        Config.spaceSmall,
+                                        Text(articles[index].title),
+                                      ],
+                                    ),
+                                  );
+                                },
+                              ),
+                            ),
+                          ],
                         ),
                       ),
                     ],
                   ),
                 ),
               ),
-            ),
-            Container(
-              height: 300,
-              child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      "Category",
-                      style: TextStyle(
-                        fontSize: 15,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    SizedBox(height: 8.0),
-                    Expanded(
-                        child: ListView.builder(
-                      scrollDirection: Axis.horizontal,
-                      itemCount: categories.length,
-                      itemBuilder: (BuildContext context, int index) {
-                        return Container(
-                          margin: EdgeInsets.symmetric(horizontal: 8.0),
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(8.0),
-                          ),
-                          child: Column(
-                            children: [
-                              Image.network(categories[index].image),
-                              SizedBox(height: 8.0),
-                              Text(categories[index].title),
-                            ],
-                          ),
-                        );
-                      },
-                    ))
-                  ]),
-            ),
-            Container(
-              height: 300,
-              child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      "Article",
-                      style: TextStyle(
-                        fontSize: 30,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    SizedBox(height: 8.0),
-                    Expanded(
-                        child: ListView.builder(
-                      scrollDirection: Axis.horizontal,
-                      itemCount: articles.length,
-                      itemBuilder: (BuildContext context, int index) {
-                        return Container(
-                          margin: EdgeInsets.symmetric(horizontal: 8.0),
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(8.0),
-                          ),
-                          child: Column(
-                            children: [
-                              Image.network(articles[index].image),
-                              SizedBox(height: 8.0),
-                              Text(articles[index].title),
-                            ],
-                          ),
-                        );
-                      },
-                    ))
-                  ]),
             ),
           ],
         ),
@@ -286,26 +335,4 @@ class Article {
   final String image;
   final String title;
   Article({required this.image, required this.title});
-}
-
-class GridItem extends StatelessWidget {
-  final int index;
-
-  GridItem({required this.index});
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      width: 25,
-      height: 25,
-      padding: EdgeInsets.all(.5),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: <Widget>[
-          Icon(Icons.star, size: 20),
-          Text('Item $index'),
-        ],
-      ),
-    );
-  }
 }

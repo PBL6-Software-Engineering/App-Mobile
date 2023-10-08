@@ -8,5 +8,7 @@ class AppText {
     'signUp_text': "Don't have an account? ",
     'forgot_password': 'Forgot Your Password? ',
     'social_text': 'Or continue with social account',
+    'search_text': 'Tìm kiếm theo từ khoá',
+    'search_menu_text': 'Tìm kiếm theo triệu chứng hoặc  theo bệnh',
   };
 }
