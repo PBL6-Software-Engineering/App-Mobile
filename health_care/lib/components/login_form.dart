@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:health_care/components/button.dart';
+import 'package:health_care/components/custom_text_field.dart';
 import 'package:health_care/utils/config.dart';
 
 class LoginForm extends StatefulWidget {
-  const LoginForm({Key? key}) : super(key: key);
+  const LoginForm({Key? key, required this.onPressed}) : super(key: key);
+  final Function(String email, String password) onPressed;
 
   @override
   _LoginFormState createState() => _LoginFormState();
@@ -14,6 +16,7 @@ class _LoginFormState extends State<LoginForm> {
   final _emailController = TextEditingController();
   final _passController = TextEditingController();
   bool obsecurePass = true;
+
   @override
   Widget build(BuildContext context) {
     return Form(
@@ -21,54 +24,30 @@ class _LoginFormState extends State<LoginForm> {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         children: <Widget>[
-          TextFormField(
-            controller: _emailController,
-            keyboardType: TextInputType.emailAddress,
-            cursorColor: Config.primaryColor,
-            decoration: const InputDecoration(
-              hintText: 'Enter Email',
+          CustomTextField(
+              controller: _emailController,
+              keyboardType: TextInputType.emailAddress,
+              hintText: 'Nhập email',
               labelText: 'Email',
-              alignLabelWithHint: true,
-              prefixIcon: Icon(Icons.email_outlined),
-              prefixIconColor: Config.primaryColor,
-            ),
-          ),
+              prefixIcon: Icons.email_outlined),
           Config.spaceSmall,
-          TextFormField(
+          CustomTextField(
             controller: _passController,
             keyboardType: TextInputType.visiblePassword,
-            cursorColor: Config.primaryColor,
-            obscureText: true,
-            decoration: InputDecoration(
-              hintText: 'Enter Password',
-              labelText: 'Password',
-              alignLabelWithHint: true,
-              prefixIcon: const Icon(Icons.lock_outlined),
-              prefixIconColor: Config.primaryColor,
-              suffixIcon: IconButton(
-                onPressed: () {
-                  setState(() {
-                    obsecurePass = !obsecurePass;
-                  });
-                },
-                icon: obsecurePass
-                    ? const Icon(
-                        Icons.visibility_off_outlined,
-                        color: Config.primaryColor,
-                      )
-                    : const Icon(
-                        Icons.visibility_outlined,
-                        color: Config.primaryColor,
-                      ),
-              ),
-            ),
+            labelText: 'Mật khẩu',
+            hintText: 'Nhập mật khẩu ',
+            prefixIcon: Icons.lock_outlined,
+            isPassword: true,
           ),
           Config.spaceSmall,
           Button(
+            height: 50,
             width: double.infinity,
             title: 'Sign In',
-            onPressed: () {
-              Navigator.of(context).pushNamed('main');
+            onPressed: () async {
+              if (_formKey.currentState!.validate()) {
+                widget.onPressed(_emailController.text, _passController.text);
+              }
             },
             disable: false,
           )

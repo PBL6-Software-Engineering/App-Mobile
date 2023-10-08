@@ -4,13 +4,19 @@ import 'package:health_care/utils/config.dart';
 class Button extends StatelessWidget {
   const Button(
       {Key? key,
+      this.height,
       required this.width,
       required this.title,
+      this.backgroundColor,
+      this.foregroundColor,
       required this.onPressed,
       required this.disable})
       : super(key: key);
 
+  final double? height;
   final double width;
+  final Color? backgroundColor;
+  final Color? foregroundColor;
   final String title;
   final bool disable;
   final Function() onPressed;
@@ -18,11 +24,12 @@ class Button extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
+      height: height,
       width: width,
       child: ElevatedButton(
         style: ElevatedButton.styleFrom(
-          backgroundColor: Config.primaryColor,
-          foregroundColor: Colors.white,
+          backgroundColor: backgroundColor ?? Config.primaryColor,
+          foregroundColor: foregroundColor ?? Colors.white,
         ),
         onPressed: disable ? null : onPressed,
         child: Text(

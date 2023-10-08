@@ -1,6 +1,10 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:health_care/components/login_form.dart';
+import 'package:health_care/components/message_dialog.dart';
 import 'package:health_care/components/social_button.dart';
+import 'package:health_care/providers/http_provider.dart';
 import 'package:health_care/screens/signup_page.dart';
 import 'package:health_care/utils/config.dart';
 import 'package:health_care/utils/text.dart';
@@ -13,6 +17,27 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
+  _login(String email, String password) async {
+    var data = {
+      'email': email,
+      'password': password,
+    };
+
+    try {
+      var res = await HttpProvider().postData(data, '/admin/login');
+      var body = json.decode(res.body);
+
+      if (res.statusCode == 200) {
+        MessageDialog.showSuccess(context, body['message']);
+        Navigator.of(context).pushNamed('main');
+      } else {
+        MessageDialog.showError(context, body['message']);
+      }
+    } catch (error) {
+      MessageDialog.showError(context, "Đã xảy ra lỗi khi đăng nhập.");
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     Config().init(context);
@@ -51,7 +76,7 @@ class _LoginPageState extends State<LoginPage> {
                         fontWeight: FontWeight.bold,
                       )),
                   Config.spaceSmall,
-                  const LoginForm(),
+                  LoginForm(onPressed: _login),
                   Config.spaceSmall,
                   GestureDetector(
                     onTap: () {
