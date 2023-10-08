@@ -36,13 +36,11 @@ class _CategoryPageState extends State<CategoryPage> {
                 // Xử lý sự kiện khi nhấn nút quay về
               },
             ),
-            title: Center(
-              child: SvgPicture.asset(
+            title: SvgPicture.asset(
                 './assets/icons/logo.svg',
-                width: 30.0,
-                height: 30.0,
-              ),
-            )),
+                width: 50.0,
+                height: 50.0,
+              ),),
         body: Column(children: [
           Align(
             alignment: Alignment.topLeft,

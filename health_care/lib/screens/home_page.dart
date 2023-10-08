@@ -185,7 +185,7 @@ class _HomePageState extends State<HomePage> {
                     Text(
                       "Category",
                       style: TextStyle(
-                        fontSize: 15,
+                        fontSize: 30,
                         fontWeight: FontWeight.bold,
                       ),
                     ),

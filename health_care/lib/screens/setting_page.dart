@@ -22,7 +22,7 @@ class _SettingPageState extends State<SettingPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('User Settings'),
+        title: Text('Thông tin người dùng'),
         centerTitle: true,
         leading: IconButton(
           icon: Icon(Icons.arrow_back),

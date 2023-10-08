@@ -25,13 +25,12 @@ class _ArticlePageState extends State<ArticlePage> {
               // Xử lý sự kiện khi nhấn nút quay về
             },
           ),
-          title: Center(
-            child: SvgPicture.asset(
-              './assets/icons/logo.svg',
-              width: 30.0,
-              height: 30.0,
-            ),
-          )),
+          title: SvgPicture.asset(
+                './assets/icons/logo.svg',
+                width: 50.0,
+                height: 50.0,
+              ),
+          ),
       body: Padding(
         padding: EdgeInsets.all(16.0),
         child: Column(
