@@ -1,7 +1,11 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:health_care/components/button.dart';
+import 'package:health_care/components/custom_text_field.dart';
+import 'package:health_care/components/message_dialog.dart';
+import 'package:health_care/providers/http_provider.dart';
 import 'package:health_care/utils/config.dart';
-import 'package:health_care/utils/text.dart';
 
 class ForgotPasswordPage extends StatefulWidget {
   const ForgotPasswordPage({super.key});
@@ -13,6 +17,26 @@ class ForgotPasswordPage extends StatefulWidget {
 class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
   final _emailController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
+
+  _forgotPassword(String email) async {
+    var data = {
+      'email': email,
+    };
+
+    try {
+      var res = await HttpProvider().postData(data, '/user/forgot-pw-sendcode');
+      var body = json.decode(res.body);
+
+      if (res.statusCode == 200) {
+        MessageDialog.showSuccess(context, body['message']);
+        Navigator.of(context).pushNamed('login');
+      } else {
+        MessageDialog.showError(context, body['message']);
+      }
+    } catch (error) {
+      MessageDialog.showError(context, "Đã xảy ra lỗi khi đặt lại mật khẩu.");
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -54,24 +78,22 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                       child: Column(
                           mainAxisAlignment: MainAxisAlignment.start,
                           children: <Widget>[
-                            TextFormField(
-                              controller: _emailController,
-                              keyboardType: TextInputType.emailAddress,
-                              cursorColor: Config.primaryColor,
-                              decoration: const InputDecoration(
-                                hintText: 'Enter Email',
+                            CustomTextField(
+                                controller: _emailController,
+                                keyboardType: TextInputType.emailAddress,
+                                hintText: 'Nhập email',
                                 labelText: 'Email',
-                                alignLabelWithHint: true,
-                                prefixIcon: Icon(Icons.email_outlined),
-                                prefixIconColor: Config.primaryColor,
-                              ),
-                            ),
+                                isEmail: true,
+                                prefixIcon: Icons.email_outlined),
                             Config.spaceSmall,
                             Button(
+                              height: 50,
                               width: double.infinity,
                               title: 'Reset Password',
                               onPressed: () {
-                                Navigator.of(context).pushNamed('login');
+                                if (_formKey.currentState!.validate()) {
+                                  _forgotPassword(_emailController.text);
+                                }
                               },
                               disable: false,
                             )
