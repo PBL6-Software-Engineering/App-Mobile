@@ -67,7 +67,7 @@ class _SignUpPageState extends State<SignUpPage> {
                       fit: BoxFit.contain,
                     ),
                   ),
-                  const Text('Sign Up',
+                  const Text('Đăng ký',
                       style: TextStyle(
                         fontSize: 30,
                         fontWeight: FontWeight.bold,
@@ -83,7 +83,7 @@ class _SignUpPageState extends State<SignUpPage> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: <Widget>[
                         Text(
-                          'Have an Account? ',
+                          'Bạn đã có tài khoản? ',
                           style: TextStyle(
                             fontSize: 16,
                             fontWeight: FontWeight.normal,
@@ -91,7 +91,7 @@ class _SignUpPageState extends State<SignUpPage> {
                           ),
                         ),
                         const Text(
-                          'Login',
+                          'Đăng nhập',
                           style: TextStyle(
                             fontSize: 16,
                             fontWeight: FontWeight.bold,

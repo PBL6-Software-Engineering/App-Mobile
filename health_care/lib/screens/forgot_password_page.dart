@@ -66,7 +66,7 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                     ),
                   ),
                   const Text(
-                    ('Forgot Password'),
+                    ('Quên mật khẩu'),
                     style: TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.bold,
@@ -89,7 +89,7 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                             Button(
                               height: 50,
                               width: double.infinity,
-                              title: 'Reset Password',
+                              title: 'Lấy lại mật khẩu',
                               onPressed: () {
                                 if (_formKey.currentState!.validate()) {
                                   _forgotPassword(_emailController.text);
