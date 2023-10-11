@@ -31,13 +31,19 @@ class GetStarted extends StatelessWidget {
                     ),
                   ),
                   Config.spaceMedium,
-                  const Text(
-                    'Book an appointment with ',
-                    style: TextStyle(fontSize: 20),
-                  ),
-                  const Text(
-                    'the right doctor.',
-                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                  const Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      Text(
+                        'Đặt lịch hẹn',
+                        style: TextStyle(fontSize: 20),
+                      ),
+                      Text(
+                        ' với bác sĩ.',
+                        style: TextStyle(
+                            fontSize: 20, fontWeight: FontWeight.bold),
+                      ),
+                    ],
                   ),
                   Config.spaceMedium,
                   Container(
@@ -92,10 +98,8 @@ class GetStarted extends StatelessWidget {
                                   boxShadow: [
                                     BoxShadow(
                                       color: Colors.grey.withOpacity(0.5),
-                                      offset: const Offset(
-                                          0, 3), // Changes position of shadow
-                                      blurRadius:
-                                          10, // Adjust the blur radius as needed
+                                      offset: const Offset(0, 3),
+                                      blurRadius: 10,
                                     ),
                                   ],
                                 ),
@@ -109,7 +113,7 @@ class GetStarted extends StatelessWidget {
                                     );
                                   },
                                   child: Text(
-                                    'Sign In',
+                                    'Đăng nhập',
                                     style: TextStyle(color: Config.blueColor),
                                   ),
                                   style: ElevatedButton.styleFrom(
@@ -130,7 +134,7 @@ class GetStarted extends StatelessWidget {
                                   }
                                 },
                                 child: Text(
-                                  'Get Started',
+                                  'Bắt đầu',
                                   style: TextStyle(color: Colors.white),
                                 ),
                                 style: ElevatedButton.styleFrom(
@@ -150,13 +154,13 @@ class GetStarted extends StatelessWidget {
                           child: const Center(
                             child: Text.rich(TextSpan(children: [
                               TextSpan(
-                                text: 'Create an Account? ',
+                                text: 'Bạn chưa có tài khoản? ',
                                 style: TextStyle(
                                   color: Colors.black,
                                 ),
                               ),
                               TextSpan(
-                                text: 'Sign up',
+                                text: 'Đăng ký ngay',
                                 style: TextStyle(
                                   color: Config.lightBlueColor,
                                 ),

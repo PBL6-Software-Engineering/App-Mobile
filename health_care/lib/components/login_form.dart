@@ -43,7 +43,7 @@ class _LoginFormState extends State<LoginForm> {
           Button(
             height: 50,
             width: double.infinity,
-            title: 'Sign In',
+            title: 'Đăng nhập',
             onPressed: () async {
               if (_formKey.currentState!.validate()) {
                 widget.onPressed(_emailController.text, _passController.text);

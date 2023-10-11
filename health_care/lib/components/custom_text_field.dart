@@ -66,7 +66,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
           );
 
           if (!emailRegExp.hasMatch(value)) {
-            return 'Invalid email format';
+            return 'Định dạng email không hợp lệ';
           }
         }
 

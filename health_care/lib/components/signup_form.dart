@@ -67,7 +67,7 @@ class _SignUpFormState extends State<SignUpForm> {
           Button(
             height: 50,
             width: double.infinity,
-            title: 'Sign Up',
+            title: 'Đăng ký',
             onPressed: () async {
               if (_formKey.currentState!.validate()) {
                 widget.onPressed(_emailController.text, _passController.text,

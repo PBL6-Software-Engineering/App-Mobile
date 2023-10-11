@@ -24,7 +24,7 @@ class _LoginPageState extends State<LoginPage> {
     };
 
     try {
-      var res = await HttpProvider().postData(data, '/admin/login');
+      var res = await HttpProvider().postData(data, '/user/login');
       var body = json.decode(res.body);
 
       if (res.statusCode == 200) {
@@ -79,13 +79,11 @@ class _LoginPageState extends State<LoginPage> {
                   LoginForm(onPressed: _login),
                   Config.spaceSmall,
                   GestureDetector(
-                    onTap: () {
-                      Navigator.of(context).pushNamed('forgotpassword');
-                    },
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: <Widget>[
-                        Text(
+                      onTap: () {
+                        Navigator.of(context).pushNamed('forgotpassword');
+                      },
+                      child: Center(
+                        child: Text(
                           AppText.enText['forgot_password']!,
                           style: TextStyle(
                             fontSize: 16,
@@ -93,17 +91,7 @@ class _LoginPageState extends State<LoginPage> {
                             color: Colors.grey.shade500,
                           ),
                         ),
-                        const Text(
-                          'Reset Here',
-                          style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold,
-                            color: Config.primaryColor,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
+                      )),
                   Config.spaceSmall,
                   Center(
                     child: Text(
@@ -140,7 +128,7 @@ class _LoginPageState extends State<LoginPage> {
                           ),
                         ),
                         const Text(
-                          'Sign Up',
+                          'Đăng ký ngay',
                           style: TextStyle(
                             fontSize: 16,
                             fontWeight: FontWeight.bold,

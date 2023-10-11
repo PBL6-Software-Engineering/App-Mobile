@@ -1,13 +1,12 @@
 class AppText {
   static final enText = {
-    'user_intro': '2000+ Users like our care systems',
-    'slogan_text':
-        'Aspiring to be the pioneer in cutting edge innovations across the medical ecosystem',
-    'welcome_text': 'Welcome',
-    'logIn_text': 'Sign in to your account',
-    'signUp_text': "Don't have an account? ",
-    'forgot_password': 'Forgot Your Password? ',
-    'social_text': 'Or continue with social account',
+    'user_intro': '2000+ Người dùng thích\nhệ thống chăm sóc của chúng tôi',
+    'slogan_text': 'Mong muốn trở thành người tiên phong trong những đổi mới tiên tiến trong hệ sinh thái y tế',
+    'welcome_text': 'Xin chào',
+    'logIn_text': 'Đăng nhập với tài khoản của bạn',
+    'signUp_text': "Bạn chưa có tài khoản? ",
+    'forgot_password': 'Quên mật khẩu? ',
+    'social_text': 'Hoặc tiếp tục với tài khoản ',
     'search_text': 'Tìm kiếm theo từ khoá',
     'search_menu_text': 'Tìm kiếm theo triệu chứng hoặc  theo bệnh',
   };

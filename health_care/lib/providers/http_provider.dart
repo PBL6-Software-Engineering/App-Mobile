@@ -3,7 +3,8 @@ import 'package:http/http.dart' as http;
 
 class HttpProvider {
   // Change localhost to match the IP address of your computer
-  final String _url = 'http://192.168.2.104:99/api';
+  // final String _url = 'http://192.168.2.104:99/api';
+  final String _url = 'http://192.168.0.165:99/api';
 
   postData(data, apiUrl) async {
     var fullUrl = _url + apiUrl;
