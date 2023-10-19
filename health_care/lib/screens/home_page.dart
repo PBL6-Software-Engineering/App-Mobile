@@ -1,10 +1,14 @@
+
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:health_care/components/search_form.dart';
 import 'package:health_care/utils/config.dart';
 import 'package:health_care/utils/text.dart';
 import 'package:http/http.dart' as http;
-import "dart:convert";
+import "dart:convert"; 
+import 'package:health_care/objects/categories.dart';
+import 'package:health_care/objects/articles.dart';
+import 'package:health_care/providers/http_provider.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -14,54 +18,66 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   final _searchController = TextEditingController();
-
+  final String _url = 'http://192.168.3.197:99/';
   final List<String> catNames = [
     "Đặt lịch hẹn",
     "Kiểm tra sức khoẻ",
     "Cửa hàng",
     "Cộng đồng",
   ];
-
   final List<String> catImageUrls = [
     'https://hhg-common.hellobacsi.com/common/nav-icons/shop.svg',
     'https://hhg-common.hellobacsi.com/common/nav-icons/care.svg',
     'https://hhg-common.hellobacsi.com/common/nav-icons/community.svg',
     'https://hhg-common.hellobacsi.com/common/nav-icons/health-tools.svg',
   ];
-
-  List<Article> articles = [
-    Article(
-        image:
-            'https://tse2.explicit.bing.net/th?id=OIP.edlZrGPHLygPXihyUuqq7AHaE7&pid=Api&P=0&h=180',
-        title: 'Bài báo 1'),
-    Article(
-        image:
-            'https://tse2.explicit.bing.net/th?id=OIP.edlZrGPHLygPXihyUuqq7AHaE7&pid=Api&P=0&h=180',
-        title: 'Bài báo 1'),
-    Article(
-        image:
-            'https://tse2.explicit.bing.net/th?id=OIP.edlZrGPHLygPXihyUuqq7AHaE7&pid=Api&P=0&h=180',
-        title: 'Bài báo 1'),
-  ];
-  List<Category> categories = [
-    Category(
-        image:
-            'https://tse2.explicit.bing.net/th?id=OIP.edlZrGPHLygPXihyUuqq7AHaE7&pid=Api&P=0&h=180',
-        title: 'Tim mach'),
-    Category(
-        image:
-            'https://tse4.mm.bing.net/th?id=OIP.xYpB4gI5Om_93NF7Ugfd3AHaFj&pid=Api&P=0&h=180',
-        title: 'Răng miệng'),
-    Category(
-        image:
-            'https://tse3.explicit.bing.net/th?id=OIP.RavAN79V5KK5qOAo9zWrhQHaFj&pid=Api&P=0&h=180',
-        title: 'Tâm lí'),
-  ];
+  CategoryService categoryService = CategoryService();
+  ArticleService articleService = ArticleService();
+  List<Category> categories=[];
+  List<Article> articles=[];
+  @override
+  void initState() {
+    fetchArticleList();
+    fetchCategoryList();
+    super.initState();
+  }
+  void fetchArticleList() async {
+    try {
+      articles = await articleService.fetchArticles();
+      setState(() {});
+      print(articles[0]);
+    } catch (e) {
+      print('Error: $e');
+    }
+  }
+  void fetchCategoryList() async {
+    try {
+      categories = await categoryService.fetchCategories();
+      setState(() {});
+      // Sử dụng danh sách category ở đây
+    } catch (e) {
+      print('Error: $e');
+    }
+  }
+  //fetchCategoryList();
+  // List<Article> articles = [
+  //   Article(
+  //       image:
+  //           'https://tse2.explicit.bing.net/th?id=OIP.edlZrGPHLygPXihyUuqq7AHaE7&pid=Api&P=0&h=180',
+  //       title: 'Bài báo 1'),
+  //   Article(
+  //       image:
+  //           'https://tse2.explicit.bing.net/th?id=OIP.edlZrGPHLygPXihyUuqq7AHaE7&pid=Api&P=0&h=180',
+  //       title: 'Bài báo 1'),
+  //   Article(
+  //       image:
+  //           'https://tse2.explicit.bing.net/th?id=OIP.edlZrGPHLygPXihyUuqq7AHaE7&pid=Api&P=0&h=180',
+  //       title: 'Bài báo 1'),
+  // ];
 
   @override
   Widget build(BuildContext context) {
     Config().init(context);
-
     return Scaffold(
       body: SingleChildScrollView(
         child: Column(
@@ -219,9 +235,9 @@ class _HomePageState extends State<HomePage> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             const Text(
-                              "Category",
+                              "Chủ đề",
                               style: TextStyle(
-                                fontSize: 15,
+                                fontSize: 30,
                                 fontWeight: FontWeight.bold,
                               ),
                             ),
@@ -232,6 +248,7 @@ class _HomePageState extends State<HomePage> {
                                 itemCount: categories.length,
                                 itemBuilder: (BuildContext context, int index) {
                                   return Container(
+                                    width: 155,
                                     margin:
                                         EdgeInsets.symmetric(horizontal: 8.0),
                                     decoration: BoxDecoration(
@@ -239,11 +256,22 @@ class _HomePageState extends State<HomePage> {
                                     ),
                                     child: Column(
                                       children: [
+                                        
                                         Image.network(
-                                          categories[index].image,
+                                          _url+categories[index].thumbnail,
+                                          width: 150, // Chiều rộng mong muốn
+                                          height: 150, // Chiều cao mong muốn
+                                          fit: BoxFit.contain,
                                         ),
                                         Config.spaceSmall,
-                                        Text(categories[index].title),
+                                        Text(
+                                          categories[index].name,
+                                          style: TextStyle(
+                                          fontSize: 15,
+                                          fontWeight: FontWeight.bold,
+                                          overflow: TextOverflow.ellipsis,
+                                          ),
+                                        )
                                       ],
                                     ),
                                   );
@@ -259,7 +287,7 @@ class _HomePageState extends State<HomePage> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             const Text(
-                              "Article",
+                              "Bài viết mới",
                               style: TextStyle(
                                 fontSize: 30,
                                 fontWeight: FontWeight.bold,
@@ -272,6 +300,7 @@ class _HomePageState extends State<HomePage> {
                                 itemCount: articles.length,
                                 itemBuilder: (BuildContext context, int index) {
                                   return Container(
+                                    width: 155,
                                     margin:
                                         EdgeInsets.symmetric(horizontal: 8.0),
                                     decoration: BoxDecoration(
@@ -279,9 +308,22 @@ class _HomePageState extends State<HomePage> {
                                     ),
                                     child: Column(
                                       children: [
-                                        Image.network(articles[index].image),
+                                        
+                                        Image.network(
+                                          _url+articles[index].thumbnail,
+                                          width: 150, // Chiều rộng mong muốn
+                                          height: 150, // Chiều cao mong muốn
+                                          fit: BoxFit.contain,
+                                        ),
                                         Config.spaceSmall,
-                                        Text(articles[index].title),
+                                        Text(
+                                          articles[index].title,
+                                          style: TextStyle(
+                                          fontSize: 15,
+                                          fontWeight: FontWeight.bold,
+                                          overflow: TextOverflow.ellipsis,
+                                          ),
+                                        )
                                       ],
                                     ),
                                   );
@@ -301,38 +343,4 @@ class _HomePageState extends State<HomePage> {
       ),
     );
   }
-}
-
-class Category {
-  final String image;
-  final String title;
-
-  const Category({required this.image, required this.title});
-
-  factory Category.fromJson(Map<String, dynamic> json) {
-    return Category(
-      image: json['image'],
-      title: json['title'],
-    );
-  }
-}
-
-Future<Category> fetchCategory() async {
-  final response = await http.get(Uri.parse(''));
-
-  if (response.statusCode == 200) {
-    // If the server did return a 200 OK response,
-    // then parse the JSON.
-    return Category.fromJson(jsonDecode(response.body));
-  } else {
-    // If the server did not return a 200 OK response,
-    // then throw an exception.
-    throw Exception('Failed to load Category');
-  }
-}
-
-class Article {
-  final String image;
-  final String title;
-  Article({required this.image, required this.title});
 }
