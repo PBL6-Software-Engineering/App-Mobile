@@ -27,7 +27,7 @@ class _SignUpPageState extends State<SignUpPage> {
     };
 
     try {
-      var res = await HttpProvider().postData(data, '/infor-user/register');
+      var res = await HttpProvider().postData(data, 'api/infor-user/register');
       var body = json.decode(res.body);
 
       if (res.statusCode == 200) {
