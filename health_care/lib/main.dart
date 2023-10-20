@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:health_care/main_layout.dart';
 import 'package:health_care/screens/forgot_password_page.dart';
 import 'package:health_care/screens/login_page.dart';
+import 'package:health_care/screens/search_page.dart';
 import 'package:health_care/screens/signup_page.dart';
 import 'package:health_care/screens/splash.dart';
 import 'package:health_care/utils/config.dart';
@@ -47,6 +48,16 @@ class MyApp extends StatelessWidget {
           floatingLabelStyle: TextStyle(color: Config.primaryColor),
           prefixIconColor: Colors.black,
         ),
+        scaffoldBackgroundColor: Colors.white,
+        bottomNavigationBarTheme: const BottomNavigationBarThemeData(
+          backgroundColor: Colors.lightBlueAccent,
+          selectedItemColor: Colors.white,
+          unselectedItemColor: Colors.black,
+          showSelectedLabels: true,
+          showUnselectedLabels: false,
+          elevation: 10,
+          type: BottomNavigationBarType.fixed,
+        ),
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
         textTheme: TextTheme(
@@ -56,13 +67,15 @@ class MyApp extends StatelessWidget {
       ),
       initialRoute: '/',
       routes: {
-        //'/': (context) => const CategoryPage(),
-        //'/': (context) => const Welcome(),
-        '/': (context) => const MainLayout(),
+        // '/': (context) => const ArticlePage(),
+        '/': (context) => const Welcome(),
+        // '/': (context) => const MainLayout(),
         'main': (context) => const MainLayout(),
         'login': (context) => const LoginPage(),
         'signup': (context) => const SignUpPage(),
         'forgotpassword': (context) => const ForgotPasswordPage(),
+        'setting': (context) => SettingPage(),
+        'search': (context) => SearchPage(),
       },
     );
   }
