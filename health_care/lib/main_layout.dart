@@ -22,39 +22,48 @@ class _MainLayoutState extends State<MainLayout> {
     return Scaffold(
       body: PageView(
         controller: _page,
-        onPageChanged: ((value) => {
-              setState(() {
-                currentPage = value;
-              })
-            }),
-        children: const <Widget>[
+        onPageChanged: (value) {
+          setState(() {
+            currentPage = value;
+          });
+        },
+        children: <Widget>[
           HomePage(),
-          //MessageScreen(),
-          SettingPage(),
+          // MessageScreen(),
           AppointmentPage(),
+          AppointmentPage(),
+          SettingPage(),
         ],
       ),
       bottomNavigationBar: BottomNavigationBar(
-          currentIndex: currentPage,
-          items: const <BottomNavigationBarItem>[
-            BottomNavigationBarItem(
-              backgroundColor: Colors.lightBlueAccent,
-              icon: Icon(Icons.home),
-              label: 'Trang chủ',
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.message),
-              label: 'Tin nhắn',
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.medication_sharp),
-              label: 'Đặt lịch hẹn',
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.settings),
-              label: 'Cài đặt',
-            ),
-          ]),
+        currentIndex: currentPage,
+        onTap: (page) {
+          setState(() {
+            currentPage = page;
+            _page.animateToPage(page,
+                duration: const Duration(milliseconds: 500),
+                curve: Curves.easeInOut);
+          });
+        },
+        items: const <BottomNavigationBarItem>[
+          BottomNavigationBarItem(
+            icon: Icon(Icons.home),
+            label: 'Trang chủ',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.message),
+            label: 'Tin nhắn',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.medication_sharp),
+            label: 'Đặt lịch hẹn',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.settings),
+            label: 'Cài đặt',
+          ),
+        ],
+      ),
     );
   }
 }
