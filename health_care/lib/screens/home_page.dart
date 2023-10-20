@@ -20,6 +20,8 @@ class _HomePageState extends State<HomePage> {
   ArticleService articleService = ArticleService();
   List<Category> categories = [];
   List<Article> articles = [];
+  Future<List<String>>? searchResults;
+  bool isSearching = false;
 
   final List<String> catNames = [
     "Đặt lịch hẹn",
@@ -82,10 +84,15 @@ class _HomePageState extends State<HomePage> {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: <Widget>[
-                          SvgPicture.asset(
-                            'assets/icons/menu-search.svg',
-                            width: 25,
-                            height: 25,
+                          GestureDetector(
+                            onTap: () {
+                              Navigator.of(context).pushNamed('search');
+                            },
+                            child: SvgPicture.asset(
+                              'assets/icons/menu-search.svg',
+                              width: 25,
+                              height: 25,
+                            ),
                           ),
                           SvgPicture.asset(
                             'assets/icons/logo.svg',
@@ -165,158 +172,208 @@ class _HomePageState extends State<HomePage> {
                                 controller: _searchController,
                               ),
                             ),
-                            Padding(
-                              padding: EdgeInsets.only(top: 20),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment
-                                    .start, // Specify crossAxisAlignment
-                                children: <Widget>[
-                                  GridView.builder(
-                                    itemCount: catNames.length,
-                                    shrinkWrap: true,
-                                    physics:
-                                        const NeverScrollableScrollPhysics(),
-                                    gridDelegate:
-                                        const SliverGridDelegateWithFixedCrossAxisCount(
-                                      crossAxisCount: 2,
-                                      childAspectRatio: 2,
-                                    ),
-                                    itemBuilder: (context, index) {
-                                      return Column(
-                                        children: [
-                                          Container(
-                                            height: 50,
-                                            width: 50,
-                                            decoration: BoxDecoration(
-                                              color:
-                                                  Colors.grey.withOpacity(0.5),
-                                              shape: BoxShape.circle,
-                                            ),
-                                            child: Center(
-                                              child: SvgPicture.network(
-                                                catImageUrls[index],
-                                                fit: BoxFit.contain,
+                            if (searchResults != null)
+                              FutureBuilder<List<String>>(
+                                future: searchResults,
+                                builder: (context, snapshot) {
+                                  if (snapshot.connectionState ==
+                                      ConnectionState.waiting) {
+                                    return Center(
+                                        child: CircularProgressIndicator());
+                                  } else if (snapshot.hasData) {
+                                    final results = snapshot.data!;
+                                    return ListView.builder(
+                                      itemCount: results.length,
+                                      itemBuilder: (context, index) {
+                                        return ListTile(
+                                          title: Text(results[index]),
+                                        );
+                                      },
+                                    );
+                                  } else if (snapshot.hasError) {
+                                    return Center(
+                                        child:
+                                            Text('Error: ${snapshot.error}'));
+                                  } else {
+                                    return Center(
+                                        child: Text('Không tìm thấy kết quả'));
+                                  }
+                                },
+                              ),
+                            Visibility(
+                                visible: _searchController.text.isEmpty,
+                                child: Padding(
+                                  padding: EdgeInsets.only(top: 20),
+                                  child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment
+                                        .start, // Specify crossAxisAlignment
+                                    children: <Widget>[
+                                      GridView.builder(
+                                        itemCount: catNames.length,
+                                        shrinkWrap: true,
+                                        physics:
+                                            const NeverScrollableScrollPhysics(),
+                                        gridDelegate:
+                                            const SliverGridDelegateWithFixedCrossAxisCount(
+                                          crossAxisCount: 2,
+                                          childAspectRatio: 2,
+                                        ),
+                                        itemBuilder: (context, index) {
+                                          return Column(
+                                            children: [
+                                              Container(
+                                                height: 50,
+                                                width: 50,
+                                                decoration: BoxDecoration(
+                                                  color: Colors.grey
+                                                      .withOpacity(0.5),
+                                                  shape: BoxShape.circle,
+                                                ),
+                                                child: Center(
+                                                  child: SvgPicture.network(
+                                                    catImageUrls[index],
+                                                    fit: BoxFit.contain,
+                                                  ),
+                                                ),
                                               ),
+                                              Text(
+                                                catNames[index],
+                                                style: const TextStyle(
+                                                  color: Colors.black,
+                                                ),
+                                              ),
+                                            ],
+                                          );
+                                        },
+                                      )
+                                    ],
+                                  ),
+                                )),
+                          ],
+                        ),
+                      ),
+                      Visibility(
+                          visible: _searchController.text.isEmpty,
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              Container(
+                                height: 300,
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    const Text(
+                                      "Chủ đề",
+                                      style: TextStyle(
+                                        fontSize: 25,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                    Config.spaceSmall,
+                                    Expanded(
+                                      child: ListView.builder(
+                                        scrollDirection: Axis.horizontal,
+                                        itemCount: categories.length,
+                                        itemBuilder:
+                                            (BuildContext context, int index) {
+                                          return Container(
+                                            width: 155,
+                                            margin: EdgeInsets.symmetric(
+                                                horizontal: 8.0),
+                                            decoration: BoxDecoration(
+                                              borderRadius:
+                                                  BorderRadius.circular(8.0),
                                             ),
-                                          ),
-                                          Text(
-                                            catNames[index],
-                                            style: const TextStyle(
-                                              color: Colors.black,
+                                            child: Column(
+                                              children: [
+                                                Image.network(
+                                                  _url +
+                                                      categories[index]
+                                                          .thumbnail,
+                                                  width:
+                                                      150, // Chiều rộng mong muốn
+                                                  height:
+                                                      150, // Chiều cao mong muốn
+                                                  fit: BoxFit.contain,
+                                                ),
+                                                Config.spaceSmall,
+                                                Text(
+                                                  categories[index].name,
+                                                  style: TextStyle(
+                                                    fontSize: 15,
+                                                    fontWeight: FontWeight.bold,
+                                                    overflow:
+                                                        TextOverflow.ellipsis,
+                                                  ),
+                                                )
+                                              ],
                                             ),
-                                          ),
-                                        ],
-                                      );
-                                    },
-                                  )
-                                ],
-                              ),
-                            )
-                          ],
-                        ),
-                      ),
-                      Container(
-                        height: 300,
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            const Text(
-                              "Chủ đề",
-                              style: TextStyle(
-                                fontSize: 25,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                            Config.spaceSmall,
-                            Expanded(
-                              child: ListView.builder(
-                                scrollDirection: Axis.horizontal,
-                                itemCount: categories.length,
-                                itemBuilder: (BuildContext context, int index) {
-                                  return Container(
-                                    width: 155,
-                                    margin:
-                                        EdgeInsets.symmetric(horizontal: 8.0),
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(8.0),
+                                          );
+                                        },
+                                      ),
                                     ),
-                                    child: Column(
-                                      children: [
-                                        Image.network(
-                                          _url + categories[index].thumbnail,
-                                          width: 150, // Chiều rộng mong muốn
-                                          height: 150, // Chiều cao mong muốn
-                                          fit: BoxFit.contain,
-                                        ),
-                                        Config.spaceSmall,
-                                        Text(
-                                          categories[index].name,
-                                          style: TextStyle(
-                                            fontSize: 15,
-                                            fontWeight: FontWeight.bold,
-                                            overflow: TextOverflow.ellipsis,
-                                          ),
-                                        )
-                                      ],
-                                    ),
-                                  );
-                                },
+                                  ],
+                                ),
                               ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      Container(
-                        height: 300,
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            const Text(
-                              "Bài viết mới",
-                              style: TextStyle(
-                                fontSize: 25,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                            Config.spaceSmall,
-                            Expanded(
-                              child: ListView.builder(
-                                scrollDirection: Axis.horizontal,
-                                itemCount: articles.length,
-                                itemBuilder: (BuildContext context, int index) {
-                                  return Container(
-                                    width: 155,
-                                    margin:
-                                        EdgeInsets.symmetric(horizontal: 8.0),
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(8.0),
+                              Container(
+                                height: 300,
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    const Text(
+                                      "Bài viết mới",
+                                      style: TextStyle(
+                                        fontSize: 25,
+                                        fontWeight: FontWeight.bold,
+                                      ),
                                     ),
-                                    child: Column(
-                                      children: [
-                                        Image.network(
-                                          _url + articles[index].thumbnail,
-                                          width: 150, // Chiều rộng mong muốn
-                                          height: 150, // Chiều cao mong muốn
-                                          fit: BoxFit.contain,
-                                        ),
-                                        Config.spaceSmall,
-                                        Text(
-                                          articles[index].title,
-                                          style: TextStyle(
-                                            fontSize: 15,
-                                            fontWeight: FontWeight.bold,
-                                            overflow: TextOverflow.ellipsis,
-                                          ),
-                                        )
-                                      ],
+                                    Config.spaceSmall,
+                                    Expanded(
+                                      child: ListView.builder(
+                                        scrollDirection: Axis.horizontal,
+                                        itemCount: articles.length,
+                                        itemBuilder:
+                                            (BuildContext context, int index) {
+                                          return Container(
+                                            width: 155,
+                                            margin: EdgeInsets.symmetric(
+                                                horizontal: 8.0),
+                                            decoration: BoxDecoration(
+                                              borderRadius:
+                                                  BorderRadius.circular(8.0),
+                                            ),
+                                            child: Column(
+                                              children: [
+                                                Image.network(
+                                                  _url +
+                                                      articles[index].thumbnail,
+                                                  width:
+                                                      150, // Chiều rộng mong muốn
+                                                  height:
+                                                      150, // Chiều cao mong muốn
+                                                  fit: BoxFit.contain,
+                                                ),
+                                                Config.spaceSmall,
+                                                Text(
+                                                  articles[index].title,
+                                                  style: TextStyle(
+                                                    fontSize: 15,
+                                                    fontWeight: FontWeight.bold,
+                                                    overflow:
+                                                        TextOverflow.ellipsis,
+                                                  ),
+                                                )
+                                              ],
+                                            ),
+                                          );
+                                        },
+                                      ),
                                     ),
-                                  );
-                                },
+                                  ],
+                                ),
                               ),
-                            ),
-                          ],
-                        ),
-                      ),
+                            ],
+                          )),
                     ],
                   ),
                 ),
