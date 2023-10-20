@@ -1,14 +1,11 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:health_care/components/search_form.dart';
+import 'package:health_care/objects/articles.dart';
+import 'package:health_care/objects/categories.dart';
+import 'package:health_care/providers/http_provider.dart';
 import 'package:health_care/utils/config.dart';
 import 'package:health_care/utils/text.dart';
-import 'package:http/http.dart' as http;
-import "dart:convert"; 
-import 'package:health_care/objects/categories.dart';
-import 'package:health_care/objects/articles.dart';
-import 'package:health_care/providers/http_provider.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -17,8 +14,13 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  final String _url = HttpProvider.url;
   final _searchController = TextEditingController();
-  final String _url = 'http://192.168.3.197:99/';
+  CategoryService categoryService = CategoryService();
+  ArticleService articleService = ArticleService();
+  List<Category> categories = [];
+  List<Article> articles = [];
+
   final List<String> catNames = [
     "Đặt lịch hẹn",
     "Kiểm tra sức khoẻ",
@@ -31,25 +33,24 @@ class _HomePageState extends State<HomePage> {
     'https://hhg-common.hellobacsi.com/common/nav-icons/community.svg',
     'https://hhg-common.hellobacsi.com/common/nav-icons/health-tools.svg',
   ];
-  CategoryService categoryService = CategoryService();
-  ArticleService articleService = ArticleService();
-  List<Category> categories=[];
-  List<Article> articles=[];
+
   @override
   void initState() {
     fetchArticleList();
     fetchCategoryList();
     super.initState();
   }
+
   void fetchArticleList() async {
     try {
       articles = await articleService.fetchArticles();
       setState(() {});
-      print(articles[0]);
+      print('The first article is: ${articles[0].thumbnail}');
     } catch (e) {
       print('Error: $e');
     }
   }
+
   void fetchCategoryList() async {
     try {
       categories = await categoryService.fetchCategories();
@@ -59,21 +60,6 @@ class _HomePageState extends State<HomePage> {
       print('Error: $e');
     }
   }
-  //fetchCategoryList();
-  // List<Article> articles = [
-  //   Article(
-  //       image:
-  //           'https://tse2.explicit.bing.net/th?id=OIP.edlZrGPHLygPXihyUuqq7AHaE7&pid=Api&P=0&h=180',
-  //       title: 'Bài báo 1'),
-  //   Article(
-  //       image:
-  //           'https://tse2.explicit.bing.net/th?id=OIP.edlZrGPHLygPXihyUuqq7AHaE7&pid=Api&P=0&h=180',
-  //       title: 'Bài báo 1'),
-  //   Article(
-  //       image:
-  //           'https://tse2.explicit.bing.net/th?id=OIP.edlZrGPHLygPXihyUuqq7AHaE7&pid=Api&P=0&h=180',
-  //       title: 'Bài báo 1'),
-  // ];
 
   @override
   Widget build(BuildContext context) {
@@ -237,7 +223,7 @@ class _HomePageState extends State<HomePage> {
                             const Text(
                               "Chủ đề",
                               style: TextStyle(
-                                fontSize: 30,
+                                fontSize: 25,
                                 fontWeight: FontWeight.bold,
                               ),
                             ),
@@ -256,9 +242,8 @@ class _HomePageState extends State<HomePage> {
                                     ),
                                     child: Column(
                                       children: [
-                                        
                                         Image.network(
-                                          _url+categories[index].thumbnail,
+                                          _url + categories[index].thumbnail,
                                           width: 150, // Chiều rộng mong muốn
                                           height: 150, // Chiều cao mong muốn
                                           fit: BoxFit.contain,
@@ -267,9 +252,9 @@ class _HomePageState extends State<HomePage> {
                                         Text(
                                           categories[index].name,
                                           style: TextStyle(
-                                          fontSize: 15,
-                                          fontWeight: FontWeight.bold,
-                                          overflow: TextOverflow.ellipsis,
+                                            fontSize: 15,
+                                            fontWeight: FontWeight.bold,
+                                            overflow: TextOverflow.ellipsis,
                                           ),
                                         )
                                       ],
@@ -289,7 +274,7 @@ class _HomePageState extends State<HomePage> {
                             const Text(
                               "Bài viết mới",
                               style: TextStyle(
-                                fontSize: 30,
+                                fontSize: 25,
                                 fontWeight: FontWeight.bold,
                               ),
                             ),
@@ -308,9 +293,8 @@ class _HomePageState extends State<HomePage> {
                                     ),
                                     child: Column(
                                       children: [
-                                        
                                         Image.network(
-                                          _url+articles[index].thumbnail,
+                                          _url + articles[index].thumbnail,
                                           width: 150, // Chiều rộng mong muốn
                                           height: 150, // Chiều cao mong muốn
                                           fit: BoxFit.contain,
@@ -319,9 +303,9 @@ class _HomePageState extends State<HomePage> {
                                         Text(
                                           articles[index].title,
                                           style: TextStyle(
-                                          fontSize: 15,
-                                          fontWeight: FontWeight.bold,
-                                          overflow: TextOverflow.ellipsis,
+                                            fontSize: 15,
+                                            fontWeight: FontWeight.bold,
+                                            overflow: TextOverflow.ellipsis,
                                           ),
                                         )
                                       ],

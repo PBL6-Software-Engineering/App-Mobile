@@ -24,7 +24,8 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
     };
 
     try {
-      var res = await HttpProvider().postData(data, '/user/forgot-pw-sendcode');
+      var res =
+          await HttpProvider().postData(data, 'api/user/forgot-pw-sendcode');
       var body = json.decode(res.body);
 
       if (res.statusCode == 200) {

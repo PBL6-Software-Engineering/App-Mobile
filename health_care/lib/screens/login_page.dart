@@ -24,7 +24,7 @@ class _LoginPageState extends State<LoginPage> {
     };
 
     try {
-      var res = await HttpProvider().postData(data, '/user/login');
+      var res = await HttpProvider().postData(data, 'api/user/login');
       var body = json.decode(res.body);
 
       if (res.statusCode == 200) {

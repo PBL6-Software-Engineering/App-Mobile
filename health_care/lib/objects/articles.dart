@@ -6,7 +6,7 @@ class ArticleService {
   final HttpProvider _httpProvider = HttpProvider();
 
   Future<List<Article>> fetchArticles() async {
-    final response = await _httpProvider.getData('/article');
+    final response = await _httpProvider.getData('api/article');
 
     if (response.statusCode == 200) {
       final responseData = json.decode(response.body);
@@ -21,13 +21,18 @@ class ArticleService {
     }
   }
 }
+
 class Article {
   final int id;
   final String title;
   final String content;
   final String thumbnail;
 
-  Article({required this.id, required this.title, required this.content, required this.thumbnail});
+  Article(
+      {required this.id,
+      required this.title,
+      required this.content,
+      required this.thumbnail});
 
   factory Article.fromJson(Map<String, dynamic> json) {
     return Article(

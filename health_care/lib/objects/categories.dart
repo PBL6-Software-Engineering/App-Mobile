@@ -6,7 +6,7 @@ class CategoryService {
   final HttpProvider _httpProvider = HttpProvider();
 
   Future<List<Category>> fetchCategories() async {
-    final response = await _httpProvider.getData('/category');
+    final response = await _httpProvider.getData('api/category');
 
     if (response.statusCode == 200) {
       final responseData = json.decode(response.body);
@@ -21,6 +21,7 @@ class CategoryService {
     }
   }
 }
+
 class Category {
   int id;
   String name;
