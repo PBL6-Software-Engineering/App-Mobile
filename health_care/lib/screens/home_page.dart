@@ -6,6 +6,9 @@ import 'package:health_care/objects/categories.dart';
 import 'package:health_care/providers/http_provider.dart';
 import 'package:health_care/utils/config.dart';
 import 'package:health_care/utils/text.dart';
+import 'package:health_care/components/article.dart';
+import 'package:health_care/screens/article_page.dart';
+import 'package:health_care/screens/category_page.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -47,7 +50,6 @@ class _HomePageState extends State<HomePage> {
     try {
       articles = await articleService.fetchArticles();
       setState(() {});
-      print('The first article is: ${articles[0].thumbnail}');
     } catch (e) {
       print('Error: $e');
     }
@@ -276,39 +278,49 @@ class _HomePageState extends State<HomePage> {
                                         itemCount: categories.length,
                                         itemBuilder:
                                             (BuildContext context, int index) {
-                                          return Container(
-                                            width: 155,
-                                            margin: EdgeInsets.symmetric(
-                                                horizontal: 8.0),
-                                            decoration: BoxDecoration(
-                                              borderRadius:
-                                                  BorderRadius.circular(8.0),
-                                            ),
-                                            child: Column(
-                                              children: [
-                                                Image.network(
-                                                  _url +
-                                                      categories[index]
-                                                          .thumbnail,
-                                                  width:
-                                                      150, // Chiều rộng mong muốn
-                                                  height:
-                                                      150, // Chiều cao mong muốn
-                                                  fit: BoxFit.contain,
+                                              return InkWell(
+                                              onTap: () {
+                                                // Xử lý sự kiện click tại đây
+                                                Navigator.push(
+                                                context,
+                                                MaterialPageRoute(
+                                                  builder: (context) => CategoryPage(categoryName: categories[index].name),
                                                 ),
-                                                Config.spaceSmall,
-                                                Text(
-                                                  categories[index].name,
-                                                  style: TextStyle(
-                                                    fontSize: 15,
-                                                    fontWeight: FontWeight.bold,
-                                                    overflow:
-                                                        TextOverflow.ellipsis,
-                                                  ),
-                                                )
-                                              ],
-                                            ),
-                                          );
+                                              );
+                                              },
+                                              child: Container(
+                                                width: 155,
+                                                margin: EdgeInsets.symmetric(
+                                                    horizontal: 8.0),
+                                                decoration: BoxDecoration(
+                                                  borderRadius:
+                                                      BorderRadius.circular(8.0),
+                                                ),
+                                                child: Column(
+                                                  children: [
+                                                    Image.network(
+                                                          categories[index]
+                                                              .thumbnail,
+                                                      width:
+                                                          150, // Chiều rộng mong muốn
+                                                      height:
+                                                          150, // Chiều cao mong muốn
+                                                      fit: BoxFit.contain,
+                                                    ),
+                                                    Config.spaceSmall,
+                                                    Text(
+                                                      categories[index].name,
+                                                      style: TextStyle(
+                                                        fontSize: 15,
+                                                        fontWeight: FontWeight.bold,
+                                                        overflow:
+                                                            TextOverflow.ellipsis,
+                                                      ),
+                                                    )
+                                                  ],
+                                                ),
+                                              )
+                                              );
                                         },
                                       ),
                                     ),
@@ -316,7 +328,7 @@ class _HomePageState extends State<HomePage> {
                                 ),
                               ),
                               Container(
-                                height: 300,
+                                height: 500,
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
@@ -330,45 +342,24 @@ class _HomePageState extends State<HomePage> {
                                     Config.spaceSmall,
                                     Expanded(
                                       child: ListView.builder(
-                                        scrollDirection: Axis.horizontal,
                                         itemCount: articles.length,
-                                        itemBuilder:
-                                            (BuildContext context, int index) {
-                                          return Container(
-                                            width: 155,
-                                            margin: EdgeInsets.symmetric(
-                                                horizontal: 8.0),
-                                            decoration: BoxDecoration(
-                                              borderRadius:
-                                                  BorderRadius.circular(8.0),
-                                            ),
-                                            child: Column(
-                                              children: [
-                                                Image.network(
-                                                  _url +
-                                                      articles[index].thumbnail,
-                                                  width:
-                                                      150, // Chiều rộng mong muốn
-                                                  height:
-                                                      150, // Chiều cao mong muốn
-                                                  fit: BoxFit.contain,
+                                        itemBuilder: (context, index) {
+                                          return InkWell(
+                                            onTap: () {
+                                              Navigator.push(
+                                                context,
+                                                MaterialPageRoute(
+                                                  builder: (context) => ArticlePage(article: articles[index]),
                                                 ),
-                                                Config.spaceSmall,
-                                                Text(
-                                                  articles[index].title,
-                                                  style: TextStyle(
-                                                    fontSize: 15,
-                                                    fontWeight: FontWeight.bold,
-                                                    overflow:
-                                                        TextOverflow.ellipsis,
-                                                  ),
-                                                )
-                                              ],
-                                            ),
+                                              );
+                                            },
+                                            splashColor: Colors.blue.withOpacity(0.5), // Màu sắc hiệu ứng lan tỏa
+                                            highlightColor: const Color.fromARGB(0, 226, 22, 22), // Màu sắc hiệu ứng khi đang click
+                                            child: ArticleContainer(article: articles[index]),
                                           );
                                         },
                                       ),
-                                    ),
+                                    )
                                   ],
                                 ),
                               ),

@@ -40,10 +40,12 @@ class Category {
   });
 
   factory Category.fromJson(Map<String, dynamic> json) {
+    final HttpProvider _httpProvider = HttpProvider();
+    final String _url = HttpProvider.url;
     return Category(
       id: json['id'],
       name: json['name'],
-      thumbnail: json['thumbnail'],
+      thumbnail: _url+json['thumbnail'],
       searchNumber: json['search_number'],
       createdAt: DateTime.parse(json['created_at']),
       updatedAt: DateTime.parse(json['updated_at']),
