@@ -345,16 +345,16 @@ class _HomePageState extends State<HomePage> {
                                         itemCount: articles.length,
                                         itemBuilder: (context, index) {
                                           return InkWell(
-                                            onTap: () {
-                                              Navigator.push(
-                                                context,
-                                                MaterialPageRoute(
-                                                  builder: (context) => ArticlePage(article: articles[index]),
-                                                ),
-                                              );
-                                            },
-                                            splashColor: Colors.blue.withOpacity(0.5), // Màu sắc hiệu ứng lan tỏa
-                                            highlightColor: const Color.fromARGB(0, 226, 22, 22), // Màu sắc hiệu ứng khi đang click
+                                            // onTap: () {
+                                            //   Navigator.push(
+                                            //     context,
+                                            //     MaterialPageRoute(
+                                            //       builder: (context) => ArticlePage(article: articles[index]),
+                                            //     ),
+                                            //   );
+                                            // },
+                                            // splashColor: Colors.blue.withOpacity(0.5), // Màu sắc hiệu ứng lan tỏa
+                                            // highlightColor: const Color.fromARGB(0, 226, 22, 22), // Màu sắc hiệu ứng khi đang click
                                             child: ArticleContainer(article: articles[index]),
                                           );
                                         },
