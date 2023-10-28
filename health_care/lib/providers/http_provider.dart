@@ -3,7 +3,7 @@ import 'package:http/http.dart' as http;
 
 class HttpProvider {
   // Change localhost to match the IP address of your computer
-  static String url = 'http://192.168.0.154:99/';
+  static String url = 'http://192.168.159.139:99/';
   // static String url = 'http://192.168.3.197:99/api';
 
   postData(data, apiUrl) async {

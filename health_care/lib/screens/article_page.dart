@@ -1,20 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:health_care/objects/articles.dart';
+import 'package:health_care/main_layout.dart';
 
-class ArticlePage extends StatefulWidget {
-  const ArticlePage({Key? key}) : super(key: key);
+class ArticlePage extends StatelessWidget {
+  final Article article;
 
-  @override
-  _ArticlePageState createState() => _ArticlePageState();
-}
-
-class _ArticlePageState extends State<ArticlePage> {
-  Article art = Article(
-      image: '',
-      title: 'Article 23123',
-      author: 'Quoc Tran',
-      publishDate: '23/12/2012',
-      content: 'hello');
+  ArticlePage({required this.article});
+  
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -22,7 +15,7 @@ class _ArticlePageState extends State<ArticlePage> {
           leading: IconButton(
             icon: Icon(Icons.arrow_back),
             onPressed: () {
-              // Xử lý sự kiện khi nhấn nút quay về
+              Navigator.pop(context);
             },
           ),
           title: Center(
@@ -38,7 +31,7 @@ class _ArticlePageState extends State<ArticlePage> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              art.title,
+              article.title,
               style: TextStyle(
                 fontSize: 24,
                 fontWeight: FontWeight.bold,
@@ -46,7 +39,7 @@ class _ArticlePageState extends State<ArticlePage> {
             ),
             SizedBox(height: 8),
             Text(
-              'By ' + art.author + '•' + art.publishDate,
+              'By ' + article.author + '•' + article.createdAt,
               style: TextStyle(
                 fontSize: 16,
                 color: Colors.grey,
@@ -56,7 +49,7 @@ class _ArticlePageState extends State<ArticlePage> {
             Expanded(
               child: SingleChildScrollView(
                 child: Text(
-                  art.content,
+                  article.content,
                   style: TextStyle(
                     fontSize: 18,
                   ),
@@ -65,21 +58,9 @@ class _ArticlePageState extends State<ArticlePage> {
             ),
           ],
         ),
+        
       ),
+      
     );
   }
-}
-
-class Article {
-  final String image;
-  final String title;
-  final String author;
-  final String publishDate;
-  final String content;
-  Article(
-      {required this.image,
-      required this.title,
-      required this.author,
-      required this.publishDate,
-      required this.content});
 }
