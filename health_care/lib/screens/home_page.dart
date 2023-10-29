@@ -289,37 +289,93 @@ class _HomePageState extends State<HomePage> {
                                               );
                                               },
                                               child: Container(
-                                                width: 155,
-                                                margin: EdgeInsets.symmetric(
-                                                    horizontal: 8.0),
-                                                decoration: BoxDecoration(
-                                                  borderRadius:
-                                                      BorderRadius.circular(8.0),
-                                                ),
+                                                width: 150,
+                                                height: 200,
                                                 child: Column(
+                                                  mainAxisAlignment: MainAxisAlignment.center,
+                                                  
                                                   children: [
-                                                    Image.network(
-                                                          categories[index]
-                                                              .thumbnail,
-                                                      width:
-                                                          150, // Chiều rộng mong muốn
-                                                      height:
-                                                          150, // Chiều cao mong muốn
-                                                      fit: BoxFit.contain,
+                                                    Container(
+                                                      width: 120,
+                                                      height: 120,
+                                                      decoration: BoxDecoration(
+                                                        borderRadius: BorderRadius.circular(40),
+                                                        image: DecorationImage(
+                                                          image: NetworkImage(categories[index].thumbnail),                                                                                                                      
+                                                              fit: BoxFit.cover,
+                                                            ),
+                                                      ),
                                                     ),
-                                                    Config.spaceSmall,
+                                                    SizedBox(height: 10),
                                                     Text(
                                                       categories[index].name,
                                                       style: TextStyle(
-                                                        fontSize: 15,
+                                                        fontSize: 16,
+                                                        color: Color.fromARGB(255, 43, 52, 179),
                                                         fontWeight: FontWeight.bold,
                                                         overflow:
-                                                            TextOverflow.ellipsis,
+                                                        TextOverflow.ellipsis,
                                                       ),
-                                                    )
+                                                    ),
+                                                    SizedBox(height: 10),
+                                                    ElevatedButton(
+                                                      onPressed: () {
+                                                        Navigator.push(
+                                                          context,
+                                                          MaterialPageRoute(
+                                                            builder: (context) => CategoryPage(categoryName: categories[index].name),
+                                                          ),
+                                                        );                                                        // TODO: Handle button press
+                                                      },
+                                                      child: Text('See Detail'),
+                                                    ),
                                                   ],
                                                 ),
                                               )
+                                              
+                                              // child: Container(
+                                              //   width: 155,
+                                              //   margin: EdgeInsets.symmetric(
+                                              //       horizontal: 8.0),
+                                              //   decoration: BoxDecoration(
+                                              //     borderRadius:
+                                              //         BorderRadius.circular(8.0),
+                                              //   ),
+                                              //   child: Column(
+                                              //     children: [
+                                              //       Container(
+                                              //         width: 120,
+                                              //         height: 120,
+                                              //         decoration: BoxDecoration(
+                                              //           shape: BoxShape.circle,
+                                              //           image: DecorationImage(
+                                              //             image: NetworkImage(categories[index].thumbnail),                                                                                                                      
+                                              //             fit: BoxFit.cover,
+                                              //           ),
+                                              //         ),
+                                              //       ),
+                                              //       // Image.network(
+                                              //       //       categories[index]
+                                              //       //           .thumbnail,
+                                              //       //   width:
+                                              //       //       150, // Chiều rộng mong muốn
+                                              //       //   height:
+                                              //       //       150, // Chiều cao mong muốn
+                                              //       //   fit: BoxFit.contain,
+                                              //       // ),
+                                              //       Config.spaceSmall,
+                                              //       Text(
+                                              //         categories[index].name,
+                                              //         style: TextStyle(
+                                              //           fontSize: 15,
+                                              //           fontWeight: FontWeight.bold,
+                                              //           overflow:
+                                              //               TextOverflow.ellipsis,
+                                              //         ),
+                                              //       )
+                                              //     ],
+                                              //   ),
+                                              // )
                                               );
                                         },
                                       ),

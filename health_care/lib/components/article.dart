@@ -21,55 +21,56 @@ class ArticleContainer extends StatelessWidget {
         );
       },
       child: Container(
-    padding: EdgeInsets.all(16),
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Container(
-                width: 80,
-                height: 80,
-                decoration: BoxDecoration(
-                  image: DecorationImage(
-                    image: NetworkImage(article.thumbnail),
-                    fit: BoxFit.cover,
+        padding: EdgeInsets.all(16),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Container(
+                    width: 80,
+                    height: 80,
+                    decoration: BoxDecoration(
+                      image: DecorationImage(
+                        image: NetworkImage(article.thumbnail),
+                        fit: BoxFit.cover,
+                      ),
+                      borderRadius: BorderRadius.circular(8),
+                    ),
                   ),
-                  borderRadius: BorderRadius.circular(8),
-                ),
+                  SizedBox(width: 16),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          article.title,
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            color: Color.fromARGB(255, 43, 52, 179),
+                            fontSize: 20,
+                          ),
+                        ),
+                        SizedBox(height: 8),
+                        Text(
+                          article.author,
+                          style: TextStyle(
+                            fontSize: 14,
+                            color: Color.fromARGB(255, 83, 61, 207),
+                          ),
+                        ),
+                        SizedBox(height: 4),
+                        Text(
+                          article.createdAt,
+                          style: TextStyle(
+                            fontSize: 14,
+                            color: Color.fromARGB(255, 98, 77, 214),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
               ),
-              SizedBox(width: 16),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      article.title,
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 16,
-                      ),
-                    ),
-                    SizedBox(height: 8),
-                    Text(
-                      article.author,
-                      style: TextStyle(
-                        fontSize: 14,
-                        color: Colors.grey,
-                      ),
-                    ),
-                    SizedBox(height: 4),
-                    Text(
-                      article.createdAt,
-                      style: TextStyle(
-                        fontSize: 14,
-                        color: Colors.grey,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ],
-          ),
-        )
+            )
     );
   }
 }

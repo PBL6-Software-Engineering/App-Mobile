@@ -61,14 +61,14 @@ class _CategoryPageState extends State<CategoryPage> {
         children: [
           Align(
             alignment: Alignment.topLeft,
-            child: Text(
-              widget.categoryName,
-              style: TextStyle(
-                fontWeight: FontWeight.bold,
-                fontSize: 24,
-              ),
+              child: Text(
+                widget.categoryName,
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 24,
+                ),
+              )
             ),
-          ),
           SizedBox(height: 16),
           Expanded(
             child: ListView.builder(
