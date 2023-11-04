@@ -1,32 +1,43 @@
 import 'dart:convert';
+import 'package:health_care/providers/auth_manager.dart';
 import 'package:http/http.dart' as http;
 
 class HttpProvider {
-  // Change localhost to match the IP address of your computer
   static String url = 'https://vanmanh.azurewebsites.net/';
   // static String url = 'http://192.168.3.197:99/api';
 
-  postData(data, apiUrl) async {
+  Future<http.Response> postData(data, apiUrl) async {
     var fullUrl = url + apiUrl;
+    Map<String, String> headers = _setHeaders();
+
     return await http.post(
       Uri.parse(fullUrl),
       body: jsonEncode(data),
-      headers: _setHeaders(),
+      headers: headers,
     );
   }
 
-  getData(apiUrl) async {
+  Future<http.Response> getData(apiUrl) async {
     var fullUrl = url + apiUrl;
+    Map<String, String> headers = _setHeaders();
+
     return await http.get(
       Uri.parse(fullUrl),
-      headers: _setHeaders(),
+      headers: headers,
     );
   }
 
   Map<String, String> _setHeaders() {
-    return {
+    Map<String, String> headers = {
       'Content-type': 'application/json',
       'Accept': 'application/json',
     };
+
+    final token = AuthManager.getToken();
+    if (token != null) {
+      headers['Authorization'] = 'Bearer $token';
+    }
+
+    return headers;
   }
 }

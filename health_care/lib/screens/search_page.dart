@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:health_care/components/article.dart';
+import 'package:health_care/objects/articles.dart';
 import 'package:http/http.dart' as http;
-import 'dart:convert';
 import 'package:health_care/components/search_form.dart';
 import 'package:health_care/utils/config.dart';
 import 'package:health_care/utils/text.dart';
@@ -12,19 +13,28 @@ class SearchPage extends StatefulWidget {
 
 class _SearchPageState extends State<SearchPage> {
   TextEditingController _searchController = TextEditingController();
-  Future<List<String>>? searchResults;
+  List<Article> articleResults = [];
+  bool isSearching = true;
 
-  // Future<List<String>> _search(String query) async {
-  //   final response =
-  //       await http.get(Uri.parse('https://api.example.com/search?q=$query'));
+  // Function to fetch search results
+  ArticleService articleService = ArticleService();
 
-  //   if (response.statusCode == 200) {
-  //     final data = json.decode(response.body);
-  //     return List<String>.from(data['results']);
-  //   } else {
-  //     throw Exception('Failed to load search results');
-  //   }
-  // }
+  void fetchSearchArticleList() async {
+    isSearching = true;
+
+    try {
+      List<Article> fetchedArticles = await articleService.fetchArticles(
+        'api/article?search=${_searchController.text}',
+      );
+      setState(() {
+        articleResults = fetchedArticles;
+        isSearching = false;
+      });
+      print(articleResults);
+    } catch (e) {
+      print('Error: $e');
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -35,41 +45,40 @@ class _SearchPageState extends State<SearchPage> {
         title: SearchInput(
           hintText: AppText.enText['search_text']!,
           controller: _searchController,
-          // onSubmitted: (query) {
-          //   setState(() {
-          //     searchResults = _search(query);
-          //   });
-          // },
+          onSearch: fetchSearchArticleList,
         ),
         backgroundColor: Config.blueColor,
       ),
-      body: searchResults != null
-          ? FutureBuilder<List<String>>(
-              future: searchResults,
-              builder: (context, snapshot) {
-                if (snapshot.hasData) {
-                  final results = snapshot.data!;
-                  return ListView.builder(
-                    itemCount: results.length,
-                    itemBuilder: (context, index) {
-                      return ListTile(
-                        title: Text(results[index]),
-                      );
-                    },
-                  );
-                } else if (snapshot.hasError) {
-                  return Center(child: Text('Error: ${snapshot.error}'));
-                }
-                return Center(child: CircularProgressIndicator());
-              },
+      body: isSearching || _searchController.text.isEmpty
+          ? Center(
+              child: CircularProgressIndicator(),
             )
-          : Center(child: Text('Không tìm thấy kết quả')),
+          : articleResults.isNotEmpty
+              ? Container(
+                  margin: EdgeInsets.only(top: 16.0),
+                  child: Column(
+                    children: [
+                      Text(
+                        '${articleResults.length} kết quả được tìm thấy',
+                        style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      Expanded(
+                        child: ListView.builder(
+                          itemCount: articleResults.length,
+                          itemBuilder: (context, index) {
+                            return ArticleContainer(
+                              article: articleResults[index],
+                            );
+                          },
+                        ),
+                      ),
+                    ],
+                  ),
+                )
+              : Center(child: Text('Không tìm thấy kết quả')),
     );
   }
-}
-
-void main() {
-  runApp(MaterialApp(
-    home: SearchPage(),
-  ));
 }

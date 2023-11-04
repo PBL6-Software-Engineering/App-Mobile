@@ -7,8 +7,9 @@ class ArticleService {
   final HttpProvider _httpProvider = HttpProvider();
   final String _url = HttpProvider.url;
 
-  Future<List<Article>> fetchArticles() async {
-    final response = await _httpProvider.getData('api/article');
+  Future<List<Article>> fetchArticles(String apiUrl) async {
+    // final response = await _httpProvider.getData('api/article');
+    final response = await _httpProvider.getData(apiUrl);
 
     if (response.statusCode == 200) {
       final responseData = json.decode(response.body);
@@ -22,21 +23,21 @@ class ArticleService {
       throw Exception('Failed to fetch articles');
     }
   }
-  Future<List<Article>> fetchArticlesByCategory(String name) async {
-    //print('api/article?name_category="${name}"');
-    final response = await _httpProvider.getData('api/article?name_category=${name}');
-    if (response.statusCode == 200) {
-      final responseData = json.decode(response.body);
-      final List<dynamic> jsonList = responseData['data'];
+  // Future<List<Article>> fetchArticlesByCategory(String name) async {
+  //   //print('api/article?name_category="${name}"');
+  //   final response = await _httpProvider.getData('api/article?name_category=${name}');
+  //   if (response.statusCode == 200) {
+  //     final responseData = json.decode(response.body);
+  //     final List<dynamic> jsonList = responseData['data'];
 
-      List<Article> articleList =
-          jsonList.map((json) => Article.fromJson(json)).toList();
+  //     List<Article> articleList =
+  //         jsonList.map((json) => Article.fromJson(json)).toList();
 
-      return articleList;
-    } else {
-      throw Exception('Failed to fetch articles');
-    }
-  }
+  //     return articleList;
+  //   } else {
+  //     throw Exception('Failed to fetch articles');
+  //   }
+  // }
 }
 
 class Article {
@@ -53,8 +54,7 @@ class Article {
       required this.content,
       required this.thumbnail,
       required this.author,
-      required this.createdAt}
-      );
+      required this.createdAt});
 
   factory Article.fromJson(Map<String, dynamic> json) {
     final HttpProvider _httpProvider = HttpProvider();
@@ -63,9 +63,11 @@ class Article {
       id: json['id'],
       title: json['title'],
       content: json['content'],
-      thumbnail: _url+json['thumbnail'],
-      author: json['name_user'],
-      createdAt: (DateFormat('yyyy-MM-dd').format(DateTime.parse(json['created_at']))).toString(),
+      thumbnail: _url + json['thumbnail'],
+      author: json['name_user'] ?? '',
+      createdAt:
+          (DateFormat('yyyy-MM-dd').format(DateTime.parse(json['created_at'])))
+              .toString(),
     );
   }
 }
