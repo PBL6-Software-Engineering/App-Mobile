@@ -1,6 +1,8 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:health_care/components/message_dialog.dart';
+import 'package:health_care/providers/auth_intercetor.dart';
+import 'package:health_care/providers/auth_manager.dart';
 import 'package:health_care/providers/http_provider.dart';
 import 'package:health_care/screens/user_info.dart';
 import 'package:health_care/utils/config.dart';
@@ -12,6 +14,7 @@ class SettingPage extends StatelessWidget {
       var body = json.decode(res.body);
 
       if (res.statusCode == 200) {
+        AuthManager.clearToken();
         MessageDialog.showSuccess(context, body['message']);
         Navigator.of(context).pushNamed('login');
       } else {

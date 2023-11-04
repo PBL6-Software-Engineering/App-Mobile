@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:health_care/screens/appointment_page.dart';
 import 'package:health_care/screens/home_page.dart';
+import 'package:health_care/screens/message_page.dart';
 import 'package:health_care/screens/setting_page.dart';
 import 'package:health_care/utils/config.dart';
 import 'package:health_care/screens/article_page.dart';
@@ -30,8 +31,7 @@ class _MainLayoutState extends State<MainLayout> {
         },
         children: <Widget>[
           HomePage(),
-          // MessageScreen(),
-          AppointmentPage(),
+          MessagePage(),
           AppointmentPage(),
           SettingPage(),
         ],
@@ -68,5 +68,3 @@ class _MainLayoutState extends State<MainLayout> {
     );
   }
 }
-
-

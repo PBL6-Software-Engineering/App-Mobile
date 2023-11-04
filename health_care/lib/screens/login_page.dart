@@ -1,16 +1,19 @@
 import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:health_care/components/login_form.dart';
 import 'package:health_care/components/message_dialog.dart';
 import 'package:health_care/components/social_button.dart';
+import 'package:health_care/providers/auth_manager.dart';
 import 'package:health_care/providers/http_provider.dart';
-import 'package:health_care/screens/signup_page.dart';
 import 'package:health_care/utils/config.dart';
 import 'package:health_care/utils/text.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+// import 'package:firebase_auth/firebase_auth.dart';
+// import 'package:google_sign_in/google_sign_in.dart';
+// import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 
 class LoginPage extends StatefulWidget {
-  const LoginPage({super.key});
+  const LoginPage({Key? key}) : super(key: key);
 
   @override
   State<LoginPage> createState() => _LoginPageState();
@@ -28,8 +31,28 @@ class _LoginPageState extends State<LoginPage> {
       var body = json.decode(res.body);
 
       if (res.statusCode == 200) {
+        // if (body.containsKey('data')) {
+        var responseData = body['data'];
+
+        // Access user properties like this
+        // var id = responseData['id'];
+        // var email = responseData['email'];
+        // var name = responseData['name'];
+        var token = responseData['access_token'];
+
+        // Use the user data as needed
+        // print('User ID: $id');
+        // print('Email: $email');
+        // print('Name: $name');
+        print('Token: $token');
+        AuthManager.setToken(token);
+
         MessageDialog.showSuccess(context, body['message']);
         Navigator.of(context).pushNamed('main');
+        // } else {
+        //   MessageDialog.showError(
+        //       context, 'Response data does not contain "data".');
+        // }
       } else {
         MessageDialog.showError(context, body['message']);
       }
@@ -37,6 +60,38 @@ class _LoginPageState extends State<LoginPage> {
       MessageDialog.showError(context, "Đã xảy ra lỗi khi đăng nhập.");
     }
   }
+
+  // Future<UserCredential?> signInWithGoogle() async {
+  //   try {
+  //     final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
+  //     final GoogleSignInAuthentication googleAuth =
+  //         await googleUser!.authentication;
+  //     final AuthCredential credential = GoogleAuthProvider.credential(
+  //       accessToken: googleAuth.accessToken,
+  //       idToken: googleAuth.idToken,
+  //     );
+  //     final UserCredential authResult =
+  //         await FirebaseAuth.instance.signInWithCredential(credential);
+  //     final User? user = authResult.user;
+  //     return user;
+  //   } catch (e) {
+  //     print("Error signing in with Google: $e");
+  //     return null;
+  //   }
+  // }
+
+  // Future<UserCredential?> signInWithFacebook() async {
+  //   final result = await FacebookAuth.instance.login();
+  //   if (result.status == LoginStatus.success) {
+  //     final AuthCredential credential =
+  //         FacebookAuthProvider.credential(result.accessToken!.token);
+  //     final UserCredential authResult =
+  //         await FirebaseAuth.instance.signInWithCredential(credential);
+  //     final User? user = authResult.user;
+  //     return user;
+  //   }
+  //   return null;
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -104,11 +159,31 @@ class _LoginPageState extends State<LoginPage> {
                     ),
                   ),
                   Config.spaceSmall,
-                  const Row(
+                  Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: <Widget>[
-                      SocialButton(social: 'google'),
-                      SocialButton(social: 'facebook'),
+                      // SocialButton(
+                      //   social: 'google',
+                      //   onPressed: () async {
+                      //     User? user = await signInWithGoogle();
+                      //     if (user != null) {
+                      //       // User is logged in with Google
+                      //     } else {
+                      //       // Handle login failure
+                      //     }
+                      //   },
+                      // ),
+                      // SocialButton(
+                      //   social: 'facebook',
+                      //   onPressed: () async {
+                      //     User? user = await signInWithFacebook();
+                      //     if (user != null) {
+                      //       // User is logged in with Facebook
+                      //     } else {
+                      //       // Handle login failure
+                      //     }
+                      //   },
+                      // ),
                     ],
                   ),
                   Config.spaceSmall,
@@ -127,7 +202,7 @@ class _LoginPageState extends State<LoginPage> {
                             color: Colors.grey.shade500,
                           ),
                         ),
-                        const Text(
+                        Text(
                           'Đăng ký ngay',
                           style: TextStyle(
                             fontSize: 16,
@@ -137,7 +212,7 @@ class _LoginPageState extends State<LoginPage> {
                         ),
                       ],
                     ),
-                  )
+                  ),
                 ],
               ),
             ),
