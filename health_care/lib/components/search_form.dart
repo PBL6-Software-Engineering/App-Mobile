@@ -4,8 +4,13 @@ import 'package:health_care/utils/config.dart';
 class SearchInput extends StatefulWidget {
   final String hintText;
   final TextEditingController controller;
+  final void Function() onSearch;
 
-  SearchInput({required this.hintText, required this.controller});
+  SearchInput({
+    required this.hintText,
+    required this.controller,
+    required this.onSearch,
+  });
 
   @override
   _SearchInputState createState() => _SearchInputState();
@@ -51,6 +56,11 @@ class _SearchInputState extends State<SearchInput> {
           Expanded(
             child: TextField(
               controller: widget.controller,
+              onSubmitted: (text) {
+                if (!isTextEmpty) {
+                  widget.onSearch();
+                }
+              },
               decoration: InputDecoration(
                 hintText: widget.hintText,
                 border: InputBorder.none,

@@ -17,10 +17,10 @@ class _CategoryPageState extends State<CategoryPage> {
   List<Article> articles = [];
   @override
   void dispose() {
-    // Xóa dữ liệu của trang tại đây
     articles = [];
     super.dispose();
   }
+
   @override
   void initState() {
     super.initState();
@@ -29,7 +29,8 @@ class _CategoryPageState extends State<CategoryPage> {
 
   void fetchArticleList() async {
     try {
-      List<Article> fetchedArticles = await articleService.fetchArticlesByCategory(widget.categoryName);
+      List<Article> fetchedArticles = await articleService
+          .fetchArticles('api/article?name_category=${widget.categoryName}');
       setState(() {
         articles = fetchedArticles;
       });
@@ -60,7 +61,7 @@ class _CategoryPageState extends State<CategoryPage> {
       body: Column(
         children: [
           Align(
-            alignment: Alignment.topLeft,
+              alignment: Alignment.topLeft,
               child: Text(
                 '  '+ widget.categoryName,
                 style: TextStyle(
@@ -68,8 +69,7 @@ class _CategoryPageState extends State<CategoryPage> {
                   fontSize: 24,
                   color: Color.fromARGB(255, 7, 8, 8),
                 ),
-              )
-            ),
+              )),
           SizedBox(height: 16),
           Expanded(
             child: ListView.builder(

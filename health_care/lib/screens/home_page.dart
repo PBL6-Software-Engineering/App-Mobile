@@ -1,14 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:health_care/components/article.dart';
 import 'package:health_care/components/search_form.dart';
+import 'package:health_care/components/search_results.dart';
 import 'package:health_care/objects/articles.dart';
 import 'package:health_care/objects/categories.dart';
 import 'package:health_care/providers/http_provider.dart';
-import 'package:health_care/utils/config.dart';
-import 'package:health_care/utils/text.dart';
-import 'package:health_care/components/article.dart';
-import 'package:health_care/screens/article_page.dart';
 import 'package:health_care/screens/category_page.dart';
+import 'package:health_care/utils/config.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -18,13 +17,13 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   final String _url = HttpProvider.url;
-  final _searchController = TextEditingController();
+  TextEditingController _searchController = TextEditingController();
   CategoryService categoryService = CategoryService();
   ArticleService articleService = ArticleService();
   List<Category> categories = [];
   List<Article> articles = [];
-  Future<List<String>>? searchResults;
-  bool isSearching = false;
+  List<Article> articleResults = [];
+  bool loading = true;
 
   final List<String> catNames = [
     "Đặt lịch hẹn",
@@ -48,7 +47,7 @@ class _HomePageState extends State<HomePage> {
 
   void fetchArticleList() async {
     try {
-      articles = await articleService.fetchArticles();
+      articles = await articleService.fetchArticles('api/article');
       setState(() {});
     } catch (e) {
       print('Errorrrr: $e');
@@ -60,6 +59,23 @@ class _HomePageState extends State<HomePage> {
       categories = await categoryService.fetchCategories();
       setState(() {});
       // Sử dụng danh sách category ở đây
+    } catch (e) {
+      print('Error: $e');
+    }
+  }
+
+  void fetchSearchArticleList() async {
+    loading = true;
+
+    try {
+      List<Article> fetchedArticles = await articleService.fetchArticles(
+        'api/article?search=${_searchController.text}',
+      );
+      setState(() {
+        articleResults = fetchedArticles;
+        loading = false;
+        print(articleResults);
+      });
     } catch (e) {
       print('Error: $e');
     }
@@ -170,45 +186,38 @@ class _HomePageState extends State<HomePage> {
                                 borderRadius: BorderRadius.circular(20),
                               ),
                               child: SearchInput(
-                                hintText: AppText.enText['search_text']!,
+                                hintText: 'Tìm kiếm bài viết',
                                 controller: _searchController,
+                                onSearch: fetchSearchArticleList,
+                                
                               ),
                             ),
-                            if (searchResults != null)
-                              FutureBuilder<List<String>>(
-                                future: searchResults,
-                                builder: (context, snapshot) {
-                                  if (snapshot.connectionState ==
-                                      ConnectionState.waiting) {
-                                    return Center(
-                                        child: CircularProgressIndicator());
-                                  } else if (snapshot.hasData) {
-                                    final results = snapshot.data!;
-                                    return ListView.builder(
-                                      itemCount: results.length,
-                                      itemBuilder: (context, index) {
-                                        return ListTile(
-                                          title: Text(results[index]),
-                                        );
-                                      },
-                                    );
-                                  } else if (snapshot.hasError) {
-                                    return Center(
-                                        child:
-                                            Text('Error: ${snapshot.error}'));
-                                  } else {
-                                    return Center(
-                                        child: Text('Không tìm thấy kết quả'));
-                                  }
-                                },
-                              ),
+                            Visibility(
+                              visible: _searchController.text.isNotEmpty,
+                              child: loading || _searchController.text.isEmpty
+                                  ? Center(
+                                      child: CircularProgressIndicator(),
+                                    )
+                                  : articleResults.isNotEmpty
+                                      ? ListView.builder(
+                                          itemCount: articleResults.length,
+                                          itemBuilder: (context, index) {
+                                            return ArticleContainer(
+                                              article: articleResults[index],
+                                            );
+                                          },
+                                        )
+                                      : Center(
+                                          child: Text('Không tìm thấy kết quả'),
+                                        ),
+                            ),
                             Visibility(
                                 visible: _searchController.text.isEmpty,
                                 child: Padding(
                                   padding: EdgeInsets.only(top: 20),
                                   child: Column(
                                     crossAxisAlignment: CrossAxisAlignment
-                                        .start, // Specify crossAxisAlignment
+                                        .start, 
                                     children: <Widget>[
                                       GridView.builder(
                                         itemCount: catNames.length,
@@ -279,32 +288,40 @@ class _HomePageState extends State<HomePage> {
                                         itemCount: categories.length,
                                         itemBuilder:
                                             (BuildContext context, int index) {
-                                              return InkWell(
+                                          return InkWell(
                                               onTap: () {
-                                                // Xử lý sự kiện click tại đây
                                                 Navigator.push(
-                                                context,
-                                                MaterialPageRoute(
-                                                  builder: (context) => CategoryPage(categoryName: categories[index].name),
-                                                ),
-                                              );
+                                                  context,
+                                                  MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        CategoryPage(
+                                                            categoryName:
+                                                                categories[
+                                                                        index]
+                                                                    .name),
+                                                  ),
+                                                );
                                               },
                                               child: Container(
                                                 width: 150,
                                                 height: 200,
                                                 child: Column(
-                                                  mainAxisAlignment: MainAxisAlignment.center,
-                                                  
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment.center,
                                                   children: [
                                                     Container(
                                                       width: 120,
                                                       height: 120,
                                                       decoration: BoxDecoration(
-                                                        borderRadius: BorderRadius.circular(40),
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(40),
                                                         image: DecorationImage(
-                                                          image: NetworkImage(categories[index].thumbnail),                                                                                                                      
-                                                              fit: BoxFit.cover,
-                                                            ),
+                                                          image: NetworkImage(
+                                                              categories[index]
+                                                                  .thumbnail),
+                                                          fit: BoxFit.cover,
+                                                        ),
                                                       ),
                                                     ),
                                                     SizedBox(height: 10),
@@ -312,10 +329,12 @@ class _HomePageState extends State<HomePage> {
                                                       categories[index].name,
                                                       style: TextStyle(
                                                         fontSize: 16,
-                                                        color: Color.fromARGB(255, 1, 1, 1),
-                                                        fontWeight: FontWeight.bold,
-                                                        overflow:
-                                                        TextOverflow.ellipsis,
+
+                                                        color: Color.fromARGB(255, 3, 3, 3),
+                                                        fontWeight:
+                                                            FontWeight.bold,
+                                                        overflow: TextOverflow
+                                                            .ellipsis,
                                                       ),
                                                     ),
                                                     SizedBox(height: 10),
@@ -324,60 +343,20 @@ class _HomePageState extends State<HomePage> {
                                                         Navigator.push(
                                                           context,
                                                           MaterialPageRoute(
-                                                            builder: (context) => CategoryPage(categoryName: categories[index].name),
+                                                            builder: (context) =>
+                                                                CategoryPage(
+                                                                    categoryName:
+                                                                        categories[index]
+                                                                            .name),
                                                           ),
-                                                        );                                                        // TODO: Handle button press
+                                                        );
                                                       },
-                                                      child: Text('Xem chi tiết'),
+                                                      child:
+                                                          Text('Xem chi tiết'),
                                                     ),
                                                   ],
                                                 ),
-                                              )
-                                              
-                                              // child: Container(
-                                              //   width: 155,
-                                              //   margin: EdgeInsets.symmetric(
-                                              //       horizontal: 8.0),
-                                              //   decoration: BoxDecoration(
-                                              //     borderRadius:
-                                              //         BorderRadius.circular(8.0),
-                                              //   ),
-                                              //   child: Column(
-                                              //     children: [
-                                              //       Container(
-                                              //         width: 120,
-                                              //         height: 120,
-                                              //         decoration: BoxDecoration(
-                                              //           shape: BoxShape.circle,
-                                              //           image: DecorationImage(
-                                              //             image: NetworkImage(categories[index].thumbnail),                                                                                                                      
-                                              //             fit: BoxFit.cover,
-                                              //           ),
-                                              //         ),
-                                              //       ),
-                                              //       // Image.network(
-                                              //       //       categories[index]
-                                              //       //           .thumbnail,
-                                              //       //   width:
-                                              //       //       150, // Chiều rộng mong muốn
-                                              //       //   height:
-                                              //       //       150, // Chiều cao mong muốn
-                                              //       //   fit: BoxFit.contain,
-                                              //       // ),
-                                              //       Config.spaceSmall,
-                                              //       Text(
-                                              //         categories[index].name,
-                                              //         style: TextStyle(
-                                              //           fontSize: 15,
-                                              //           fontWeight: FontWeight.bold,
-                                              //           overflow:
-                                              //               TextOverflow.ellipsis,
-                                              //         ),
-                                              //       )
-                                              //     ],
-                                              //   ),
-                                              // )
-                                              );
+                                              ));
                                         },
                                       ),
                                     ),
@@ -402,8 +381,9 @@ class _HomePageState extends State<HomePage> {
                                       child: ListView.builder(
                                         itemCount: articles.length,
                                         itemBuilder: (context, index) {
-                                          return InkWell(                                            
-                                            child: ArticleContainer(article: articles[index]),
+                                          return InkWell(
+                                            child: ArticleContainer(
+                                                article: articles[index]),
                                           );
                                         },
                                       ),

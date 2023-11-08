@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:health_care/main_layout.dart';
+import 'package:health_care/providers/auth_intercetor.dart';
+import 'package:health_care/providers/auth_manager.dart';
+import 'package:health_care/providers/http_provider.dart';
 import 'package:health_care/screens/forgot_password_page.dart';
 import 'package:health_care/screens/login_page.dart';
 import 'package:health_care/screens/search_page.dart';
@@ -11,12 +14,23 @@ import 'package:health_care/screens/category_page.dart';
 import 'package:health_care/screens/article_page.dart';
 import 'package:health_care/objects/articles.dart';
 import 'package:health_care/screens/appointment_page.dart';
+import 'package:http_interceptor/http_interceptor.dart';
+import 'package:http/http.dart' as http;
 
 void main() {
-  runApp(const MyApp());
+  final interceptors = <InterceptorContract>[];
+  interceptors.add(AuthInterceptor());
+
+  final client =
+      http.Client(); 
+
+  runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
+  // final http.Client client;
+
+  // MyApp(this.client);
   const MyApp({super.key});
   static final navigatorKey = GlobalKey<NavigatorState>();
   // This widget is the root of your application.
@@ -63,17 +77,12 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
         textTheme: TextTheme(
-          bodyText1:
-              TextStyle(fontSize: 13.0), // Set the default text font size to 13
+          bodyText1: TextStyle(fontSize: 13.0),
         ),
       ),
       initialRoute: '/',
       routes: {
-        // '/': (context) => const ArticlePage(),
-        //'/': (context) => const Welcome(),s
-        //'/': (context) => const AppointmentPage(),
-        '/': (context) => const MainLayout(),
-        'main': (context) => const MainLayout(),
+         '/': (context) => const MainLayout(),
         'login': (context) => const LoginPage(),
         'signup': (context) => const SignUpPage(),
         'forgotpassword': (context) => const ForgotPasswordPage(),
