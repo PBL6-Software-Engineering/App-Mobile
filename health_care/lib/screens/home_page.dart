@@ -51,7 +51,7 @@ class _HomePageState extends State<HomePage> {
       articles = await articleService.fetchArticles();
       setState(() {});
     } catch (e) {
-      print('Error: $e');
+      print('Errorrrr: $e');
     }
   }
 
@@ -269,6 +269,7 @@ class _HomePageState extends State<HomePage> {
                                       style: TextStyle(
                                         fontSize: 25,
                                         fontWeight: FontWeight.bold,
+                                        color: Color.fromARGB(255, 11, 11, 11),
                                       ),
                                     ),
                                     Config.spaceSmall,
@@ -311,7 +312,7 @@ class _HomePageState extends State<HomePage> {
                                                       categories[index].name,
                                                       style: TextStyle(
                                                         fontSize: 16,
-                                                        color: Color.fromARGB(255, 43, 52, 179),
+                                                        color: Color.fromARGB(255, 1, 1, 1),
                                                         fontWeight: FontWeight.bold,
                                                         overflow:
                                                         TextOverflow.ellipsis,
@@ -327,7 +328,7 @@ class _HomePageState extends State<HomePage> {
                                                           ),
                                                         );                                                        // TODO: Handle button press
                                                       },
-                                                      child: Text('See Detail'),
+                                                      child: Text('Xem chi tiết'),
                                                     ),
                                                   ],
                                                 ),
@@ -393,6 +394,7 @@ class _HomePageState extends State<HomePage> {
                                       style: TextStyle(
                                         fontSize: 25,
                                         fontWeight: FontWeight.bold,
+                                        color: Color.fromARGB(255, 4, 4, 4),
                                       ),
                                     ),
                                     Config.spaceSmall,
@@ -400,17 +402,7 @@ class _HomePageState extends State<HomePage> {
                                       child: ListView.builder(
                                         itemCount: articles.length,
                                         itemBuilder: (context, index) {
-                                          return InkWell(
-                                            // onTap: () {
-                                            //   Navigator.push(
-                                            //     context,
-                                            //     MaterialPageRoute(
-                                            //       builder: (context) => ArticlePage(article: articles[index]),
-                                            //     ),
-                                            //   );
-                                            // },
-                                            // splashColor: Colors.blue.withOpacity(0.5), // Màu sắc hiệu ứng lan tỏa
-                                            // highlightColor: const Color.fromARGB(0, 226, 22, 22), // Màu sắc hiệu ứng khi đang click
+                                          return InkWell(                                            
                                             child: ArticleContainer(article: articles[index]),
                                           );
                                         },

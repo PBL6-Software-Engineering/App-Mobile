@@ -62,10 +62,11 @@ class _CategoryPageState extends State<CategoryPage> {
           Align(
             alignment: Alignment.topLeft,
               child: Text(
-                widget.categoryName,
+                '  '+ widget.categoryName,
                 style: TextStyle(
                   fontWeight: FontWeight.bold,
                   fontSize: 24,
+                  color: Color.fromARGB(255, 7, 8, 8),
                 ),
               )
             ),

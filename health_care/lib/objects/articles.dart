@@ -40,13 +40,13 @@ class ArticleService {
 }
 
 class Article {
-  final String _url = HttpProvider.url;
-  final int id;
-  final String title;
-  final String content;
-  final String thumbnail;
-  final String author;
-  final String createdAt;
+   String _url = HttpProvider.url;
+   int id;
+   String title;
+   String content;
+   String thumbnail;
+   String author;
+   String createdAt;
   Article(
       {required this.id,
       required this.title,
@@ -63,8 +63,8 @@ class Article {
       id: json['id'],
       title: json['title'],
       content: json['content'],
-      thumbnail: _url+json['thumbnail'],
-      author: json['name_user'],
+      thumbnail: _url+json['thumbnail_article'],
+      author: json['name_user'] ?? '',
       createdAt: (DateFormat('yyyy-MM-dd').format(DateTime.parse(json['created_at']))).toString(),
     );
   }

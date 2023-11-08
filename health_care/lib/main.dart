@@ -10,7 +10,7 @@ import 'package:health_care/screens/setting_page.dart';
 import 'package:health_care/screens/category_page.dart';
 import 'package:health_care/screens/article_page.dart';
 import 'package:health_care/objects/articles.dart';
-
+import 'package:health_care/screens/appointment_page.dart';
 
 void main() {
   runApp(const MyApp());
@@ -70,8 +70,9 @@ class MyApp extends StatelessWidget {
       initialRoute: '/',
       routes: {
         // '/': (context) => const ArticlePage(),
-        //'/': (context) => const Welcome(),
-         '/': (context) => const MainLayout(),
+        //'/': (context) => const Welcome(),s
+        //'/': (context) => const AppointmentPage(),
+        '/': (context) => const MainLayout(),
         'main': (context) => const MainLayout(),
         'login': (context) => const LoginPage(),
         'signup': (context) => const SignUpPage(),

@@ -1,14 +1,54 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:health_care/objects/hospitals.dart';
 
 class HospitalPage extends StatefulWidget {
-  const HospitalPage({Key? key}) : super(key: key);
+  final int id;
+  const HospitalPage({required this.id});
 
   @override
   _HospitalPageState createState() => _HospitalPageState();
 }
 
 class _HospitalPageState extends State<HospitalPage> with SingleTickerProviderStateMixin{
+  HospitalService hospitalService = HospitalService(); 
+  HospitalDetail hospital = HospitalDetail(
+    id: 1,
+    email: "",
+    name: "",
+    phone: "",
+    address: "",
+    avatar: "",
+    provinceCode: 42,
+    infrastructure: [],
+    description: "",
+    location: [],
+    searchNumber: 0,
+    timeWork: TimeWork(
+      id: 1,
+      idHospital: 1,
+      times: {      
+      },
+      enable: 1,
+      note: "",
+    ),
+    departments: [],
+  );
+
+  void initState(){
+    fetchHospital();
+    super.initState();
+  }
+  void fetchHospital () async {
+    try {
+      hospital = await hospitalService.fetchHospitalDetail(widget.id);
+      print(hospital);
+      setState(() {
+      });
+    } catch (e) {
+      print('Error fetch Hospital at page: $e');
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -37,7 +77,8 @@ class _HospitalPageState extends State<HospitalPage> with SingleTickerProviderSt
                   CircleAvatar(
                     radius: 60,
                     backgroundImage: NetworkImage(
-                        'https://muanhanhhon.com/wp-content/uploads/2019/09/benh-vien.jpg'),
+                      hospital.avatar,
+                    )
                   ),
                   SizedBox(width: 16.0),
                   Container(
@@ -45,7 +86,7 @@ class _HospitalPageState extends State<HospitalPage> with SingleTickerProviderSt
                       maxWidth: MediaQuery.of(context).size.width - 100,
                     ),
                     child: Text(
-                      'Bệnh viện đa khoa Đà Nẵng',
+                      hospital.name,
                       style: TextStyle(fontSize: 20.0,),
                       softWrap: true,
                       
@@ -68,7 +109,7 @@ class _HospitalPageState extends State<HospitalPage> with SingleTickerProviderSt
                       maxWidth: MediaQuery.of(context).size.width - 100,
                     ),
                     child: Text(
-                      '54 Nguyễn Lưong Bằng, Liên Chiểu, Đà Nẵng',
+                      hospital.address,
                       style: TextStyle(fontSize: 18.0),
                       softWrap: true,
                     ),
@@ -76,6 +117,53 @@ class _HospitalPageState extends State<HospitalPage> with SingleTickerProviderSt
                 ],
               ),
             ),
+            Container(
+              padding: EdgeInsets.all(16.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    'Thông tin nổi bật:',
+                    style: TextStyle(
+                      fontSize: 20.0,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  SizedBox(height: 8.0),      
+                  Text(
+                    hospital.description,
+                    style: TextStyle(fontSize: 16.0),
+                  ),
+                ],
+              ),
+            ),
+            // Container(
+            //   padding: EdgeInsets.all(16.0),
+            //   child: Column(
+            //     crossAxisAlignment: CrossAxisAlignment.start,
+            //     children: [
+            //       Text(
+            //         'Trang thiết bị',
+            //         style: TextStyle(
+            //           fontSize: 20.0,
+            //           fontWeight: FontWeight.bold,
+            //         ),
+            //       ),
+            //       SizedBox(height: 8.0),      
+            //       Container(
+            //         child: ListView.builder(
+            //           itemCount: 4,//4hospital.infrastructure.length,
+            //           itemBuilder: (context, index) {
+            //             return ListTile(
+            //               leading: Icon(Icons.check_circle),
+            //               title: Text(hospital.infrastructure[index]),
+            //             );
+            //           },
+            //         ),
+            //       ),
+            //     ],
+            //   ),
+            // ),
             // Container chứa tiêu đề thông tin nổi bậ
             // Giờ làm việc trong tuần
             Container(
@@ -119,80 +207,7 @@ class _HospitalPageState extends State<HospitalPage> with SingleTickerProviderSt
                 ],
               ),
             ),
-            // Expanded(
-            //   child:DefaultTabController(
-            //     length: 3,
-            //     child: Column(
-            //       children: [
-            //         TabBar(
-            //           tabs: [
-            //             Tab(text: 'Thông tin'),
-            //             Tab(text: 'Dịch vụ'),
-            //             Tab(text: 'Bác sĩ'),
-            //           ],
-            //         ),
-            //         Expanded(
-            //           child: TabBarView(
-            //             children: [
-            //               HospitalInfor(),
-            //               HospitalService(),
-            //               HospitalDoctor(),
-            //             ],
-            //           ),
-            //         ),
-            //       ],
-            //     ),
-            //   ),
-            // ),
           ],
-        ),
-      ),
-    );
-  }
-}
-
-class HospitalInfor extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Thông tin'),
-      ),
-      body: Container(
-        child: Center(
-          child: Text('Trang thông tin'),
-        ),
-      ),
-    );
-  }
-}
-
-class HospitalService extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Dịch vụ'),
-      ),
-      body: Container(
-        child: Center(
-          child: Text('Trang dịch vụ'),
-        ),
-      ),
-    );
-  }
-}
-
-class HospitalDoctor extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Bác sĩ'),
-      ),
-      body: Container(
-        child: Center(
-          child: Text('Trang bác sĩ'),
         ),
       ),
     );

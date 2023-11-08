@@ -45,7 +45,7 @@ class ArticleContainer extends StatelessWidget {
                           article.title,
                           style: TextStyle(
                             fontWeight: FontWeight.bold,
-                            color: Color.fromARGB(255, 43, 52, 179),
+                            color: Color.fromARGB(255, 1, 1, 1),
                             fontSize: 20,
                           ),
                         ),
@@ -54,7 +54,7 @@ class ArticleContainer extends StatelessWidget {
                           article.author,
                           style: TextStyle(
                             fontSize: 14,
-                            color: Color.fromARGB(255, 83, 61, 207),
+                            color: Color.fromARGB(255, 6, 6, 6),
                           ),
                         ),
                         SizedBox(height: 4),
@@ -62,7 +62,7 @@ class ArticleContainer extends StatelessWidget {
                           article.createdAt,
                           style: TextStyle(
                             fontSize: 14,
-                            color: Color.fromARGB(255, 98, 77, 214),
+                            color: Color.fromARGB(255, 2, 2, 2),
                           ),
                         ),
                       ],
