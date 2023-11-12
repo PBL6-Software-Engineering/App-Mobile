@@ -13,6 +13,7 @@ import 'package:health_care/screens/setting_page.dart';
 import 'package:health_care/screens/category_page.dart';
 import 'package:health_care/screens/article_page.dart';
 import 'package:health_care/objects/articles.dart';
+import 'package:health_care/screens/appointment_page.dart';
 import 'package:http_interceptor/http_interceptor.dart';
 import 'package:http/http.dart' as http;
 
@@ -81,10 +82,9 @@ class MyApp extends StatelessWidget {
       ),
       initialRoute: '/',
       routes: {
-        // '/': (context) => const ArticlePage(),
-        // '/': (context) => const Welcome(),
+        //'/': (context) => const AppointmentPage(),
+        //'/': (context) => const Welcome(),
         '/': (context) => const MainLayout(),
-        // 'main': (context) => const MainLayout(),
         'login': (context) => const LoginPage(),
         'signup': (context) => const SignUpPage(),
         'forgotpassword': (context) => const ForgotPasswordPage(),

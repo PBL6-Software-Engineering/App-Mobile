@@ -46,18 +46,24 @@ class _HomePageState extends State<HomePage> {
   }
 
   void fetchArticleList() async {
+    loading = true;
     try {
       articles = await articleService.fetchArticles('api/article');
-      setState(() {});
+      setState(() {
+        loading =false;
+      });
     } catch (e) {
-      print('Error: $e');
+      print('Errorrrr: $e');
     }
   }
 
   void fetchCategoryList() async {
+    loading = true;
     try {
       categories = await categoryService.fetchCategories();
-      setState(() {});
+      setState(() {
+        loading=false;
+      });
       // Sử dụng danh sách category ở đây
     } catch (e) {
       print('Error: $e');
@@ -278,10 +284,13 @@ class _HomePageState extends State<HomePage> {
                                       style: TextStyle(
                                         fontSize: 25,
                                         fontWeight: FontWeight.bold,
+                                        color: Color.fromARGB(255, 11, 11, 11),
                                       ),
                                     ),
                                     Config.spaceSmall,
-                                    Expanded(
+                                    loading ? Center(
+                                      child: CircularProgressIndicator(),
+                                    ):Expanded(
                                       child: ListView.builder(
                                         scrollDirection: Axis.horizontal,
                                         itemCount: categories.length,
@@ -328,8 +337,8 @@ class _HomePageState extends State<HomePage> {
                                                       categories[index].name,
                                                       style: TextStyle(
                                                         fontSize: 16,
-                                                        color: Color.fromARGB(
-                                                            255, 43, 52, 179),
+
+                                                        color: Color.fromARGB(255, 3, 3, 3),
                                                         fontWeight:
                                                             FontWeight.bold,
                                                         overflow: TextOverflow
@@ -372,10 +381,13 @@ class _HomePageState extends State<HomePage> {
                                       style: TextStyle(
                                         fontSize: 25,
                                         fontWeight: FontWeight.bold,
+                                        color: Color.fromARGB(255, 4, 4, 4),
                                       ),
                                     ),
                                     Config.spaceSmall,
-                                    Expanded(
+                                    loading ? Center(
+                                      child: CircularProgressIndicator(),
+                                    ):Expanded(
                                       child: ListView.builder(
                                         itemCount: articles.length,
                                         itemBuilder: (context, index) {
