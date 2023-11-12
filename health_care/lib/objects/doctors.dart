@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:health_care/providers/http_provider.dart';
 import 'package:intl/intl.dart';
 import 'package:health_care/objects/hospitals.dart';
+import 'package:health_care/objects/timework.dart';
 
 class DoctorService {
   final HttpProvider _httpProvider = HttpProvider();
@@ -64,8 +65,8 @@ class Doctor{
     return Doctor(
       id: json['id_doctor'],
       name: json['name_doctor'] ?? '',
-      phone: json['phone'] ?? '',
-      avatar: _url+(json['avatar'] ?? ''),
+      phone: json['phone'] ?? 'Chưa cập nhật',
+      avatar: json['avatar'] != null ? _url+json['avatar'] : '',
       department: json['name_department'] ?? ''
 
     );
@@ -87,13 +88,14 @@ class DoctorDetail {
   int idHospital;
   int isConfirm;
   int provinceCode;
-  DateTime dateOfBirth;
+  String dateOfBirth;
   int experience;
   int gender;
   int searchNumber;
+  TimeWork timeWork;
   Hospitalinfor hospital;
   InforExtend inforExtend;
-  Rating rating;
+  //Rating rating;
   Department department;
   DoctorDetail({
     required this.id,
@@ -115,8 +117,9 @@ class DoctorDetail {
     required this.gender,
     required this.searchNumber,
     required this.hospital,
+    required this.timeWork,
     required this.inforExtend,
-    required this.rating,
+    //required this.rating,
     required this.department,
   });
 
@@ -125,12 +128,12 @@ class DoctorDetail {
     final String _url = HttpProvider.url;
     return DoctorDetail(
       id: json['id_doctor'],
-      email: json['email'],
-      username: json['username'],
+      email: json['email'] ?? 'Chưa cập nhật',
+      username: json['username'] ?? 'Chưa cập nhật',
       name: json['name'],
-      phone: json['phone'],
-      address: json['address'],
-      avatar: _url+(json['avatar'] ?? ''),
+      phone: json['phone'] ?? 'Chưa cập nhật',
+      address: json['address'] ?? 'Chưa cập nhật',
+      avatar: json['avatar'] != null ? _url+json['avatar'] : '',
       isAccept: json['is_accept'],
       role: json['role'],
       idDoctor: json['id_doctor'],
@@ -138,14 +141,16 @@ class DoctorDetail {
       idHospital: json['id_hospital'],
       isConfirm: json['is_confirm'],
       provinceCode: json['province_code'],
-      dateOfBirth: DateTime.parse(json['date_of_birth']),
-      experience: json['experience'],
-      gender: json['gender'],
+      dateOfBirth: json['date_of_birth']!=null ?(DateFormat('yyyy-MM-dd').format(DateTime.parse(json['date_of_birth'])))
+              .toString() : '',
+      experience: json['experience'] ?? 0,
+      gender: json['gender'] ?? 1,
       searchNumber: json['search_number'],
       inforExtend: InforExtend.fromJson(json['infor_extend']),
-      rating: Rating.fromJson(json['rating']),
+      //rating: Rating.fromJson(json['rating']),
       department: Department.fromJson(json['department']),
       hospital: Hospitalinfor.fromJson(json['infor_hospital']),
+      timeWork: TimeWork.fromJson(json['time_work']),
     );
   }
 }
@@ -291,8 +296,8 @@ class Rating {
     return Rating(
       countRating: json['cout_rating'],
       numberRating: json['number_rating'],
-      countDetails: RatingDetails.fromJson(json['cout_details']),
-      ratings: ratingsList.map((e) => RatingItem.fromJson(e)).toList(),
+      countDetails: RatingDetails.fromJson(json['cout_details']) ,
+      ratings: ratingsList.map((e) => RatingItem.fromJson(e)).toList() ?? [],
     );
   }
 }
@@ -314,11 +319,11 @@ class RatingDetails {
 
   factory RatingDetails.fromJson(Map<String, dynamic> json) {
     return RatingDetails(
-      oneStar: json['1_star'],
-      twoStar: json['2_star'],
-      threeStar: json['3_star'],
-      fourStar: json['4_star'],
-      fiveStar: json['5_star'],
+      oneStar: json['1_star'] ?? 0,
+      twoStar: json['2_star'] ?? 0,
+      threeStar: json['3_star'] ?? 0,
+      fourStar: json['4_star'] ?? 0,
+      fiveStar: json['5_star'] ?? 0,
     );
   }
 }
@@ -372,7 +377,7 @@ class Hospitalinfor{
   });
   factory Hospitalinfor.fromJson(Map<String, dynamic> json) {
     return Hospitalinfor(
-      id: json['id'],
+      id: json['id_hospital'],
       name: json['name'],
     );
   }

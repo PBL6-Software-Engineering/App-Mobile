@@ -64,7 +64,7 @@ class Article {
       title: json['title'],
       content: json['content'],
 
-      thumbnail: _url + json['thumbnail'],
+      thumbnail: _url + json['thumbnail_article'],
       author: json['name_user'] ?? '',
       createdAt:
           (DateFormat('yyyy-MM-dd').format(DateTime.parse(json['created_at'])))

@@ -15,6 +15,7 @@ class CategoryPage extends StatefulWidget {
 class _CategoryPageState extends State<CategoryPage> {
   ArticleService articleService = ArticleService();
   List<Article> articles = [];
+  bool loading = true;
   @override
   void dispose() {
     articles = [];
@@ -29,10 +30,12 @@ class _CategoryPageState extends State<CategoryPage> {
 
   void fetchArticleList() async {
     try {
+      loading = true;
       List<Article> fetchedArticles = await articleService
           .fetchArticles('api/article?name_category=${widget.categoryName}');
       setState(() {
         articles = fetchedArticles;
+        loading = false;
       });
       print(articles);
     } catch (e) {
@@ -58,7 +61,11 @@ class _CategoryPageState extends State<CategoryPage> {
           ),
         ),
       ),
-      body: Column(
+      body: loading ? 
+      Center(
+              child: CircularProgressIndicator(),
+      ): 
+      Column(
         children: [
           Align(
               alignment: Alignment.topLeft,

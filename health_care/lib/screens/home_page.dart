@@ -46,18 +46,24 @@ class _HomePageState extends State<HomePage> {
   }
 
   void fetchArticleList() async {
+    loading = true;
     try {
       articles = await articleService.fetchArticles('api/article');
-      setState(() {});
+      setState(() {
+        loading =false;
+      });
     } catch (e) {
       print('Errorrrr: $e');
     }
   }
 
   void fetchCategoryList() async {
+    loading = true;
     try {
       categories = await categoryService.fetchCategories();
-      setState(() {});
+      setState(() {
+        loading=false;
+      });
       // Sử dụng danh sách category ở đây
     } catch (e) {
       print('Error: $e');
@@ -282,7 +288,9 @@ class _HomePageState extends State<HomePage> {
                                       ),
                                     ),
                                     Config.spaceSmall,
-                                    Expanded(
+                                    loading ? Center(
+                                      child: CircularProgressIndicator(),
+                                    ):Expanded(
                                       child: ListView.builder(
                                         scrollDirection: Axis.horizontal,
                                         itemCount: categories.length,
@@ -377,7 +385,9 @@ class _HomePageState extends State<HomePage> {
                                       ),
                                     ),
                                     Config.spaceSmall,
-                                    Expanded(
+                                    loading ? Center(
+                                      child: CircularProgressIndicator(),
+                                    ):Expanded(
                                       child: ListView.builder(
                                         itemCount: articles.length,
                                         itemBuilder: (context, index) {

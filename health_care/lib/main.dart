@@ -82,7 +82,9 @@ class MyApp extends StatelessWidget {
       ),
       initialRoute: '/',
       routes: {
-         '/': (context) => const MainLayout(),
+        //'/': (context) => const AppointmentPage(),
+        //'/': (context) => const Welcome(),
+        '/': (context) => const MainLayout(),
         'login': (context) => const LoginPage(),
         'signup': (context) => const SignUpPage(),
         'forgotpassword': (context) => const ForgotPasswordPage(),

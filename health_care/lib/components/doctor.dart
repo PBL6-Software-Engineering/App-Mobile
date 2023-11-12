@@ -24,44 +24,67 @@ class DoctorContainer extends StatelessWidget {
       child: Container(
         //height: 200,
         padding: EdgeInsets.all(16.0),
+        width: 200,
+        margin: EdgeInsets.all(8.0),
         decoration: BoxDecoration(
-        border: Border.all(
-          color: Colors.grey,
-          width: 2.0,
+        color: Colors.white,
+        border: Border(
+          left: BorderSide(
+            color: Color(0xFF0B8AA0),
+            width: 8.0,
+          ),
+          right: BorderSide(
+            color: Color(0xFF11B3CF),
+            width: 2.0,
+          ),
+          top: BorderSide(
+            color: Color(0xFF11B3CF),
+            width: 2.0,
+          ),
+          bottom: BorderSide(
+            color: Color(0xFF11B3CF),
+            width: 2.0,
+          ),
         ),
-        borderRadius: BorderRadius.circular(10.0),
-        ),
+      ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: <Widget>[
-          Image.network(
-            doctor.avatar,
-            width: 100.0,
-            height: 100.0,
-            fit: BoxFit.cover,
-          ),
+          doctor.avatar==''
+          ? Image.asset("assets/images/doctor.jpg", width: 130.0, height: 100.0, fit: BoxFit.cover)
+          : Image.network(doctor.avatar, width: 130.0, height: 100.0, fit: BoxFit.cover),
           SizedBox(height: 16.0),
-          Text(
-            doctor.name,
-            style: TextStyle(
-              fontSize: 20.0,
-              fontWeight: FontWeight.bold,
+          Container(
+            height: 65,
+            child: Text(
+              doctor.name,
+              style: TextStyle(
+                fontSize: 20.0,
+                fontWeight: FontWeight.bold,
+              ),
             ),
           ),
           SizedBox(height: 8.0),
           Text(
-            'Chuyên khoa: ' + doctor.department,
+            'Chuyên khoa',
             style: TextStyle(
               fontSize: 16.0,
             ),
           ),
           SizedBox(height: 8.0),
           Text(
-            'Sđt: ' + doctor.phone,
+            doctor.department,
             style: TextStyle(
-              fontSize: 14.0,
+              fontSize: 16.0,
+              fontWeight: FontWeight.bold,
             ),
-          ),
+          )
+          // Text(
+          //   'Sđt: ' + doctor.phone,
+          //   style: TextStyle(
+          //     fontSize: 14.0,
+          //   ),
+          // ),
         ],
       ),
         )

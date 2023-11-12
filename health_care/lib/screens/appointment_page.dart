@@ -13,32 +13,39 @@ class AppointmentPage extends StatefulWidget {
 }
 
 class _AppointmentPageState extends State<AppointmentPage> {
+  bool loading = true;
   HospitalService hospitalService = HospitalService();
   DoctorService doctorService = DoctorService();
   List<Hospital> hospitals= [];
   List<Doctor> doctors = [];
   void initState() {
+    super.initState();
     fetchHospitalList();
     fetchDoctorlList();
-    super.initState();
   }
 
   void fetchHospitalList() async {
     try {
+      loading = true;
       hospitals = await hospitalService.fetchHospitals();
-      setState(() {});
+      setState(() {
+        loading = false;
+      });
       //print(hospitals);
     } catch (e) {
-      print('Error fetch hospital: $e');
+      print('Error fetch hospitals: $e');
     }
   }
   void fetchDoctorlList() async {
     try {
+      loading = true;
       doctors = await doctorService.fetchDoctors();
-      setState(() {});
+      setState(() {
+        loading = false;
+      });
       //print(doctors);
     } catch (e) {
-      print('Error fetch doctor: $e');
+      print('Error fetch doctors: $e');
     }
   }
 
@@ -59,7 +66,6 @@ class _AppointmentPageState extends State<AppointmentPage> {
       padding: EdgeInsets.all(16),
       child: Column(
           children: [
-
             Container(
               height: 590,
               child: Column(
@@ -70,7 +76,9 @@ class _AppointmentPageState extends State<AppointmentPage> {
                     style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
                   ),
                   SizedBox(height: 8),
-                  Expanded(
+                  loading ? Center(
+                    child: CircularProgressIndicator(),
+                  ): Expanded(
                       child: ListView.separated(
                       itemCount: hospitals.length,
                       separatorBuilder: (context, index) => SizedBox(height: 16),
@@ -84,7 +92,7 @@ class _AppointmentPageState extends State<AppointmentPage> {
             ),
             SizedBox(height: 16),
             Container(
-              height: 590,
+              height: 350,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children:[
@@ -93,16 +101,28 @@ class _AppointmentPageState extends State<AppointmentPage> {
                     style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
                   ),
                   SizedBox(height: 16),
-                  Expanded(
-                      child: ListView.separated(
+                  // Expanded(
+                  //     child: ListView.separated(
+                  //     itemCount: doctors.length,
+                  //     separatorBuilder: (context, index) => SizedBox(height: 16),
+                  //     itemBuilder: (context, index) {
+                  //       return Container(
+                  //         width: 150,
+                  //         child: DoctorContainer(doctor: doctors[index]));
+                  //   },
+                  //   )
+                  // )
+                  loading ? Center(
+                    child: CircularProgressIndicator(),
+                  ):Expanded(
+                    child: ListView.builder(
+                      scrollDirection: Axis.horizontal,
                       itemCount: doctors.length,
-                      separatorBuilder: (context, index) => SizedBox(height: 16),
                       itemBuilder: (context, index) {
-                        return Container(
-                          width: 150,
-                          child: DoctorContainer(doctor: doctors[index]));
-                    },
-                    )
+                        return DoctorContainer(doctor: doctors[index]);
+
+                      },
+                    ),
                   )
                ]
             ),
