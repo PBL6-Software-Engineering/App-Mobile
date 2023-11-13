@@ -3,6 +3,8 @@ import 'package:health_care/components/hospital.dart';
 import 'package:health_care/objects/hospitals.dart';
 import 'package:health_care/components/doctor.dart';
 import 'package:health_care/objects/doctors.dart';
+import 'package:health_care/components/service.dart';
+import 'package:health_care/objects/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 //import 'package:health_care/screens/hospital_page.dart';
 class AppointmentPage extends StatefulWidget {
@@ -16,12 +18,15 @@ class _AppointmentPageState extends State<AppointmentPage> {
   bool loading = true;
   HospitalService hospitalService = HospitalService();
   DoctorService doctorService = DoctorService();
+  ServiceService  serviceService= ServiceService();
   List<Hospital> hospitals= [];
   List<Doctor> doctors = [];
+  List<Service> services = [];
   void initState() {
     super.initState();
     fetchHospitalList();
     fetchDoctorlList();
+    fetchServiceList();
   }
 
   void fetchHospitalList() async {
@@ -34,6 +39,18 @@ class _AppointmentPageState extends State<AppointmentPage> {
       //print(hospitals);
     } catch (e) {
       print('Error fetch hospitals: $e');
+    }
+  }
+  void fetchServiceList() async {
+    try {
+      loading = true;
+      services = await serviceService.fetchServices();
+      setState(() {
+        loading = false;
+      });
+      //print(hospitals);
+    } catch (e) {
+      print('Error fetch services: $e');
     }
   }
   void fetchDoctorlList() async {
@@ -53,13 +70,13 @@ class _AppointmentPageState extends State<AppointmentPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Center(
-          child: SvgPicture.asset(
-            './assets/icons/logo.svg',
-            width: 30.0,
-            height: 30.0,
-          ),
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back),
+          onPressed: () {
+            Navigator.pop(context);
+          },
         ),
+        backgroundColor: Color(0xFF59D4E9),
       ),
       body: SingleChildScrollView(
       child:Padding(
@@ -67,17 +84,19 @@ class _AppointmentPageState extends State<AppointmentPage> {
       child: Column(
           children: [
             Container(
-              height: 590,
+              height: 550,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children:[
                   Text(
-                    'Top Bệnh Viện',
+                    'Top Bệnh Viện/Phòng Khám Nổi Bật',
                     style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
                   ),
                   SizedBox(height: 8),
-                  loading ? Center(
-                    child: CircularProgressIndicator(),
+                  loading ? Expanded(
+                    child: Center(
+                      child: CircularProgressIndicator(),
+                    ),
                   ): Expanded(
                       child: ListView.separated(
                       itemCount: hospitals.length,
@@ -97,7 +116,7 @@ class _AppointmentPageState extends State<AppointmentPage> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children:[
                   Text(
-                    'Top Bác Sĩ',
+                    'Top Bác Sĩ Hàng Đầu',
                     style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
                   ),
                   SizedBox(height: 16),
@@ -112,8 +131,10 @@ class _AppointmentPageState extends State<AppointmentPage> {
                   //   },
                   //   )
                   // )
-                  loading ? Center(
-                    child: CircularProgressIndicator(),
+                  loading ? Expanded(
+                    child: Center(
+                      child: CircularProgressIndicator(),
+                    ),
                   ):Expanded(
                     child: ListView.builder(
                       scrollDirection: Axis.horizontal,
@@ -126,7 +147,34 @@ class _AppointmentPageState extends State<AppointmentPage> {
                   )
                ]
             ),
-            )
+            ),
+            SizedBox(height: 16),
+            Container(
+              height: 400,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children:[
+                  Text(
+                    'Top dịch vu nổi bật',
+                    style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                  ),
+                  SizedBox(height: 8),
+                  loading ? Expanded(
+                    child: Center(
+                      child: CircularProgressIndicator(),
+                    ),
+                  ): Expanded(
+                      child: ListView.separated(
+                      itemCount: services.length,
+                      separatorBuilder: (context, index) => SizedBox(height: 16),
+                      itemBuilder: (context, index) {
+                        return ServiceComponent(service: services[index]);
+                    },
+                    )
+                  )
+               ]
+            ),
+            ),
           ]
       )
     )

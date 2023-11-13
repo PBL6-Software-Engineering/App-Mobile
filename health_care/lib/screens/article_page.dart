@@ -20,13 +20,8 @@ class ArticlePage extends StatelessWidget {
               Navigator.pop(context);
             },
           ),
-          title: Center(
-            child: SvgPicture.asset(
-              './assets/icons/logo.svg',
-              width: 30.0,
-              height: 30.0,
-            ),
-          )),
+          backgroundColor: Color(0xFF59D4E9)
+      ),
       body: SingleChildScrollView(
         child: Padding(
           padding: EdgeInsets.all(16.0),

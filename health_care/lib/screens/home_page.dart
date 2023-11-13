@@ -53,7 +53,7 @@ class _HomePageState extends State<HomePage> {
         loading =false;
       });
     } catch (e) {
-      print('Errorrrr: $e');
+      print('Error fetch article: $e');
     }
   }
 
@@ -66,7 +66,7 @@ class _HomePageState extends State<HomePage> {
       });
       // Sử dụng danh sách category ở đây
     } catch (e) {
-      print('Error: $e');
+      print('Error fetch category: $e');
     }
   }
 
@@ -288,8 +288,10 @@ class _HomePageState extends State<HomePage> {
                                       ),
                                     ),
                                     Config.spaceSmall,
-                                    loading ? Center(
-                                      child: CircularProgressIndicator(),
+                                    loading ? Expanded(
+                                      child: Center(
+                                        child: CircularProgressIndicator(),
+                                      ),
                                     ):Expanded(
                                       child: ListView.builder(
                                         scrollDirection: Axis.horizontal,
@@ -385,8 +387,10 @@ class _HomePageState extends State<HomePage> {
                                       ),
                                     ),
                                     Config.spaceSmall,
-                                    loading ? Center(
-                                      child: CircularProgressIndicator(),
+                                    loading ? Expanded(
+                                      child: Center(
+                                        child: CircularProgressIndicator(),
+                                      ),
                                     ):Expanded(
                                       child: ListView.builder(
                                         itemCount: articles.length,

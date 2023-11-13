@@ -16,7 +16,7 @@ class HospitalService {
     if (response !=null) {
       final responseData = json.decode(response.body);
       final List<dynamic> jsonList = responseData['data'];
-      print(responseData);
+      //print(responseData);
 
       List<Hospital> HospitalList =
           jsonList.map((json) => Hospital.fromJson(json)).toList();
@@ -29,15 +29,15 @@ class HospitalService {
   Future<HospitalDetail> fetchHospitalDetail(int id) async {
     
     final response = await _httpProvider.getData('api/infor-hospital/view-profile/${id.toString()}');
-    print('api/infor-hospital/view-profile/${id.toString()}');
+    //print('api/infor-hospital/view-profile/${id.toString()}');
     if (response!=null) {
       final responseData = json.decode(response.body);
       //final List<dynamic> jsonList = responseData['data'];
       //print('api/infor-doctor/view-profile/${id.toString()}');
-      print(responseData);
+      //print(responseData);
 
       HospitalDetail hospitalDetail = HospitalDetail.fromJson(responseData['data']);
-      print('ok');
+      //print('ok');
       return hospitalDetail;
     } else {
       throw Exception('Failed to fetch hospital detail');

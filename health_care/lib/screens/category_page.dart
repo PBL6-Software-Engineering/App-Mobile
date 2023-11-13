@@ -53,15 +53,11 @@ class _CategoryPageState extends State<CategoryPage> {
             Navigator.pop(context);
           },
         ),
-        title: Center(
-          child: SvgPicture.asset(
-            './assets/icons/logo.svg',
-            width: 30.0,
-            height: 30.0,
-          ),
-        ),
+        backgroundColor: Color(0xFF59D4E9)
       ),
-      body: loading ? 
+      body: Padding(
+        padding: EdgeInsets.all(16.0),
+        child: loading ? 
       Center(
               child: CircularProgressIndicator(),
       ): 
@@ -70,7 +66,7 @@ class _CategoryPageState extends State<CategoryPage> {
           Align(
               alignment: Alignment.topLeft,
               child: Text(
-                '  '+ widget.categoryName,
+                widget.categoryName,
                 style: TextStyle(
                   fontWeight: FontWeight.bold,
                   fontSize: 24,
@@ -88,6 +84,7 @@ class _CategoryPageState extends State<CategoryPage> {
           )
         ],
       ),
+      )
     );
   }
 }
