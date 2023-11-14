@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:health_care/components/booking_form.dart';
 import 'package:health_care/objects/doctors.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:health_care/objects/hospitals.dart';
@@ -85,8 +86,6 @@ class _DoctorPageState extends State<DoctorPage> {
 
   void initState() {
     fetchDoctor();
-    //print('ok');
-    //print(doctor[1].address);
     super.initState();
   }
 
@@ -97,6 +96,7 @@ class _DoctorPageState extends State<DoctorPage> {
       setState(() {
         loading = false;
       });
+      // print(doctor.timeWork.times['monday']?.afternoon?.date);
     } catch (e) {
       print('Error fetch doctor page: $e');
     }
@@ -142,14 +142,14 @@ class _DoctorPageState extends State<DoctorPage> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                                doctor.name,
-                                style: TextStyle(
-                                  fontSize: 20.0,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                                overflow: TextOverflow.ellipsis,
-                                maxLines: 1,
+                              doctor.name,
+                              style: TextStyle(
+                                fontSize: 20.0,
+                                fontWeight: FontWeight.bold,
                               ),
+                              overflow: TextOverflow.ellipsis,
+                              maxLines: 1,
+                            ),
                             SizedBox(height: 16),
                             Text(
                               'Chuyên khoa: ' + doctor.department.name,
@@ -292,6 +292,9 @@ class _DoctorPageState extends State<DoctorPage> {
                   //       ),
                   //     ],
                   //   ),
+                  // ),
+                  // Center(
+                  //   child: BookingForm(id: doctor.idDoctor),
                   // ),
                 ],
               ),

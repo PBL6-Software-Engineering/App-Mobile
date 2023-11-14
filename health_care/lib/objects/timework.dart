@@ -17,7 +17,8 @@ class TimeWork {
     return TimeWork(
       id: json['id'],
       idHospital: json['id_hospital'],
-      times: Map<String, DayTime>.from(json['times'].map((k, v) => MapEntry(k, DayTime.fromJson(v)))),
+      times: Map<String, DayTime>.from(
+          json['times'].map((k, v) => MapEntry(k, DayTime.fromJson(v)))),
       enable: json['enable'],
       note: json['note'] ?? '',
     );
@@ -41,7 +42,9 @@ class DayTime {
     return DayTime(
       night: TimeRange.fromJson(json['night']),
       enable: json['enable'],
-      morning: TimeRange.fromJson(json['morning']),
+      morning: json.containsKey('morning')
+          ? TimeRange.fromJson(json['morning'])
+          : null,
       afternoon: TimeRange.fromJson(json['afternoon']),
     );
   }
@@ -50,16 +53,19 @@ class DayTime {
 class TimeRange {
   final List<String> time;
   final bool enable;
+  final List<List<String>> dividedTimes;
 
   TimeRange({
     required this.time,
     required this.enable,
+    required this.dividedTimes,
   });
 
   factory TimeRange.fromJson(Map<String, dynamic> json) {
     return TimeRange(
       time: List<String>.from(json['time']) ?? [],
       enable: json['enable'],
+      dividedTimes: List<List<String>>.from(json['divided_times'] ?? []),
     );
   }
 }

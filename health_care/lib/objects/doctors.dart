@@ -10,7 +10,8 @@ class DoctorService {
   final String _url = HttpProvider.url;
 
   Future<List<Doctor>> fetchDoctors() async {
-    final response = await _httpProvider.getData('api/infor-hospital/all-doctor-care');
+    final response =
+        await _httpProvider.getData('api/infor-hospital/all-doctor-care');
     //print(response);
     if (response.statusCode == 200) {
       final responseData = json.decode(response.body);
@@ -26,14 +27,14 @@ class DoctorService {
   }
 
   Future<DoctorDetail> fetchDoctorDetail(int id) async {
-    
-    final response = await _httpProvider.getData('api/infor-doctor/view-profile/${id.toString()}');
+    final response = await _httpProvider
+        .getData('api/infor-doctor/view-profile/${id.toString()}');
     //print(response);
-    if (response!=null) {
+    if (response != null) {
       final responseData = json.decode(response.body);
       //final List<dynamic> jsonList = responseData['data'];
       //print('api/infor-doctor/view-profile/${id.toString()}');
-      //print(responseData);
+      print(responseData);
 
       DoctorDetail doctorDetail = DoctorDetail.fromJson(responseData['data']);
       //print(doctorDetail);
@@ -43,7 +44,8 @@ class DoctorService {
     }
   }
 }
-class Doctor{
+
+class Doctor {
   int id;
   String name;
   String avatar;
@@ -63,13 +65,11 @@ class Doctor{
     //List<String> infrastructureList = List<String>.from(json['infrastructure']);
     //print(json);
     return Doctor(
-      id: json['id_doctor'],
-      name: json['name_doctor'] ?? '',
-      phone: json['phone'] ?? 'Chưa cập nhật',
-      avatar: json['avatar'] != null ? _url+json['avatar'] : '',
-      department: json['name_department'] ?? ''
-
-    );
+        id: json['id_doctor'],
+        name: json['name_doctor'] ?? '',
+        phone: json['phone'] ?? 'Chưa cập nhật',
+        avatar: json['avatar'] != null ? _url + json['avatar'] : '',
+        department: json['name_department'] ?? '');
   }
 }
 
@@ -133,7 +133,7 @@ class DoctorDetail {
       name: json['name'],
       phone: json['phone'] ?? 'Chưa cập nhật',
       address: json['address'] ?? 'Chưa cập nhật',
-      avatar: json['avatar'] != null ? _url+json['avatar'] : '',
+      avatar: json['avatar'] != null ? _url + json['avatar'] : '',
       isAccept: json['is_accept'],
       role: json['role'],
       idDoctor: json['id_doctor'],
@@ -141,8 +141,11 @@ class DoctorDetail {
       idHospital: json['id_hospital'],
       isConfirm: json['is_confirm'],
       provinceCode: json['province_code'],
-      dateOfBirth: json['date_of_birth']!=null ?(DateFormat('yyyy-MM-dd').format(DateTime.parse(json['date_of_birth'])))
-              .toString() : '',
+      dateOfBirth: json['date_of_birth'] != null
+          ? (DateFormat('yyyy-MM-dd')
+                  .format(DateTime.parse(json['date_of_birth'])))
+              .toString()
+          : '',
       experience: json['experience'] ?? 0,
       gender: json['gender'] ?? 1,
       searchNumber: json['search_number'],
@@ -197,11 +200,16 @@ class InforExtend {
       prominent: prominentList.map((e) => Prominent.fromJson(e)).toList(),
       information: json['information'],
       strengths: json['strengths'].cast<String>(),
-      workExperience: workExperienceList.map((e) => WorkExperience.fromJson(e)).toList(),
-      trainingProcess: trainingProcessList.map((e) => TrainingProcess.fromJson(e)).toList(),
+      workExperience:
+          workExperienceList.map((e) => WorkExperience.fromJson(e)).toList(),
+      trainingProcess:
+          trainingProcessList.map((e) => TrainingProcess.fromJson(e)).toList(),
       language: json['language'].cast<String>(),
-      awardsRecognition: awardsRecognitionList.map((e) => AwardsRecognition.fromJson(e)).toList(),
-      researchWork: researchWorkList.map((e) => ResearchWork.fromJson(e)).toList(),
+      awardsRecognition: awardsRecognitionList
+          .map((e) => AwardsRecognition.fromJson(e))
+          .toList(),
+      researchWork:
+          researchWorkList.map((e) => ResearchWork.fromJson(e)).toList(),
       createdAt: DateTime.parse(json['created_at']),
       updatedAt: DateTime.parse(json['updated_at']),
     );
@@ -296,7 +304,7 @@ class Rating {
     return Rating(
       countRating: json['cout_rating'],
       numberRating: json['number_rating'],
-      countDetails: RatingDetails.fromJson(json['cout_details']) ,
+      countDetails: RatingDetails.fromJson(json['cout_details']),
       ratings: ratingsList.map((e) => RatingItem.fromJson(e)).toList() ?? [],
     );
   }
@@ -368,7 +376,8 @@ class RatingItem {
     );
   }
 }
-class Hospitalinfor{
+
+class Hospitalinfor {
   int id;
   String name;
   Hospitalinfor({
@@ -382,6 +391,7 @@ class Hospitalinfor{
     );
   }
 }
+
 class Department {
   int id;
   String name;

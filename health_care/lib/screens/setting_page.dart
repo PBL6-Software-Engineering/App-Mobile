@@ -9,20 +9,16 @@ import 'package:health_care/utils/config.dart';
 
 class SettingPage extends StatelessWidget {
   Future<void> _logOut(BuildContext context) async {
-    try {
-      var res = await HttpProvider().getData('api/user/logout');
-      var body = json.decode(res.body);
+    final token = AuthManager.getToken();
+    print('Token Logout: $token');
 
-      if (res.statusCode == 200) {
-        AuthManager.clearToken();
-        MessageDialog.showSuccess(context, body['message']);
-        Navigator.of(context).pushNamed('login');
-      } else {
-        MessageDialog.showError(context, body['message']);
-      }
-    } catch (error) {
-      MessageDialog.showError(context, "Đã xảy ra lỗi khi đăng xuất.");
+    if (token != null) {
+      MessageDialog.showSuccess(context, 'Đăng xuất thành công!');
+      AuthManager.clearToken();
+    } else {
+      MessageDialog.showError(context, 'Bạn chưa đăng nhập!');
     }
+    Navigator.of(context).pushNamed('login');
   }
 
   @override

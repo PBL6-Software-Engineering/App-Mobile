@@ -16,7 +16,6 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  final String _url = HttpProvider.url;
   TextEditingController _searchController = TextEditingController();
   CategoryService categoryService = CategoryService();
   ArticleService articleService = ArticleService();
@@ -50,7 +49,7 @@ class _HomePageState extends State<HomePage> {
     try {
       articles = await articleService.fetchArticles('api/article');
       setState(() {
-        loading =false;
+        loading = false;
       });
     } catch (e) {
       print('Error fetch article: $e');
@@ -62,7 +61,7 @@ class _HomePageState extends State<HomePage> {
     try {
       categories = await categoryService.fetchCategories();
       setState(() {
-        loading=false;
+        loading = false;
       });
       // Sử dụng danh sách category ở đây
     } catch (e) {
@@ -80,7 +79,6 @@ class _HomePageState extends State<HomePage> {
       setState(() {
         articleResults = fetchedArticles;
         loading = false;
-        print(articleResults);
       });
     } catch (e) {
       print('Error: $e');
@@ -183,47 +181,40 @@ class _HomePageState extends State<HomePage> {
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.spaceAround,
                           children: [
-                            Container(
-                              padding:
-                                  const EdgeInsets.symmetric(horizontal: 5.0),
-                              width: Config.screenWidth! * 0.9,
-                              decoration: BoxDecoration(
-                                color: Config.primaryColor.withOpacity(.1),
-                                borderRadius: BorderRadius.circular(20),
+                            GestureDetector(
+                              onTap: () {
+                                Navigator.of(context)
+                                    .pushNamed('booking-search');
+                              },
+                              child: Container(
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 5.0),
+                                width: Config.screenWidth! * 0.9,
+                                decoration: BoxDecoration(
+                                  color: Config.primaryColor.withOpacity(.1),
+                                  borderRadius: BorderRadius.circular(20),
+                                ),
+                                child: Row(
+                                  children: [
+                                    IconButton(
+                                      icon: Icon(Icons.search),
+                                      onPressed: () {
+                                        Navigator.of(context)
+                                            .pushNamed('booking-search');
+                                      },
+                                    ),
+                                    Text('Tìm kiếm'),
+                                  ],
+                                ),
                               ),
-                              child: SearchInput(
-                                hintText: 'Tìm kiếm bài viết',
-                                controller: _searchController,
-                                onSearch: fetchSearchArticleList,
-                                
-                              ),
-                            ),
-                            Visibility(
-                              visible: _searchController.text.isNotEmpty,
-                              child: loading || _searchController.text.isEmpty
-                                  ? Center(
-                                      child: CircularProgressIndicator(),
-                                    )
-                                  : articleResults.isNotEmpty
-                                      ? ListView.builder(
-                                          itemCount: articleResults.length,
-                                          itemBuilder: (context, index) {
-                                            return ArticleContainer(
-                                              article: articleResults[index],
-                                            );
-                                          },
-                                        )
-                                      : Center(
-                                          child: Text('Không tìm thấy kết quả'),
-                                        ),
                             ),
                             Visibility(
                                 visible: _searchController.text.isEmpty,
                                 child: Padding(
                                   padding: EdgeInsets.only(top: 20),
                                   child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment
-                                        .start, 
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
                                     children: <Widget>[
                                       GridView.builder(
                                         itemCount: catNames.length,
@@ -288,88 +279,101 @@ class _HomePageState extends State<HomePage> {
                                       ),
                                     ),
                                     Config.spaceSmall,
-                                    loading ? Expanded(
-                                      child: Center(
-                                        child: CircularProgressIndicator(),
-                                      ),
-                                    ):Expanded(
-                                      child: ListView.builder(
-                                        scrollDirection: Axis.horizontal,
-                                        itemCount: categories.length,
-                                        itemBuilder:
-                                            (BuildContext context, int index) {
-                                          return InkWell(
-                                              onTap: () {
-                                                Navigator.push(
-                                                  context,
-                                                  MaterialPageRoute(
-                                                    builder: (context) =>
-                                                        CategoryPage(
-                                                            categoryName:
-                                                                categories[
-                                                                        index]
-                                                                    .name),
-                                                  ),
-                                                );
-                                              },
-                                              child: Container(
-                                                width: 150,
-                                                height: 200,
-                                                child: Column(
-                                                  mainAxisAlignment:
-                                                      MainAxisAlignment.center,
-                                                  children: [
-                                                    Container(
-                                                      width: 120,
-                                                      height: 120,
-                                                      decoration: BoxDecoration(
-                                                        borderRadius:
-                                                            BorderRadius
-                                                                .circular(40),
-                                                        image: DecorationImage(
-                                                          image: NetworkImage(
-                                                              categories[index]
-                                                                  .thumbnail),
-                                                          fit: BoxFit.cover,
+                                    loading
+                                        ? Expanded(
+                                            child: Center(
+                                              child:
+                                                  CircularProgressIndicator(),
+                                            ),
+                                          )
+                                        : Expanded(
+                                            child: ListView.builder(
+                                              scrollDirection: Axis.horizontal,
+                                              itemCount: categories.length,
+                                              itemBuilder:
+                                                  (BuildContext context,
+                                                      int index) {
+                                                return InkWell(
+                                                    onTap: () {
+                                                      Navigator.push(
+                                                        context,
+                                                        MaterialPageRoute(
+                                                          builder: (context) =>
+                                                              CategoryPage(
+                                                                  categoryName:
+                                                                      categories[
+                                                                              index]
+                                                                          .name),
                                                         ),
-                                                      ),
-                                                    ),
-                                                    SizedBox(height: 10),
-                                                    Text(
-                                                      categories[index].name,
-                                                      style: TextStyle(
-                                                        fontSize: 16,
-
-                                                        color: Color.fromARGB(255, 3, 3, 3),
-                                                        fontWeight:
-                                                            FontWeight.bold,
-                                                        overflow: TextOverflow
-                                                            .ellipsis,
-                                                      ),
-                                                    ),
-                                                    SizedBox(height: 10),
-                                                    ElevatedButton(
-                                                      onPressed: () {
-                                                        Navigator.push(
-                                                          context,
-                                                          MaterialPageRoute(
-                                                            builder: (context) =>
-                                                                CategoryPage(
-                                                                    categoryName:
-                                                                        categories[index]
-                                                                            .name),
+                                                      );
+                                                    },
+                                                    child: Container(
+                                                      width: 150,
+                                                      height: 200,
+                                                      child: Column(
+                                                        mainAxisAlignment:
+                                                            MainAxisAlignment
+                                                                .center,
+                                                        children: [
+                                                          Container(
+                                                            width: 120,
+                                                            height: 120,
+                                                            decoration:
+                                                                BoxDecoration(
+                                                              borderRadius:
+                                                                  BorderRadius
+                                                                      .circular(
+                                                                          40),
+                                                              image:
+                                                                  DecorationImage(
+                                                                image: NetworkImage(
+                                                                    categories[
+                                                                            index]
+                                                                        .thumbnail),
+                                                                fit: BoxFit
+                                                                    .cover,
+                                                              ),
+                                                            ),
                                                           ),
-                                                        );
-                                                      },
-                                                      child:
-                                                          Text('Xem chi tiết'),
-                                                    ),
-                                                  ],
-                                                ),
-                                              ));
-                                        },
-                                      ),
-                                    ),
+                                                          SizedBox(height: 10),
+                                                          Text(
+                                                            categories[index]
+                                                                .name,
+                                                            style: TextStyle(
+                                                              fontSize: 16,
+                                                              color: Color
+                                                                  .fromARGB(255,
+                                                                      3, 3, 3),
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .bold,
+                                                              overflow:
+                                                                  TextOverflow
+                                                                      .ellipsis,
+                                                            ),
+                                                          ),
+                                                          SizedBox(height: 10),
+                                                          ElevatedButton(
+                                                            onPressed: () {
+                                                              Navigator.push(
+                                                                context,
+                                                                MaterialPageRoute(
+                                                                  builder: (context) =>
+                                                                      CategoryPage(
+                                                                          categoryName:
+                                                                              categories[index].name),
+                                                                ),
+                                                              );
+                                                            },
+                                                            child: Text(
+                                                                'Xem chi tiết'),
+                                                          ),
+                                                        ],
+                                                      ),
+                                                    ));
+                                              },
+                                            ),
+                                          ),
                                   ],
                                 ),
                               ),
@@ -387,21 +391,24 @@ class _HomePageState extends State<HomePage> {
                                       ),
                                     ),
                                     Config.spaceSmall,
-                                    loading ? Expanded(
-                                      child: Center(
-                                        child: CircularProgressIndicator(),
-                                      ),
-                                    ):Expanded(
-                                      child: ListView.builder(
-                                        itemCount: articles.length,
-                                        itemBuilder: (context, index) {
-                                          return InkWell(
-                                            child: ArticleContainer(
-                                                article: articles[index]),
-                                          );
-                                        },
-                                      ),
-                                    )
+                                    loading
+                                        ? Expanded(
+                                            child: Center(
+                                              child:
+                                                  CircularProgressIndicator(),
+                                            ),
+                                          )
+                                        : Expanded(
+                                            child: ListView.builder(
+                                              itemCount: articles.length,
+                                              itemBuilder: (context, index) {
+                                                return InkWell(
+                                                  child: ArticleContainer(
+                                                      article: articles[index]),
+                                                );
+                                              },
+                                            ),
+                                          )
                                   ],
                                 ),
                               ),

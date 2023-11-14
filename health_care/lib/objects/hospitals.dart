@@ -11,9 +11,10 @@ class HospitalService {
   final String _url = HttpProvider.url;
 
   Future<List<Hospital>> fetchHospitals() async {
-    final response = await _httpProvider.getData('api/infor-hospital/all-hospital');
+    final response =
+        await _httpProvider.getData('api/infor-hospital/all-hospital');
     //print(response);
-    if (response !=null) {
+    if (response != null) {
       final responseData = json.decode(response.body);
       final List<dynamic> jsonList = responseData['data'];
       //print(responseData);
@@ -26,17 +27,19 @@ class HospitalService {
       throw Exception('Failed to fetch hospitals');
     }
   }
+
   Future<HospitalDetail> fetchHospitalDetail(int id) async {
-    
-    final response = await _httpProvider.getData('api/infor-hospital/view-profile/${id.toString()}');
+    final response = await _httpProvider
+        .getData('api/infor-hospital/view-profile/${id.toString()}');
     //print('api/infor-hospital/view-profile/${id.toString()}');
-    if (response!=null) {
+    if (response != null) {
       final responseData = json.decode(response.body);
       //final List<dynamic> jsonList = responseData['data'];
       //print('api/infor-doctor/view-profile/${id.toString()}');
       //print(responseData);
 
-      HospitalDetail hospitalDetail = HospitalDetail.fromJson(responseData['data']);
+      HospitalDetail hospitalDetail =
+          HospitalDetail.fromJson(responseData['data']);
       //print('ok');
       return hospitalDetail;
     } else {
@@ -44,6 +47,7 @@ class HospitalService {
     }
   }
 }
+
 class Hospital {
   int id;
   String email;
@@ -82,7 +86,7 @@ class Hospital {
       name: json['name'],
       phone: json['phone'] ?? 'Chưa cập nhật',
       address: json['address'] ?? 'Chưa cập nhật',
-      avatar: json['avatar'] != null ? _url+json['avatar'] : '',
+      avatar: json['avatar'] != null ? _url + json['avatar'] : '',
       provinceCode: json['province_code'],
       infrastructure: List<String>.from(json['infrastructure']),
       description: json['description'],
@@ -91,6 +95,7 @@ class Hospital {
     );
   }
 }
+
 class HospitalDetail {
   int id;
   String email;
@@ -142,4 +147,3 @@ class HospitalDetail {
     );
   }
 }
-
