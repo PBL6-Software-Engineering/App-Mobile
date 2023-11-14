@@ -5,7 +5,7 @@ class Button extends StatelessWidget {
   const Button(
       {Key? key,
       this.height,
-      required this.width,
+      this.width,
       required this.title,
       this.backgroundColor,
       this.foregroundColor,
@@ -14,7 +14,7 @@ class Button extends StatelessWidget {
       : super(key: key);
 
   final double? height;
-  final double width;
+  final double? width;
   final Color? backgroundColor;
   final Color? foregroundColor;
   final String title;

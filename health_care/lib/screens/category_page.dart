@@ -37,7 +37,6 @@ class _CategoryPageState extends State<CategoryPage> {
         articles = fetchedArticles;
         loading = false;
       });
-      print(articles);
     } catch (e) {
       print('Error: $e');
     }
@@ -46,45 +45,43 @@ class _CategoryPageState extends State<CategoryPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        leading: IconButton(
-          icon: Icon(Icons.arrow_back),
-          onPressed: () {
-            Navigator.pop(context);
-          },
-        ),
-        backgroundColor: Color(0xFF59D4E9)
-      ),
-      body: Padding(
-        padding: EdgeInsets.all(16.0),
-        child: loading ? 
-      Center(
-              child: CircularProgressIndicator(),
-      ): 
-      Column(
-        children: [
-          Align(
-              alignment: Alignment.topLeft,
-              child: Text(
-                widget.categoryName,
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 24,
-                  color: Color.fromARGB(255, 7, 8, 8),
-                ),
-              )),
-          SizedBox(height: 16),
-          Expanded(
-            child: ListView.builder(
-              itemCount: articles.length,
-              itemBuilder: (context, index) {
-                return ArticleContainer(article: articles[index]);
+        appBar: AppBar(
+            leading: IconButton(
+              icon: Icon(Icons.arrow_back),
+              onPressed: () {
+                Navigator.pop(context);
               },
             ),
-          )
-        ],
-      ),
-      )
-    );
+            backgroundColor: Color(0xFF59D4E9)),
+        body: Padding(
+          padding: EdgeInsets.all(16.0),
+          child: loading
+              ? Center(
+                  child: CircularProgressIndicator(),
+                )
+              : Column(
+                  children: [
+                    Align(
+                        alignment: Alignment.topLeft,
+                        child: Text(
+                          widget.categoryName,
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 24,
+                            color: Color.fromARGB(255, 7, 8, 8),
+                          ),
+                        )),
+                    SizedBox(height: 16),
+                    Expanded(
+                      child: ListView.builder(
+                        itemCount: articles.length,
+                        itemBuilder: (context, index) {
+                          return ArticleContainer(article: articles[index]);
+                        },
+                      ),
+                    )
+                  ],
+                ),
+        ));
   }
 }

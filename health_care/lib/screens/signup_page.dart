@@ -30,14 +30,20 @@ class _SignUpPageState extends State<SignUpPage> {
       var res = await HttpProvider().postData(data, 'api/infor-user/register');
       var body = json.decode(res.body);
 
-      if (res.statusCode == 200) {
+      if (body['success'] = true) {
         MessageDialog.showSuccess(context, body['message']);
         Navigator.of(context).pushNamed('login');
       } else {
-        MessageDialog.showError(context, body['message']);
+        if (body.containsKey('errors') && body['errors'] is List<String>) {
+          MessageDialog.showError(context, body['errors'][0]);
+        } else if (body.containsKey('message')) {
+          MessageDialog.showError(context, body['message']);
+        } else {
+          MessageDialog.showError(context, "An error occurred.");
+        }
       }
     } catch (error) {
-      MessageDialog.showError(context, "Đã xảy ra lỗi khi đăng ký.");
+      MessageDialog.showError(context, "An error occurred: $error");
     }
   }
 

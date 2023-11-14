@@ -31,28 +31,12 @@ class _LoginPageState extends State<LoginPage> {
       var body = json.decode(res.body);
 
       if (res.statusCode == 200) {
-        // if (body.containsKey('data')) {
         var responseData = body['data'];
-
-        // Access user properties like this
-        // var id = responseData['id'];
-        // var email = responseData['email'];
-        // var name = responseData['name'];
         var token = responseData['access_token'];
 
-        // Use the user data as needed
-        // print('User ID: $id');
-        // print('Email: $email');
-        // print('Name: $name');
-        print('Token: $token');
         AuthManager.setToken(token);
-
         MessageDialog.showSuccess(context, body['message']);
         Navigator.of(context).pushNamed('main');
-        // } else {
-        //   MessageDialog.showError(
-        //       context, 'Response data does not contain "data".');
-        // }
       } else {
         MessageDialog.showError(context, body['message']);
       }
@@ -162,28 +146,28 @@ class _LoginPageState extends State<LoginPage> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: <Widget>[
-                      // SocialButton(
-                      //   social: 'google',
-                      //   onPressed: () async {
-                      //     User? user = await signInWithGoogle();
-                      //     if (user != null) {
-                      //       // User is logged in with Google
-                      //     } else {
-                      //       // Handle login failure
-                      //     }
-                      //   },
-                      // ),
-                      // SocialButton(
-                      //   social: 'facebook',
-                      //   onPressed: () async {
-                      //     User? user = await signInWithFacebook();
-                      //     if (user != null) {
-                      //       // User is logged in with Facebook
-                      //     } else {
-                      //       // Handle login failure
-                      //     }
-                      //   },
-                      // ),
+                      SocialButton(
+                        social: 'google',
+                        onPressed: () async {
+                          // User? user = await signInWithGoogle();
+                          // if (user != null) {
+                          //   // User is logged in with Google
+                          // } else {
+                          //   // Handle login failure
+                          // }
+                        },
+                      ),
+                      SocialButton(
+                        social: 'facebook',
+                        onPressed: () async {
+                          // User? user = await signInWithFacebook();
+                          // if (user != null) {
+                          //   // User is logged in with Facebook
+                          // } else {
+                          //   // Handle login failure
+                          // }
+                        },
+                      ),
                     ],
                   ),
                   Config.spaceSmall,

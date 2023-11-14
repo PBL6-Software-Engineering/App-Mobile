@@ -16,6 +16,8 @@ class AuthManager {
   }
 
   static Future<void> setToken(String token) async {
+    print('Tokendd: $token');
+
     await _prefs?.setString('access_token', token);
   }
 

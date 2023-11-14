@@ -3,6 +3,7 @@ import 'package:health_care/main_layout.dart';
 import 'package:health_care/providers/auth_intercetor.dart';
 import 'package:health_care/providers/auth_manager.dart';
 import 'package:health_care/providers/http_provider.dart';
+import 'package:health_care/screens/booking_search.dart';
 import 'package:health_care/screens/forgot_password_page.dart';
 import 'package:health_care/screens/login_page.dart';
 import 'package:health_care/screens/search_page.dart';
@@ -17,22 +18,33 @@ import 'package:health_care/screens/appointment_page.dart';
 import 'package:http_interceptor/http_interceptor.dart';
 import 'package:http/http.dart' as http;
 
-void main() {
+void main() async {
+  // final interceptors = <InterceptorContract>[];
+  // interceptors.add(AuthInterceptor());
+
+  // final client = http.Client();
+  WidgetsFlutterBinding.ensureInitialized();
+  await AuthManager.init();
+
+  WidgetsFlutterBinding.ensureInitialized();
+  await AuthManager.init();
+
   final interceptors = <InterceptorContract>[];
   interceptors.add(AuthInterceptor());
 
-  final client =
-      http.Client(); 
+  final client = http.Client();
 
-  runApp(MyApp());
+  runApp(MyApp(client: client));
 }
 
 class MyApp extends StatelessWidget {
-  // final http.Client client;
+  final http.Client client;
 
-  // MyApp(this.client);
-  const MyApp({super.key});
+  MyApp({Key? key, required this.client}) : super(key: key);
+
+  // const MyApp({super.key});
   static final navigatorKey = GlobalKey<NavigatorState>();
+
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
@@ -85,11 +97,14 @@ class MyApp extends StatelessWidget {
         //'/': (context) => const AppointmentPage(),
         //'/': (context) => const Welcome(),
         '/': (context) => const MainLayout(),
+        'main': (context) => const MainLayout(),
         'login': (context) => const LoginPage(),
         'signup': (context) => const SignUpPage(),
         'forgotpassword': (context) => const ForgotPasswordPage(),
         'setting': (context) => SettingPage(),
         'search': (context) => SearchPage(),
+        'booking-search': (context) => BookingSearchPage(),
+
         //'article': (context)=>ArticlePage(),
       },
     );

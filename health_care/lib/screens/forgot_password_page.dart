@@ -28,7 +28,7 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
           await HttpProvider().postData(data, 'api/user/forgot-pw-sendcode');
       var body = json.decode(res.body);
 
-      if (res.statusCode == 200) {
+      if (body['success'] = true) {
         MessageDialog.showSuccess(context, body['message']);
         Navigator.of(context).pushNamed('login');
       } else {

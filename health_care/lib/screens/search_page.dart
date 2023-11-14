@@ -30,7 +30,6 @@ class _SearchPageState extends State<SearchPage> {
         articleResults = fetchedArticles;
         isSearching = false;
       });
-      print(articleResults);
     } catch (e) {
       print('Error: $e');
     }

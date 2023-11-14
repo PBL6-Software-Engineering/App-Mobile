@@ -34,6 +34,8 @@ class HttpProvider {
     };
 
     final token = AuthManager.getToken();
+    print('Token header: $token');
+
     if (token != null) {
       headers['Authorization'] = 'Bearer $token';
     }
