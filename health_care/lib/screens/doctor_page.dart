@@ -112,11 +112,7 @@ class _DoctorPageState extends State<DoctorPage> {
             Navigator.pop(context);
           },
         ),
-        title: SvgPicture.asset(
-          './assets/icons/logo.svg',
-          width: 50.0,
-          height: 50.0,
-        ),
+        backgroundColor: Color(0xFF59D4E9)
       ),
       body: loading
           ? Center(
