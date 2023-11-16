@@ -3,9 +3,10 @@ import 'package:health_care/utils/config.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 class TimePickerField extends StatefulWidget {
-  final List<String> times;
+  final List<dynamic> times;
+  final void Function(List<dynamic>) onIntervalSelected;
 
-  TimePickerField({required this.times});
+  TimePickerField({required this.times, required this.onIntervalSelected});
 
   @override
   _TimePickerFieldState createState() => _TimePickerFieldState();
@@ -13,10 +14,12 @@ class TimePickerField extends StatefulWidget {
 
 class _TimePickerFieldState extends State<TimePickerField> {
   int selectedIndex = -1;
+  List<dynamic> interval = [];
 
   @override
   Widget build(BuildContext context) {
     Config().init(context);
+    print('times ${widget.times}');
 
     return Center(
       child: Container(
@@ -30,7 +33,15 @@ class _TimePickerFieldState extends State<TimePickerField> {
                   return GestureDetector(
                     onTap: () {
                       setState(() {
-                        selectedIndex = index;
+                        // Toggle selection when tapped
+                        if (index == selectedIndex) {
+                          selectedIndex = -1; // Unselect if already selected
+                          interval.clear(); // Clear the interval
+                        } else {
+                          selectedIndex = index; // Select the interval
+                          interval = List<dynamic>.from(widget.times[index]);
+                          widget.onIntervalSelected(interval);
+                        }
                       });
                     },
                     child: Container(
@@ -51,7 +62,7 @@ class _TimePickerFieldState extends State<TimePickerField> {
                       ),
                       child: Center(
                         child: Text(
-                          widget.times[index],
+                          '${widget.times[index][0]} - ${widget.times[index][1]}',
                           style: TextStyle(
                             color: index == selectedIndex
                                 ? Colors.white

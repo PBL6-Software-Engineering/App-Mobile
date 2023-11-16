@@ -191,9 +191,7 @@ class _BookingSearchPageState extends State<BookingSearchPage> {
                     getAll: () {
                       // Handle the getAll action here
                     },
-                    getDetail: (int idx) {
-                      // Handle the getAll action here
-                    },
+                    getDetail: (int idx) {},
                     items: categoryResults['services']!,
                     thumbnail: 'thumbnail_department',
                   ),
