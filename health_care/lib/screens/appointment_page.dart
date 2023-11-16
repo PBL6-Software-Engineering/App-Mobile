@@ -77,7 +77,9 @@ class _AppointmentPageState extends State<AppointmentPage> {
           leading: IconButton(
             icon: Icon(Icons.arrow_back),
             onPressed: () {
-              Navigator.pop(context);
+              {
+                Navigator.of(context).pushNamed('main');
+              }
             },
           ),
           backgroundColor: Color(0xFF59D4E9),
@@ -94,7 +96,7 @@ class _AppointmentPageState extends State<AppointmentPage> {
                           Text(
                             'Top Bệnh Viện/Phòng Khám Nổi Bật',
                             style: TextStyle(
-                                fontSize: 24, fontWeight: FontWeight.bold),
+                                fontSize: 20, fontWeight: FontWeight.bold),
                           ),
                           SizedBox(height: 8),
                           loading
@@ -124,7 +126,7 @@ class _AppointmentPageState extends State<AppointmentPage> {
                           Text(
                             'Top Bác Sĩ Hàng Đầu',
                             style: TextStyle(
-                                fontSize: 24, fontWeight: FontWeight.bold),
+                                fontSize: 20, fontWeight: FontWeight.bold),
                           ),
                           SizedBox(height: 16),
                           // Expanded(
@@ -163,9 +165,9 @@ class _AppointmentPageState extends State<AppointmentPage> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            'Top dịch vu nổi bật',
+                            'Top dịch vụ nổi bật',
                             style: TextStyle(
-                                fontSize: 24, fontWeight: FontWeight.bold),
+                                fontSize: 20, fontWeight: FontWeight.bold),
                           ),
                           SizedBox(height: 8),
                           loading

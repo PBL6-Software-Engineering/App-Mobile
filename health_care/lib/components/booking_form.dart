@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:health_care/components/button.dart';
 import 'package:health_care/components/datetime_field.dart';
+import 'package:health_care/components/message_dialog.dart';
 import 'package:health_care/components/tab_bar_view.dart';
 import 'package:health_care/objects/doctors.dart';
 import 'package:health_care/objects/timework.dart';
@@ -12,7 +13,8 @@ import 'package:intl/intl.dart';
 
 class BookingForm extends StatefulWidget {
   final int id;
-  const BookingForm({required this.id});
+  final String name;
+  const BookingForm({required this.id, required this.name});
 
   @override
   _BookingFormState createState() => _BookingFormState();
@@ -21,7 +23,11 @@ class BookingForm extends StatefulWidget {
 class _BookingFormState extends State<BookingForm> {
   final _formKey = GlobalKey<FormState>();
   DateTime? selectedDate;
-  int selectedDayIndex = 0; // To store the index of the selected day
+  Map<String, dynamic> selectedDayData =
+      {}; // To store the index of the selected day
+  List<MapEntry<String, dynamic>> sortedEntries = [];
+  List<dynamic> selectedInterval = [];
+  bool isLoading = true;
 
   Map<String, String> dayNames = {
     'sunday': 'Chủ Nhật',
@@ -36,26 +42,114 @@ class _BookingFormState extends State<BookingForm> {
   Map<String, dynamic>? bookingData = {};
 
   Future<void> fetchBooking() async {
+    isLoading = true;
     try {
       final response =
           await HttpProvider().getData('/api/time-work/advise/${widget.id}');
-      print('id: ${widget.id}');
 
       final responseData = json.decode(response.body);
       final data = responseData['data'];
 
       // Checking if the fetched data is a Map<String, dynamic>
       if (data is Map<String, dynamic>) {
-        // Updating the state with the new data
-        setState(() {
-          // Assigning the new data to a variable in the widget state
-          bookingData = data;
-        });
+        // Extracting the 'times' data from the nested structure
+        final timesData = data['times'] as Map<String, dynamic>?;
+
+        if (timesData != null) {
+          // Updating the state with the new data
+          setState(() {
+            // Assigning the new data to a variable in the widget state
+            bookingData = timesData;
+          });
+        }
       }
-      print('bokking data ${bookingData}, ${widget.id}');
+      isLoading = false;
     } catch (e) {
       // Handling errors, if any
       print('Error: $e');
+    }
+  }
+
+  _bookingForm(int id, String date, List<dynamic> interval) async {
+    var data = {
+      "id_doctor": id,
+      "time": {"date": date, "interval": interval}
+    };
+    isLoading = true;
+    try {
+      var res =
+          await HttpProvider().postData(data, 'api/work-schedule/add-advise');
+      var body = json.decode(res.body);
+      print('object ${data}');
+      if (res.statusCode == 201) {
+        MessageDialog.showSuccess(context, body['message']);
+      } else {
+        if (body.containsKey('errors') && body['errors'] is List<String>) {
+          MessageDialog.showError(context, body['errors'][0]);
+        } else if (body.containsKey('message')) {
+          MessageDialog.showError(context, body['message']);
+        } else {
+          MessageDialog.showError(context, "An error occurred.");
+        }
+      }
+      isLoading = false;
+    } catch (error) {
+      MessageDialog.showError(context, "An error occurred: $error");
+    }
+  }
+
+  Future<void> _confirmBooking(BuildContext context) async {
+    // Show a confirmation dialog
+    bool confirm = await showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          backgroundColor: Colors.white, // Set the background color
+          contentPadding:
+              EdgeInsets.all(16.0), // Adjust content padding as needed
+          title: Text('Xác nhận đặt lịch'),
+          content: Container(
+            height: 100.0, // Set the height of the content container
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text('Bạn có chắc chắn muốn đặt lịch với:'),
+                SizedBox(height: 8),
+                Text('Bác sĩ: ${widget.name}'),
+                SizedBox(height: 8),
+                Text(
+                  'Thời gian: ${selectedInterval[0]} - ${selectedInterval[1]}, ${selectedDayData['date']}',
+                ),
+              ],
+            ),
+          ),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () {
+                // User canceled the operation
+                Navigator.of(context).pop(false);
+              },
+              child: Text('Hủy'),
+            ),
+            TextButton(
+              onPressed: () {
+                // User confirmed the operation
+                Navigator.of(context).pop(true);
+              },
+              child: Text('Xác nhận'),
+            ),
+          ],
+        );
+      },
+    );
+
+    // If the user confirmed, proceed with booking
+    if (confirm == true) {
+      _bookingForm(
+        widget.id,
+        selectedDayData['date'],
+        selectedInterval,
+      );
     }
   }
 
@@ -85,6 +179,37 @@ class _BookingFormState extends State<BookingForm> {
     }
   }
 
+  List<MapEntry<String, dynamic>> sortBookingData(Map<String, dynamic>? data) {
+    List<MapEntry<String, dynamic>> sortedEntries = [];
+
+    if (data != null) {
+      // Convert the Map entries to a list
+      sortedEntries = data.entries.toList();
+
+      // Sort the list based on the 'date' field
+      sortedEntries.sort((a, b) {
+        DateTime dateA = DateTime.parse(a.value['date']);
+        DateTime dateB = DateTime.parse(b.value['date']);
+        return dateA.compareTo(dateB);
+      });
+    }
+
+    return sortedEntries;
+  }
+
+  Map<String, dynamic> getDayData(String dayKey) {
+    if (bookingData != null) {
+      // Iterate through bookingData to find the matching day data
+      for (var entry in bookingData!.entries) {
+        if (entry.key.toString() == dayKey.toString()) {
+          return entry.value;
+        }
+      }
+    }
+    // Return an empty map or handle the case when no matching data is found
+    return {};
+  }
+
   @override
   void initState() {
     super.initState();
@@ -94,138 +219,189 @@ class _BookingFormState extends State<BookingForm> {
   @override
   Widget build(BuildContext context) {
     Config().init(context);
+    sortedEntries = sortBookingData(bookingData);
+    print('object ${selectedInterval}');
+
     return Form(
-      key: _formKey,
-      child: Container(
-        color: Color(0xffE7F7FA),
-        padding: EdgeInsets.symmetric(vertical: 30, horizontal: 15),
-        alignment: Alignment.topLeft,
-        child: Column(
-          children: <Widget>[
-            InkWell(
-              onTap: () {
-                _selectDate(context);
-              },
-              child: DateTimeField(
-                label: 'Đặt lịch hẹn',
-                value: selectedDate != null
-                    ? DateFormat('dd/MM/yyyy').format(selectedDate!)
-                    : '${DateFormat('dd/MM/yyyy').format(DateTime.now())} - ${DateFormat('dd/MM/yyyy').format(DateTime.now().add(const Duration(days: 7)))}',
-                readOnly: true,
-                onTap: () {
-                  _selectDate(context);
-                },
-              ),
-            ),
-            Config.spaceSmall,
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                if (selectedDayIndex == 0)
-                  Align(
-                    alignment: Alignment.topLeft,
-                    child: InkWell(
-                      child: Text(
-                        'Lịch trống gần nhất',
-                        style: TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.bold,
-                        ),
+        key: _formKey,
+        child: !isLoading
+            ? Container(
+                color: Color(0xffE7F7FA),
+                padding: EdgeInsets.symmetric(vertical: 30, horizontal: 15),
+                alignment: Alignment.topLeft,
+                child: Column(
+                  children: <Widget>[
+                    // InkWell(
+                    //   onTap: () {
+                    //     _selectDate(context);
+                    //   },
+                    //   child: DateTimeField(
+                    //     label: 'Đặt lịch hẹn',
+                    //     value: selectedDate != null
+                    //         ? DateFormat('dd/MM/yyyy').format(selectedDate!)
+                    //         : '${DateFormat('dd/MM/yyyy').format(DateTime.now())} - ${DateFormat('dd/MM/yyyy').format(DateTime.now().add(const Duration(days: 7)))}',
+                    //     readOnly: true,
+                    //     onTap: () {
+                    //       _selectDate(context);
+                    //     },
+                    //   ),
+                    // ),
+                    // Config.spaceSmall,
+                    // Row(
+                    //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    //   children: [
+                    //     Align(
+                    //       alignment: Alignment.topLeft,
+                    //       child: InkWell(
+                    //         child: Text(
+                    //           'Lịch trống gần nhất',
+                    //           style: TextStyle(
+                    //             fontSize: 16,
+                    //             fontWeight: FontWeight.bold,
+                    //           ),
+                    //         ),
+                    //       ),
+                    //     ),
+                    //     Spacer(),
+                    //     Align(
+                    //       alignment: Alignment.topRight,
+                    //       child: InkWell(
+                    //         onTap: () {
+                    //           setState(() {
+                    //             selectedDayData =
+                    //                 getDayData(sortedEntries.first.key);
+                    //           });
+                    //         },
+                    //         child: Text(
+                    //           'Hôm nay',
+                    //           style: TextStyle(
+                    //             fontSize: 16,
+                    //             fontWeight: FontWeight.bold,
+                    //           ),
+                    //         ),
+                    //       ),
+                    //     ),
+                    //   ],
+                    // ),
+                    // Config.spaceSmall,
+                    Container(
+                      height: 100,
+                      child: ListView.builder(
+                        shrinkWrap: true,
+                        scrollDirection: Axis.horizontal,
+                        itemCount: sortedEntries.length,
+                        itemBuilder: (context, index) {
+                          if (sortedEntries == null || sortedEntries.isEmpty) {
+                            // Handle the case where bookingData is null or empty
+                            return Container(); // or a placeholder widget
+                          }
+
+                          // Verify that the index is within the valid range
+                          if (index < 0 || index >= sortedEntries.length) {
+                            print('Invalid index: $index');
+                            return Container(); // or handle the error in another way
+                          }
+
+                          MapEntry<String, dynamic> entry =
+                              sortedEntries[index];
+                          String dayKey = entry.key;
+                          Map<String, dynamic> dayData =
+                              entry.value as Map<String, dynamic>;
+
+                          String formattedDate = DateFormat('dd/MM/yyyy')
+                              .format(DateTime.parse(dayData['date']));
+                          return InkWell(
+                            onTap: () {
+                              setState(() {
+                                selectedDayData = getDayData(dayKey);
+                              });
+                            },
+                            child: Container(
+                              margin: EdgeInsets.symmetric(
+                                  horizontal: 8, vertical: 5),
+                              padding: EdgeInsets.symmetric(
+                                  vertical: 5, horizontal: 25),
+                              decoration: BoxDecoration(
+                                color: dayData['enable'] == false
+                                    ? Colors.grey.withOpacity(0.5).withOpacity(
+                                        0.5) // Adjust the disabled color
+                                    : selectedDayData == dayData
+                                        ? Color(
+                                            0xFFE3F2FF) // Adjust the color when tapped
+                                        : Colors.white,
+                                borderRadius: BorderRadius.circular(10),
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: Colors.grey.withOpacity(0.5),
+                                    blurRadius: 4,
+                                    spreadRadius: 2,
+                                  ),
+                                ],
+                              ),
+                              child: Column(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text(
+                                    dayNames[dayKey] ?? 'Unknown',
+                                    style: TextStyle(
+                                      color: Colors.black,
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.w500,
+                                    ),
+                                  ),
+                                  SizedBox(height: 5),
+                                  Text(
+                                    formattedDate,
+                                    style: TextStyle(
+                                      color: Colors.black,
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.w700,
+                                    ),
+                                  ),
+                                  SizedBox(height: 5),
+                                  Text(
+                                    '${dayData['space'] ?? 0} chỗ trống',
+                                    style: TextStyle(
+                                      color: dayData['enable'] == false
+                                          ? Colors
+                                              .black // Adjust the text color for disabled state
+                                          : Colors.green,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          );
+                        },
                       ),
                     ),
-                  ),
-                Spacer(),
-                Align(
-                  alignment: Alignment.topRight,
-                  child: InkWell(
-                    onTap: () {
-                      setState(() {
-                        selectedDayIndex = 0;
-                      });
-                    },
-                    child: Text(
-                      'Hôm nay',
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
+                    Config.spaceMedium,
+                    Container(
+                      height: 300,
+                      child: TabBarScreen(
+                        dayNameData: selectedDayData,
+                        onIntervalSelected: (interval) {
+                          selectedInterval = interval;
+                          print('selectedInterval: ${selectedInterval}');
+                        },
                       ),
                     ),
-                  ),
+                    Config.spaceMedium,
+                    Button(
+                      height: 50,
+                      width: Config.screenWidth,
+                      title: 'TIẾP TỤC ĐẶT LỊCH',
+                      disable: false,
+                      onPressed: () => _confirmBooking(context),
+                    )
+                  ],
                 ),
-              ],
-            ),
-            Config.spaceSmall,
-            Container(
-              height: 100,
-              child: ListView.builder(
-                shrinkWrap: true,
-                scrollDirection: Axis.horizontal,
-                itemCount: 7,
-                itemBuilder: (context, index) {
-                  String dayKey = bookingData!.keys.toList()[index];
-                  Map<String, dynamic> dayData = bookingData![dayKey] ?? {};
-                  return InkWell(
-                    onTap: () {
-                      setState(() {
-                        selectedDayIndex = index; // Set the selected day index
-                      });
-                    },
-                    child: Container(
-                      margin: EdgeInsets.symmetric(horizontal: 8, vertical: 5),
-                      padding:
-                          EdgeInsets.symmetric(vertical: 5, horizontal: 25),
-                      decoration: BoxDecoration(
-                        color: selectedDayIndex == index
-                            ? Color(0xFFE3F2FF)
-                            : Colors.white,
-                        borderRadius: BorderRadius.circular(10),
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.grey.withOpacity(0.5),
-                            blurRadius: 4,
-                            spreadRadius: 2,
-                          ),
-                        ],
-                      ),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text(
-                            dayNames[dayKey] ?? 'Unknown',
-                            style: TextStyle(
-                              color: Colors.black,
-                              fontSize: 16,
-                              fontWeight: FontWeight.w500,
-                            ),
-                          ),
-                          SizedBox(height: 5),
-                          Text(
-                            dayData['enable'] == true
-                                ? 'Có lịch'
-                                : 'Không có lịch',
-                            style: TextStyle(
-                              color: Colors.black,
-                              fontSize: 18,
-                              fontWeight: FontWeight.w700,
-                            ),
-                          ),
-                          SizedBox(height: 5),
-                          Text(
-                            '${dayData['space']} chỗ trống',
-                            style: TextStyle(
-                              color: Colors.green,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  );
-                },
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
+              )
+            : Container(
+                child: Center(
+                  child: CircularProgressIndicator(),
+                ),
+              ));
   }
 }
