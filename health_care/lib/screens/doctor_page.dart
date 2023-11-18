@@ -131,11 +131,9 @@ class _DoctorPageState extends State<DoctorPage> {
                                 radius: 60,
                                 backgroundImage: NetworkImage(doctor.avatar),
                               )
-                            : Image.asset(
-                                'assets/images/doctor.jpg',
-                                fit: BoxFit.cover,
-                                width: 120,
-                                height: 120,
+                            : CircleAvatar(
+                                radius: 60,
+                                backgroundImage: AssetImage('assets/images/doctor.jpg'),
                               ),
                         SizedBox(width: 16.0),
                         Column(

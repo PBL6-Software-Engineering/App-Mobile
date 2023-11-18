@@ -6,8 +6,44 @@ import 'package:health_care/providers/auth_manager.dart';
 import 'package:health_care/providers/http_provider.dart';
 import 'package:health_care/screens/user_info.dart';
 import 'package:health_care/utils/config.dart';
+import 'package:health_care/objects/user.dart';
+class SettingPage extends StatefulWidget {
 
-class SettingPage extends StatelessWidget {
+  @override
+  _SettingPageState createState() => _SettingPageState();
+}
+
+class _SettingPageState extends State<SettingPage> {
+  UserService userservice = UserService();
+  bool loading = true;
+  User user = User(
+    id: 0,
+    name: '',
+    email:'',
+    phone: '',
+    gender: 0,
+    dateofbirth: '',
+    avatar: '',
+    address: '',
+  );
+  void initState() {
+    super.initState();
+    fetchUser();
+
+  }
+
+  void fetchUser() async {
+    try {
+      loading = true;
+      user = await userservice.fetchUser();
+      setState(() {
+        loading = false;
+      });
+      //print(hospitals);
+    } catch (e) {
+      print('Error fetch user: $e');
+    }
+  }
   Future<void> _logOut(BuildContext context) async {
     final token = AuthManager.getToken();
     print('Token Logout: $token');
@@ -21,12 +57,33 @@ class SettingPage extends StatelessWidget {
     Navigator.of(context).pushNamed('login');
   }
 
+
   @override
   Widget build(BuildContext context) {
     Config().init(context);
 
     return Scaffold(
-      body: SingleChildScrollView(
+      body: AuthManager.getToken() == null ?
+      Center(
+
+        child: ElevatedButton(
+          onPressed: () {
+            // Xử lý sự kiện khi nhấn nút Đăng nhập
+            Navigator.of(context).pushNamed('login');
+          },
+          style: ElevatedButton.styleFrom(
+            padding: EdgeInsets.symmetric(horizontal: 40, vertical: 16),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(8),
+            ),
+          ),
+          child: Text(
+            'Đăng nhập',
+            style: TextStyle(fontSize: 18),
+          ),
+        ),
+      )
+      :SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
@@ -47,28 +104,33 @@ class SettingPage extends StatelessWidget {
               ),
               child: Row(
                 children: <Widget>[
-                  CircleAvatar(
-                    backgroundImage: AssetImage('assets/user_avatar.png'),
-                    radius: 25,
+                  user.avatar==''? CircleAvatar(
+                    backgroundImage: AssetImage('assets/images/user.jpeg'),
+                    radius: 35,
+                  )
+                  :CircleAvatar(
+                    backgroundImage: NetworkImage(user.avatar),
+                    radius: 35,
                   ),
                   Config.gapSmall,
                   Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
                       Text(
-                        'Tên Người Dùng',
+                        user.name,
                         style: TextStyle(
                           fontSize: 20.0,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: <Widget>[
+                      // Row(
+                        // mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        // children: <Widget>[
                           TextButton(
                             onPressed: () {
                               Navigator.of(context).push(
                                 MaterialPageRoute(
-                                  builder: (context) => UserInfoPage(),
+                                  builder: (context) => UserInfoPage(user: user),
                                 ),
                               );
                             },
@@ -86,8 +148,8 @@ class SettingPage extends StatelessWidget {
                               ],
                             ),
                           ),
-                        ],
-                      ),
+                        //],
+                      //),
                     ],
                   ),
                 ],
