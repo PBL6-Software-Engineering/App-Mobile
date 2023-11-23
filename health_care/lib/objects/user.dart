@@ -33,6 +33,7 @@ class User {
   String dateofbirth;
   String avatar;
   String address;
+  String username;
   User({
     required this.id,
     required this.name,
@@ -41,7 +42,8 @@ class User {
     required this.gender,
     required this.dateofbirth,
     required this.avatar,
-    required this.address
+    required this.address,
+    required this.username,
   });
 
   factory User.fromJson(Map<String, dynamic> json) {
@@ -50,10 +52,11 @@ class User {
     return User(
       id: json['id'],
       name: json['name'],
+      username: json['username'],
       email: json['email'] ?? 'Chưa cập nhật',
       phone: json['phone'] ?? 'Chưa cập nhật',
       gender: json['gender'] ?? 0,
-      dateofbirth: json['date_of_birth'] == null ? 'Chưa cập nhật': (DateFormat('yyyy-MM-dd').format(DateTime.parse(json['date_of_birth']))).toString(),
+      dateofbirth: json['date_of_birth'] == null ? 'Chưa cập nhật': (DateFormat('dd/MM/yyyy').format(DateTime.parse(json['date_of_birth']))).toString(),
       avatar: json['avatar'] != null ? _url + json['avatar'] : '',
       address: json['address'] ?? 'Chưa cập nhật',
     );

@@ -106,14 +106,13 @@ class _DoctorPageState extends State<DoctorPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        leading: IconButton(
-          icon: Icon(Icons.arrow_back),
-          onPressed: () {
-            Navigator.pop(context);
-          },
-        ),
-        backgroundColor: Color(0xFF59D4E9)
-      ),
+          leading: IconButton(
+            icon: Icon(Icons.arrow_back),
+            onPressed: () {
+              Navigator.pop(context);
+            },
+          ),
+          backgroundColor: Color(0xFF59D4E9)),
       body: loading
           ? Center(
               child: CircularProgressIndicator(),
@@ -122,6 +121,7 @@ class _DoctorPageState extends State<DoctorPage> {
               child: Column(
                 children: [
                   // Container chứa ảnh và thông tin bác sĩ
+                  
                   Container(
                     padding: EdgeInsets.all(16.0),
                     child: Row(
@@ -136,24 +136,32 @@ class _DoctorPageState extends State<DoctorPage> {
                                 backgroundImage: AssetImage('assets/images/doctor.jpg'),
                               ),
                         SizedBox(width: 16.0),
-                        Column(
+                        Container( 
+                          constraints: BoxConstraints( maxWidth: 235), // Giới hạn chiều rộng tối đa của đoạn text ),
+                        child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
                               doctor.name,
                               style: TextStyle(
-                                fontSize: 20.0,
+                                fontSize: 18.0,
                                 fontWeight: FontWeight.bold,
                               ),
                               overflow: TextOverflow.ellipsis,
-                              maxLines: 1,
+                              maxLines: 2,
                             ),
                             SizedBox(height: 16),
-                            Text(
-                              'Chuyên khoa: ' + doctor.department.name,
-                              style: TextStyle(fontSize: 16.0),
+                            Container(
+                              constraints: BoxConstraints(
+                                maxWidth: 235,
+                              ),
+                              child: Text(
+                                'Chuyên khoa: ' + doctor.department.name,
+                                style: TextStyle(fontSize: 16.0),
+                              ),
                             ),
                           ],
+                        ),
                         ),
                       ],
                     ),
@@ -291,9 +299,9 @@ class _DoctorPageState extends State<DoctorPage> {
                   //     ],
                   //   ),
                   // ),
-                  // Center(
-                  //   child: BookingForm(id: doctor.idDoctor),
-                  // ),
+                  Center(
+                    child: BookingForm(id: doctor.idDoctor, name: doctor.name),
+                  ),
                 ],
               ),
             ),

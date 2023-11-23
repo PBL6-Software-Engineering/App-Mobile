@@ -21,6 +21,7 @@ class _HospitalPageState extends State<HospitalPage>
   HospitalService hospitalService = HospitalService();
   DoctorService doctorService = DoctorService();
   bool loading = true;
+  bool loadingdoctors = true;
   List<Doctor> doctors = [];
   HospitalDetail hospital = HospitalDetail(
     id: 1,
@@ -42,6 +43,7 @@ class _HospitalPageState extends State<HospitalPage>
       note: "",
     ),
     departments: [],
+    cover_image: '',
   );
 
   void initState() {
@@ -52,11 +54,11 @@ class _HospitalPageState extends State<HospitalPage>
 
   void fetchHospital() async {
     try {
-      loading = true;
+      loadingdoctors = true;
       hospital = await hospitalService.fetchHospitalDetail(widget.id);
       //print(hospital);
       setState(() {
-        loading = false;
+        loadingdoctors = false;
       });
     } catch (e) {
       print('Error fetch Hospital at page: $e');
@@ -66,7 +68,7 @@ class _HospitalPageState extends State<HospitalPage>
   void fetchDoctorsHospital() async {
     try {
       loading = true;
-      doctors = await doctorService.fetchDoctors();
+      doctors = await doctorService.fetchDoctorsHospital(widget.id);
       setState(() {
         loading = false;
       });
@@ -79,14 +81,13 @@ class _HospitalPageState extends State<HospitalPage>
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        leading: IconButton(
-          icon: Icon(Icons.arrow_back),
-          onPressed: () {
-            Navigator.pop(context);
-          },
-        ),
-        backgroundColor: Color(0xFF59D4E9)
-      ),
+          leading: IconButton(
+            icon: Icon(Icons.arrow_back),
+            onPressed: () {
+              Navigator.pop(context);
+            },
+          ),
+          backgroundColor: Color(0xFF59D4E9)),
       body: loading
           ? Center(
               child: CircularProgressIndicator(),
@@ -97,29 +98,49 @@ class _HospitalPageState extends State<HospitalPage>
                 children: [
                   // Container chứa ảnh và thông tin bác sĩ
                   Container(
-                    padding: EdgeInsets.all(16.0),
-                    child: Row(
-                      children: [
-                        CircleAvatar(
-                            radius: 60,
-                            backgroundImage: NetworkImage(
-                              hospital.avatar,
-                            )),
-                        SizedBox(width: 16.0),
-                        Text(
-                          hospital.name,
-                          style: TextStyle(
-                            fontSize: 20.0,
+                      height: 270,
+                      child: Stack(
+                        children: [
+                          Container(
+                            height: 200,
+                            decoration: BoxDecoration(
+                              image: DecorationImage(
+                                image: NetworkImage(hospital.cover_image),
+                                fit: BoxFit.cover,
+                              ),
+                            ),
                           ),
-                          overflow: TextOverflow
-                              .ellipsis, // Hiển thị dấu "..." nếu text quá dài
-                          maxLines: 1,
-                        ),
-                      ],
-                    ),
-                  ),
+                          Positioned(
+                            top: 140,
+                            left: 16,
+                            child: CircleAvatar(
+                              radius: 60,
+                              backgroundImage: NetworkImage(
+                                hospital.avatar,
+                              ),
+                            ),
+                          ),
+                          Positioned(
+                            top: 210,
+                            left: 140,
+                            child: Text(
+                              hospital.name,
+                              style: TextStyle(
+                                color: const Color.fromARGB(255, 6, 5, 5),
+                                fontSize: 24,
+                                fontWeight: FontWeight.bold,
+                              ),
+                              overflow: TextOverflow
+                                  .ellipsis, // Hiển thị dấu "..." nếu text quá dài
+                              maxLines: 1,
+                            ),
+                          ),
+                        ],
+                      )),
+                  //SizedBox(height: 20),
                   Container(
-                    padding: EdgeInsets.all(16.0),
+                    padding: EdgeInsets.only(
+                        top: 20, bottom: 16, left: 16, right: 16),
                     child: Row(
                       children: [
                         Icon(
@@ -154,13 +175,18 @@ class _HospitalPageState extends State<HospitalPage>
                           ),
                           SizedBox(height: 16),
                           Expanded(
-                            child: ListView.builder(
-                              scrollDirection: Axis.horizontal,
-                              itemCount: doctors.length,
-                              itemBuilder: (context, index) {
-                                return DoctorContainer(doctor: doctors[index]);
-                              },
-                            ),
+                            child: loadingdoctors == true
+                                ? Center(
+                                    child: CircularProgressIndicator(),
+                                  )
+                                : ListView.builder(
+                                    scrollDirection: Axis.horizontal,
+                                    itemCount: doctors.length,
+                                    itemBuilder: (context, index) {
+                                      return DoctorContainer(
+                                          doctor: doctors[index]);
+                                    },
+                                  ),
                           )
                         ]),
                   ),
