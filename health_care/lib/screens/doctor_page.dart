@@ -121,6 +121,7 @@ class _DoctorPageState extends State<DoctorPage> {
               child: Column(
                 children: [
                   // Container chứa ảnh và thông tin bác sĩ
+                  
                   Container(
                     padding: EdgeInsets.all(16.0),
                     child: Row(
@@ -130,14 +131,14 @@ class _DoctorPageState extends State<DoctorPage> {
                                 radius: 60,
                                 backgroundImage: NetworkImage(doctor.avatar),
                               )
-                            : Image.asset(
-                                'assets/images/doctor.jpg',
-                                fit: BoxFit.cover,
-                                width: 120,
-                                height: 120,
+                            : CircleAvatar(
+                                radius: 60,
+                                backgroundImage: AssetImage('assets/images/doctor.jpg'),
                               ),
                         SizedBox(width: 16.0),
-                        Column(
+                        Container( 
+                          constraints: BoxConstraints( maxWidth: 235), // Giới hạn chiều rộng tối đa của đoạn text ),
+                        child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
@@ -147,7 +148,7 @@ class _DoctorPageState extends State<DoctorPage> {
                                 fontWeight: FontWeight.bold,
                               ),
                               overflow: TextOverflow.ellipsis,
-                              maxLines: 1,
+                              maxLines: 2,
                             ),
                             SizedBox(height: 16),
                             Container(
@@ -160,6 +161,7 @@ class _DoctorPageState extends State<DoctorPage> {
                               ),
                             ),
                           ],
+                        ),
                         ),
                       ],
                     ),

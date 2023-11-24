@@ -119,7 +119,7 @@ class _AppointmentPageState extends State<AppointmentPage> {
                   ),
                   SizedBox(height: 16),
                   Container(
-                    height: 350,
+                    height: 380,
                     child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
@@ -128,7 +128,7 @@ class _AppointmentPageState extends State<AppointmentPage> {
                             style: TextStyle(
                                 fontSize: 20, fontWeight: FontWeight.bold),
                           ),
-                          SizedBox(height: 16),
+                          SizedBox(height: 8),
                           // Expanded(
                           //     child: ListView.separated(
                           //     itemCount: doctors.length,
@@ -160,7 +160,7 @@ class _AppointmentPageState extends State<AppointmentPage> {
                   ),
                   SizedBox(height: 16),
                   Container(
-                    height: 400,
+                    height: 350,
                     child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
@@ -177,15 +177,15 @@ class _AppointmentPageState extends State<AppointmentPage> {
                                   ),
                                 )
                               : Expanded(
-                                  child: ListView.separated(
-                                  itemCount: services.length,
-                                  separatorBuilder: (context, index) =>
-                                      SizedBox(height: 16),
-                                  itemBuilder: (context, index) {
-                                    return ServiceComponent(
-                                        service: services[index]);
-                                  },
-                                ))
+                                  child: ListView.builder(
+                                    scrollDirection: Axis.horizontal,
+                                    itemCount: services.length,
+                                    itemBuilder: (context, index) {
+                                      return ServiceComponent(
+                                          service: services[index]);
+                                    },
+                                  ),
+                                )
                         ]),
                   ),
                 ]))));

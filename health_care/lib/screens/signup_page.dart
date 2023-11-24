@@ -1,5 +1,4 @@
 import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:health_care/components/SignUp_form.dart';
 import 'package:health_care/components/message_dialog.dart';

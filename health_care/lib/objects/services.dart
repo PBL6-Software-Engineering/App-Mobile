@@ -28,6 +28,7 @@ class Service {
   String name;
   int price;
   String hospital_name;
+  String thumbnail ;
   ServiceInformation infor;
 
   Service({
@@ -36,14 +37,18 @@ class Service {
     required this.price,
     required this.hospital_name,
     required this.infor,
+    required this.thumbnail,
   });
   factory  Service.fromJson(Map<String, dynamic> json){
+  final HttpProvider _httpProvider = HttpProvider();
+  final String _url = HttpProvider.url;
     return Service(
       id: json['id_hospital_service'],
       name: json['name'],
       price: json['price'],
       hospital_name: json['name_hospital'],
       infor: ServiceInformation.fromJson(json['infor']),
+      thumbnail: json['thumbnail_service'] == null  ? '' : _url + json['thumbnail_service'],
     );
   }
 }

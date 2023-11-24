@@ -103,6 +103,7 @@ class HospitalDetail {
   String phone;
   String address;
   String avatar;
+  String cover_image;
   int provinceCode;
   List<String> infrastructure;
   String description;
@@ -125,6 +126,7 @@ class HospitalDetail {
     required this.searchNumber,
     required this.timeWork,
     required this.departments,
+    required this.cover_image,
   });
 
   factory HospitalDetail.fromJson(Map<String, dynamic> json) {
@@ -144,6 +146,7 @@ class HospitalDetail {
       searchNumber: json['search_number'],
       timeWork: TimeWork.fromJson(json['time_work']),
       departments: List<String>.from(json['departments']),
+      cover_image: json['cover_hospital']==null ? '' : _url+json['cover_hospital'],
     );
   }
 }

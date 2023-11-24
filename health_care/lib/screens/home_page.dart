@@ -8,6 +8,7 @@ import 'package:health_care/objects/categories.dart';
 import 'package:health_care/providers/http_provider.dart';
 import 'package:health_care/screens/category_page.dart';
 import 'package:health_care/utils/config.dart';
+import 'package:health_care/objects/user.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -23,6 +24,32 @@ class _HomePageState extends State<HomePage> {
   List<Article> articles = [];
   List<Article> articleResults = [];
   bool loading = true;
+  UserService userservice = UserService();
+  //bool loading = true;
+  User user = User(
+    id: 0,
+    name: '',
+    email: '',
+    phone: '',
+    gender: 0,
+    dateofbirth: '',
+    avatar: '',
+    address: '',
+    username: ''
+  );
+
+  void fetchUser() async {
+    try {
+      loading = true;
+      user = await userservice.fetchUser();
+      setState(() {
+        loading = false;
+      });
+      //print(hospitals);
+    } catch (e) {
+      print('Error fetch user: $e');
+    }
+  }
 
   final List<String> catNames = [
     "Đặt lịch hẹn",
@@ -41,6 +68,7 @@ class _HomePageState extends State<HomePage> {
   void initState() {
     fetchArticleList();
     fetchCategoryList();
+    fetchUser();
     super.initState();
   }
 
@@ -140,19 +168,26 @@ class _HomePageState extends State<HomePage> {
                         ],
                       ),
                       Config.spaceSmall,
-                      const Row(
+                      Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: <Widget>[
                           Row(
                             children: <Widget>[
-                              CircleAvatar(
-                                radius: 25,
-                                backgroundImage:
-                                    AssetImage("assets/images/Ellipse-1.png"),
-                              ),
+                              user.avatar == ''
+                                  ? CircleAvatar(
+                                      backgroundImage:
+                                          AssetImage('assets/images/user.jpeg'),
+                                      radius: 25,
+                                    )
+                                  : CircleAvatar(
+                                      backgroundImage:
+                                          NetworkImage(user.avatar),
+                                      radius: 25,
+                                    ),
                               Config.gapSmall,
                               Text(
-                                "Xin chào! \nProgram",
+                                "Xin chào! \n" + user.name,
+                                
                                 style: TextStyle(
                                   color: Colors.black,
                                   fontSize: 14.0,

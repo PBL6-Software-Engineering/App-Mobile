@@ -67,7 +67,7 @@ class Article {
       thumbnail: _url + json['thumbnail_article'],
       author: json['name_user'] ?? '',
       createdAt:
-          (DateFormat('yyyy-MM-dd').format(DateTime.parse(json['created_at'])))
+          (DateFormat('dd/MM/yyyy').format(DateTime.parse(json['created_at'])))
               .toString(),
     );
   }

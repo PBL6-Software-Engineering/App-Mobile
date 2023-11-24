@@ -62,11 +62,12 @@ class HospitalContainer extends StatelessWidget {
                           radius: 60,
                           backgroundImage: NetworkImage(hospital.avatar),
                         )
-                      : Image.asset(
-                          'assets/images/hospital.jpg',
-                          fit: BoxFit.cover,
-                          width: 120,
-                          height: 120,
+                      : 
+                      CircleAvatar(
+                          radius: 60,
+                          backgroundImage: AssetImage(
+                          'assets/images/hospital.jpg'
+                        ),
                         ),
                   SizedBox(width: 8),
                   Column(

@@ -26,43 +26,55 @@ class DoctorContainer extends StatelessWidget {
           padding: EdgeInsets.all(16.0),
           width: 200,
           margin: EdgeInsets.all(8.0),
-          decoration: BoxDecoration(
-            color: Colors.white,
-            border: Border(
-              left: BorderSide(
-                color: Color(0xFF0B8AA0),
-                width: 8.0,
-              ),
-              right: BorderSide(
-                color: Color(0xFF11B3CF),
-                width: 2.0,
-              ),
-              top: BorderSide(
-                color: Color(0xFF11B3CF),
-                width: 2.0,
-              ),
-              bottom: BorderSide(
-                color: Color(0xFF11B3CF),
-                width: 2.0,
-              ),
-            ),
-          ),
+          // decoration: BoxDecoration(
+          //   color: Colors.white,
+          //   border: Border(
+          //     left: BorderSide(
+          //       color: Color(0xFF0B8AA0),
+          //       width: 8.0,
+          //     ),
+          //     right: BorderSide(
+          //       color: Color(0xFF11B3CF),
+          //       width: 2.0,
+          //     ),
+          //     top: BorderSide(
+          //       color: Color(0xFF11B3CF),
+          //       width: 2.0,
+          //     ),
+          //     bottom: BorderSide(
+          //       color: Color(0xFF11B3CF),
+          //       width: 2.0,
+          //     ),
+          //   ),
+          // ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: <Widget>[
-              doctor.avatar == ''
-                  ? Image.asset("assets/images/doctor.jpg",
-                      width: 130.0, height: 100.0, fit: BoxFit.cover)
-                  : Image.network(doctor.avatar,
-                      width: 130.0, height: 100.0, fit: BoxFit.cover),
+              doctor.avatar != ''
+                  ? CircleAvatar(
+                      radius: 60,
+                      backgroundImage: NetworkImage(doctor.avatar),
+                    )
+                  : CircleAvatar(
+                      radius: 60,
+                      backgroundImage: AssetImage('assets/images/doctor.jpg'),
+                    ),
               SizedBox(height: 16.0),
-              Container(
-                height: 65,
-                child: Text(
-                  doctor.name,
-                  style: TextStyle(
-                    fontSize: 20.0,
-                    fontWeight: FontWeight.bold,
+              Center(
+                child: Container(
+                  height: 65,
+                  child: Align(
+                    alignment: Alignment.center,
+                    child: Text(
+                      doctor.name,
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        fontSize: 18.0,
+                        fontWeight: FontWeight.bold,
+                      ),
+                      overflow: TextOverflow.ellipsis,
+                      maxLines: 2,
+                    ),
                   ),
                 ),
               ),

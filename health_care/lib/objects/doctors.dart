@@ -25,6 +25,22 @@ class DoctorService {
       throw Exception('Failed to fetch doctors');
     }
   }
+  Future<List<Doctor>> fetchDoctorsHospital(int id) async {
+    final response =
+        await _httpProvider.getData('api/infor-hospital/doctors-home/${id.toString()}');
+    //print(response);
+    if (response.statusCode == 200) {
+      final responseData = json.decode(response.body);
+      final List<dynamic> jsonList = responseData['data'];
+      //print(responseData);
+
+      List<Doctor> DoctorList =
+          jsonList.map((json) => Doctor.fromJson(json)).toList();
+      return DoctorList;
+    } else {
+      throw Exception('Failed to fetch doctors');
+    }
+  }
 
   Future<DoctorDetail> fetchDoctorDetail(int id) async {
     final response = await _httpProvider
