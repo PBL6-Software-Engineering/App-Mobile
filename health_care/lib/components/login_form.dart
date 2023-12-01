@@ -25,6 +25,7 @@ class _LoginFormState extends State<LoginForm> {
         mainAxisAlignment: MainAxisAlignment.start,
         children: <Widget>[
           CustomTextField(
+              key: Key('emailField'),
               controller: _emailController,
               keyboardType: TextInputType.emailAddress,
               hintText: 'Nhập email',
@@ -32,6 +33,7 @@ class _LoginFormState extends State<LoginForm> {
               prefixIcon: Icons.email_outlined),
           Config.spaceSmall,
           CustomTextField(
+            key: Key('passwordField'),
             controller: _passController,
             keyboardType: TextInputType.visiblePassword,
             labelText: 'Mật khẩu',
@@ -41,6 +43,7 @@ class _LoginFormState extends State<LoginForm> {
           ),
           Config.spaceSmall,
           Button(
+            key: Key('loginButton'),
             height: 50,
             width: double.infinity,
             title: 'Đăng nhập',

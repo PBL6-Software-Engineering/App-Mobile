@@ -7,6 +7,7 @@ import 'dart:async';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:intl/intl.dart';
+import 'package:flutter/services.dart';
 
 class UserInfoPage extends StatefulWidget {
   User user;
@@ -211,14 +212,21 @@ class UserProfileFormDialog extends StatelessWidget {
     //genderController.text = user.gender.toString();
     addressController.text = user.address;
     dobController.text = user.dateofbirth;
+      bool isLoading = false;
 
     return AlertDialog(
       title: Text('Chỉnh sửa thông tin'),
+      backgroundColor: Colors.white,
+      contentPadding: EdgeInsets.all(16.0),
       content: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
           TextFormField(
             controller: nameController,
+            style: TextStyle(
+              fontSize: 15,
+              fontWeight: FontWeight.bold, // Kích thước font chữ mong muốn
+            ),
             decoration: InputDecoration(
               labelText: 'Tên',
               labelStyle: TextStyle(
@@ -226,9 +234,13 @@ class UserProfileFormDialog extends StatelessWidget {
               ),
             ),
           ),
-          SizedBox(height: 8),
+          Config.spaceSmall,
           TextFormField(
             controller: phoneController,
+            style: TextStyle(
+              fontSize: 15,
+              fontWeight: FontWeight.bold, // Kích thước font chữ mong muốn
+            ),
             decoration: InputDecoration(
               labelText: 'Số điện thoại',
               labelStyle: TextStyle(
@@ -236,18 +248,18 @@ class UserProfileFormDialog extends StatelessWidget {
               ),
             ),
           ),
-          SizedBox(height: 8),
-          TextFormField(
-            controller: emailController,
-            decoration: InputDecoration(
-              enabled: false,
-              labelText: 'Email',
-              labelStyle: TextStyle(
-                color: Config.blueColor, // Màu sắc mong muốn cho nhãn
-              ),
-            ),
-          ),
-          SizedBox(height: 8),
+          Config.spaceSmall,
+          // TextFormField(
+          //   controller: emailController,
+          //   decoration: InputDecoration(
+          //     enabled: false,
+          //     labelText: 'Email',
+          //     labelStyle: TextStyle(
+          //       color: Config.blueColor, // Màu sắc mong muốn cho nhãn
+          //     ),
+          //   ),
+          // ),
+          //Config.spaceSmall,
           // TextFormField(
           //   controller: genderController,
           //   decoration: InputDecoration(
@@ -280,9 +292,13 @@ class UserProfileFormDialog extends StatelessWidget {
               ),
             ],
           ),
-          SizedBox(height: 8),
+          Config.spaceSmall,
           TextFormField(
             controller: addressController,
+            style: TextStyle(
+              fontSize: 15,
+              fontWeight: FontWeight.bold, // Kích thước font chữ mong muốn
+            ),
             decoration: InputDecoration(
               labelText: 'Địa chỉ',
               labelStyle: TextStyle(
@@ -290,10 +306,18 @@ class UserProfileFormDialog extends StatelessWidget {
               ),
             ),
           ),
-          SizedBox(height: 8),
+          Config.spaceSmall,
           TextFormField(
             controller: dobController,
+            //inputFormatters: [
+              //FilteringTextInputFormatter.allow(RegExp(r'^\d{2}/\d{2}/\d{4}$')),
+              //_DateInputFormatter(),
+            //],
             keyboardType: TextInputType.datetime,
+            style: TextStyle(
+              fontSize: 15,
+              fontWeight: FontWeight.bold, // Kích thước font chữ mong muốn
+            ),
             decoration: InputDecoration(
               labelText: 'Ngày sinh',
               labelStyle: TextStyle(
@@ -306,6 +330,7 @@ class UserProfileFormDialog extends StatelessWidget {
       actions: [
         ElevatedButton(
           onPressed: () async {
+            isLoading = true;
             var updatedProfile = {
               'name': nameController.text,
               'phone': phoneController.text,
@@ -349,11 +374,18 @@ class UserProfileFormDialog extends StatelessWidget {
               //   ),
               // );
             }
+            isLoading = false;
             _showNotificationDialog(
                   context, json.decode(response.body)['message']);
             //if (response.statusCode==200) Navigator.of(context).pop();
           },
-          child: Text('Lưu thay đổi'),
+          child: Stack(
+            alignment: Alignment.center,
+            children: [
+              Text('Lưu thay đổi'),
+              isLoading == true ? Center(child: CircularProgressIndicator() ) : Text(''),
+            ],
+          ),
         ),
         TextButton(
           onPressed: () {

@@ -5,6 +5,7 @@ import 'package:health_care/screens/message_page.dart';
 import 'package:health_care/screens/setting_page.dart';
 import 'package:health_care/utils/config.dart';
 import 'package:health_care/screens/article_page.dart';
+import 'package:health_care/objects/user.dart';
 
 class MainLayout extends StatefulWidget {
   const MainLayout({super.key});
@@ -16,6 +17,41 @@ class MainLayout extends StatefulWidget {
 class _MainLayoutState extends State<MainLayout> {
   int currentPage = 0;
   final PageController _page = PageController();
+  UserService userservice = UserService();
+  bool loading = true;
+  User user = User(
+    id: 0,
+    name: '',
+    username: '',
+    email: '',
+    phone: '',
+    gender: 0,
+    dateofbirth: '',
+    avatar: '',
+    address: '',
+  );
+  void initState() {
+    super.initState();
+    fetchUser();
+  }
+
+  void updateUser(User updatedUser) { 
+    setState(() {
+      user = updatedUser;
+    });
+  }
+  void fetchUser() async {
+    try {
+      loading = true;
+      user = await userservice.fetchUser();
+      setState(() {
+        loading = false;
+      });
+      //print(hospitals);
+    } catch (e) {
+      print('Error fetch user: $e');
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -30,10 +66,10 @@ class _MainLayoutState extends State<MainLayout> {
           });
         },
         children: <Widget>[
-          HomePage(),
+          HomePage(user: user),
           MessagePage(),
           AppointmentPage(),
-          SettingPage(),
+          SettingPage(user: user, onUpdateUser:updateUser),
         ],
       ),
       bottomNavigationBar: BottomNavigationBar(

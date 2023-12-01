@@ -23,8 +23,6 @@ void main() async {
   // interceptors.add(AuthInterceptor());
 
   // final client = http.Client();
-  WidgetsFlutterBinding.ensureInitialized();
-  await AuthManager.init();
 
   WidgetsFlutterBinding.ensureInitialized();
   await AuthManager.init();
@@ -32,15 +30,12 @@ void main() async {
   final interceptors = <InterceptorContract>[];
   interceptors.add(AuthInterceptor());
 
-  final client = http.Client();
-
-  runApp(MyApp(client: client));
+  runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
-  final http.Client client;
 
-  MyApp({Key? key, required this.client}) : super(key: key);
+  MyApp({Key? key}) : super(key: key);
 
   // const MyApp({super.key});
   static final navigatorKey = GlobalKey<NavigatorState>();
@@ -94,14 +89,15 @@ class MyApp extends StatelessWidget {
       ),
       initialRoute: '/',
       routes: {
-        //'/': (context) => const AppointmentPage(),
+        //'/': (context) => const LoginPage(),
+        //'/': (context) => SettingPage(),
         //'/': (context) => const Welcome(),
         '/': (context) => const MainLayout(),
         'main': (context) => const MainLayout(),
         'login': (context) => const LoginPage(),
         'signup': (context) => const SignUpPage(),
         'forgotpassword': (context) => const ForgotPasswordPage(),
-        'setting': (context) => SettingPage(),
+        //'setting': (context) => SettingPage(),
         'search': (context) => SearchPage(),
         'booking-search': (context) => BookingSearchPage(),
 

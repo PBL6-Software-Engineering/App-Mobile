@@ -55,11 +55,11 @@ class Hospital {
   String phone;
   String address;
   String avatar;
-  int provinceCode;
-  List<String> infrastructure;
+  //int provinceCode;
+  // List<String> infrastructure;
   String description;
-  List<int> location;
-  int searchNumber;
+  // List<int> location;
+  // int searchNumber;
 
   Hospital({
     required this.id,
@@ -68,11 +68,11 @@ class Hospital {
     required this.phone,
     required this.address,
     required this.avatar,
-    required this.provinceCode,
-    required this.infrastructure,
+    // required this.provinceCode,
+    // required this.infrastructure,
     required this.description,
-    required this.location,
-    required this.searchNumber,
+    // required this.location,
+    // required this.searchNumber,
   });
 
   factory Hospital.fromJson(Map<String, dynamic> json) {
@@ -87,11 +87,11 @@ class Hospital {
       phone: json['phone'] ?? 'Chưa cập nhật',
       address: json['address'] ?? 'Chưa cập nhật',
       avatar: json['avatar'] != null ? _url + json['avatar'] : '',
-      provinceCode: json['province_code'],
-      infrastructure: List<String>.from(json['infrastructure']),
+      //provinceCode: json['province_code'],
+      //infrastructure: List<String>.from(json['infrastructure']),
       description: json['description'],
-      location: List<int>.from(json['location']),
-      searchNumber: json['search_number'],
+      //location: List<int>.from(json['location']),
+      //searchNumber: json['search_number'],
     );
   }
 }

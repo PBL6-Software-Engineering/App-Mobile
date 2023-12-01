@@ -11,6 +11,7 @@ class CustomTextField extends StatefulWidget {
   final bool isEmail;
 
   CustomTextField({
+    Key? key,
     required this.controller,
     required this.hintText,
     required this.labelText,
