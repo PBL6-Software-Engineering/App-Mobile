@@ -10,46 +10,30 @@ import 'package:health_care/objects/user.dart';
 
 class SettingPage extends StatefulWidget {
   @override
+  User user;
+  final Function(User) onUpdateUser;
+  SettingPage({required this.user, required this.onUpdateUser});
   _SettingPageState createState() => _SettingPageState();
 }
 
 class _SettingPageState extends State<SettingPage> {
-  UserService userservice = UserService();
-  bool loading = true;
-  User user = User(
-    id: 0,
-    name: '',
-    username: '',
-    email: '',
-    phone: '',
-    gender: 0,
-    dateofbirth: '',
-    avatar: '',
-    address: '',
-  );
+  //bool loading = true;
   void initState() {
     super.initState();
-    fetchUser();
+    //onUpdateUser : updateUser(widget.user);
+    //widget.onUpdateUser(widget.user);
   }
-
+  void dispose() {
+  // Gọi hàm performActionOnHomePage khi thoát khỏi trang settingpage
+  widget.onUpdateUser(widget.user);
+  super.dispose();
+  }
   void updateUser(User updatedUser) { 
     setState(() {
-      user = updatedUser;
+      widget.user = updatedUser;
+      widget.onUpdateUser(updatedUser);
     });
   }
-  void fetchUser() async {
-    try {
-      loading = true;
-      user = await userservice.fetchUser();
-      setState(() {
-        loading = false;
-      });
-      //print(hospitals);
-    } catch (e) {
-      print('Error fetch user: $e');
-    }
-  }
-
   Future<void> _logOut(BuildContext context) async {
     final token = AuthManager.getToken();
     print('Token Logout: $token');
@@ -106,13 +90,9 @@ class _SettingPageState extends State<SettingPage> {
                         ),
                       ],
                     ),
-                    child: loading
-                        ? Center(
-                            child: CircularProgressIndicator(),
-                          )
-                        : Row(
+                    child: Row(
                             children: <Widget>[
-                              user.avatar == ''
+                              widget.user.avatar == ''
                                   ? CircleAvatar(
                                       backgroundImage:
                                           AssetImage('assets/images/user.jpeg'),
@@ -120,7 +100,7 @@ class _SettingPageState extends State<SettingPage> {
                                     )
                                   : CircleAvatar(
                                       backgroundImage:
-                                          NetworkImage(user.avatar),
+                                          NetworkImage(widget.user.avatar),
                                       radius: 35,
                                     ),
                               Config.gapSmall,
@@ -128,7 +108,7 @@ class _SettingPageState extends State<SettingPage> {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: <Widget>[
                                   Text(
-                                    user.name,
+                                    widget.user.name,
                                     style: TextStyle(
                                       fontSize: 20.0,
                                       fontWeight: FontWeight.bold,
@@ -142,7 +122,7 @@ class _SettingPageState extends State<SettingPage> {
                                       Navigator.of(context).push(
                                         MaterialPageRoute(
                                           builder: (context) =>
-                                              UserInfoPage(user: user,onUpdateUser:updateUser),
+                                              UserInfoPage(user: widget.user, onUpdateUser: updateUser),
                                         ),
                                       );
                                     },
@@ -151,7 +131,7 @@ class _SettingPageState extends State<SettingPage> {
                                         Text(
                                           'Thông tin cá nhân',
                                           style: TextStyle(
-                                            fontSize: 15.0,
+                                            fontSize: 20.0,
                                           ),
                                         ),
                                         Icon(

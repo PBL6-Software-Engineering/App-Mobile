@@ -27,16 +27,16 @@ class Category {
   String name;
   String thumbnail;
   int searchNumber;
-  DateTime createdAt;
-  DateTime updatedAt;
+  //DateTime createdAt;
+  //DateTime updatedAt;
 
   Category({
     required this.id,
     required this.name,
     required this.thumbnail,
     required this.searchNumber,
-    required this.createdAt,
-    required this.updatedAt,
+    //required this.createdAt,
+    //required this.updatedAt,
   });
 
   factory Category.fromJson(Map<String, dynamic> json) {
@@ -47,8 +47,8 @@ class Category {
       name: json['name'],
       thumbnail: _url+json['thumbnail'],
       searchNumber: json['search_number'],
-      createdAt: DateTime.parse(json['created_at']),
-      updatedAt: DateTime.parse(json['updated_at']),
+      //createdAt: DateTime.parse(json['created_at']),
+      //updatedAt: DateTime.parse(json['updated_at']),
     );
   }
 }

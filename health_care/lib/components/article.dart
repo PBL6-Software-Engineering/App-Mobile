@@ -26,8 +26,8 @@ class ArticleContainer extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Container(
-                    width: 80,
-                    height: 80,
+                    width: 120,
+                    height: 100,
                     decoration: BoxDecoration(
                       image: DecorationImage(
                         image: NetworkImage(article.thumbnail),

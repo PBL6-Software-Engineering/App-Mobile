@@ -7,11 +7,14 @@ import 'package:health_care/objects/articles.dart';
 import 'package:health_care/objects/categories.dart';
 import 'package:health_care/providers/http_provider.dart';
 import 'package:health_care/screens/category_page.dart';
+import 'package:health_care/screens/all_categories_page.dart';
 import 'package:health_care/utils/config.dart';
 import 'package:health_care/objects/user.dart';
+import 'package:health_care/components/category.dart';
 
 class HomePage extends StatefulWidget {
-  const HomePage({Key? key}) : super(key: key);
+  final User user;
+  const HomePage({Key? key, required this.user,}) : super(key: key);
   @override
   _HomePageState createState() => _HomePageState();
 }
@@ -24,32 +27,7 @@ class _HomePageState extends State<HomePage> {
   List<Article> articles = [];
   List<Article> articleResults = [];
   bool loading = true;
-  UserService userservice = UserService();
   //bool loading = true;
-  User user = User(
-    id: 0,
-    name: '',
-    email: '',
-    phone: '',
-    gender: 0,
-    dateofbirth: '',
-    avatar: '',
-    address: '',
-    username: ''
-  );
-
-  void fetchUser() async {
-    try {
-      loading = true;
-      user = await userservice.fetchUser();
-      setState(() {
-        loading = false;
-      });
-      //print(hospitals);
-    } catch (e) {
-      print('Error fetch user: $e');
-    }
-  }
 
   final List<String> catNames = [
     "Đặt lịch hẹn",
@@ -68,7 +46,6 @@ class _HomePageState extends State<HomePage> {
   void initState() {
     fetchArticleList();
     fetchCategoryList();
-    fetchUser();
     super.initState();
   }
 
@@ -173,7 +150,7 @@ class _HomePageState extends State<HomePage> {
                         children: <Widget>[
                           Row(
                             children: <Widget>[
-                              user.avatar == ''
+                              widget.user.avatar == ''
                                   ? CircleAvatar(
                                       backgroundImage:
                                           AssetImage('assets/images/user.jpeg'),
@@ -181,13 +158,12 @@ class _HomePageState extends State<HomePage> {
                                     )
                                   : CircleAvatar(
                                       backgroundImage:
-                                          NetworkImage(user.avatar),
+                                          NetworkImage(widget.user.avatar),
                                       radius: 25,
                                     ),
                               Config.gapSmall,
                               Text(
-                                "Xin chào! \n" + user.name,
-                                
+                                "Xin chào! \n" + widget.user.name,
                                 style: TextStyle(
                                   color: Colors.black,
                                   fontSize: 14.0,
@@ -301,19 +277,45 @@ class _HomePageState extends State<HomePage> {
                             mainAxisAlignment: MainAxisAlignment.start,
                             children: [
                               Container(
-                                height: 300,
+                                height: 250,
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    const Text(
-                                      "Chủ đề",
-                                      style: TextStyle(
-                                        fontSize: 25,
-                                        fontWeight: FontWeight.bold,
-                                        color: Color.fromARGB(255, 11, 11, 11),
-                                      ),
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Text(
+                                          'Chủ Đề',
+                                          style: TextStyle(
+                                            fontSize: 25,
+                                            fontWeight: FontWeight.bold,
+                                            color: Color.fromARGB(255, 4, 4, 4),
+                                          ),
+                                        ),
+                                        TextButton(
+                                          onPressed: () {
+                                            Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                builder: (context) =>
+                                                    AllCategoryPage(
+                                                        categories: categories),
+                                              ),
+                                            );
+                                          },
+                                          child: Text(
+                                            'Xem thêm >>',
+                                            style: TextStyle(
+                                              fontSize: 16,
+                                              color: Config.blueColor,
+                                              fontWeight: FontWeight.bold,
+                                            ),
+                                          ),
+                                        ),
+                                      ],
                                     ),
-                                    Config.spaceSmall,
+                                    //Config.spaceSmall,
                                     loading
                                         ? Expanded(
                                             child: Center(
@@ -328,104 +330,48 @@ class _HomePageState extends State<HomePage> {
                                               itemBuilder:
                                                   (BuildContext context,
                                                       int index) {
-                                                return InkWell(
-                                                    onTap: () {
-                                                      Navigator.push(
-                                                        context,
-                                                        MaterialPageRoute(
-                                                          builder: (context) =>
-                                                              CategoryPage(
-                                                                  categoryName:
-                                                                      categories[
-                                                                              index]
-                                                                          .name),
-                                                        ),
-                                                      );
-                                                    },
-                                                    child: Container(
-                                                      width: 150,
-                                                      height: 200,
-                                                      child: Column(
-                                                        mainAxisAlignment:
-                                                            MainAxisAlignment
-                                                                .center,
-                                                        children: [
-                                                          Container(
-                                                            width: 120,
-                                                            height: 120,
-                                                            decoration:
-                                                                BoxDecoration(
-                                                              borderRadius:
-                                                                  BorderRadius
-                                                                      .circular(
-                                                                          40),
-                                                              image:
-                                                                  DecorationImage(
-                                                                image: NetworkImage(
-                                                                    categories[
-                                                                            index]
-                                                                        .thumbnail),
-                                                                fit: BoxFit
-                                                                    .cover,
-                                                              ),
-                                                            ),
-                                                          ),
-                                                          SizedBox(height: 10),
-                                                          Text(
-                                                            categories[index]
-                                                                .name,
-                                                            style: TextStyle(
-                                                              fontSize: 16,
-                                                              color: Color
-                                                                  .fromARGB(255,
-                                                                      3, 3, 3),
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .bold,
-                                                              overflow:
-                                                                  TextOverflow
-                                                                      .ellipsis,
-                                                            ),
-                                                          ),
-                                                          SizedBox(height: 10),
-                                                          ElevatedButton(
-                                                            onPressed: () {
-                                                              Navigator.push(
-                                                                context,
-                                                                MaterialPageRoute(
-                                                                  builder: (context) =>
-                                                                      CategoryPage(
-                                                                          categoryName:
-                                                                              categories[index].name),
-                                                                ),
-                                                              );
-                                                            },
-                                                            child: Text(
-                                                                'Xem chi tiết'),
-                                                          ),
-                                                        ],
-                                                      ),
-                                                    ));
+                                                return CategoryContainer(
+                                                    category:
+                                                        categories[index]);
                                               },
                                             ),
                                           ),
                                   ],
                                 ),
                               ),
+                              Config.spaceSmall,
                               Container(
                                 height: 500,
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    const Text(
-                                      "Bài viết mới",
-                                      style: TextStyle(
-                                        fontSize: 25,
-                                        fontWeight: FontWeight.bold,
-                                        color: Color.fromARGB(255, 4, 4, 4),
-                                      ),
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Text(
+                                          'Bài viết mới',
+                                          style: TextStyle(
+                                            fontSize: 25,
+                                            fontWeight: FontWeight.bold,
+                                            color: Color.fromARGB(255, 4, 4, 4),
+                                          ),
+                                        ),
+                                        TextButton(
+                                          onPressed: () {},
+                                          child: Text(
+                                            'Xem thêm >>',
+                                            
+                                            style: TextStyle(
+                                              fontSize: 16,
+                                              color: Config.blueColor,
+                                              fontWeight: FontWeight.bold,
+                                            ),
+                                          ),
+                                        ),
+                                      ],
                                     ),
-                                    Config.spaceSmall,
+                                    //Config.spaceSmall,
                                     loading
                                         ? Expanded(
                                             child: Center(
