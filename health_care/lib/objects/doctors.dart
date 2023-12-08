@@ -158,7 +158,7 @@ class DoctorDetail {
       isConfirm: json['is_confirm'],
       provinceCode: json['province_code'],
       dateOfBirth: json['date_of_birth'] != null
-          ? (DateFormat('yyyy-MM-dd')
+          ? (DateFormat('dd/MM/yyyy')
                   .format(DateTime.parse(json['date_of_birth'])))
               .toString()
           : '',

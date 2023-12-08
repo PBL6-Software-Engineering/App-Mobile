@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:health_care/components/booking_form.dart';
+import 'package:health_care/components/timework.dart';
 import 'package:health_care/objects/doctors.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:health_care/objects/hospitals.dart';
@@ -83,6 +84,10 @@ class _DoctorPageState extends State<DoctorPage> {
       updatedAt: DateTime.now(),
     ),
   );
+  bool isExpanded1 = false;
+  bool isExpanded2 = false;
+  bool isExpanded3 = false;
+  bool isExpanded4 = false;
 
   void initState() {
     fetchDoctor();
@@ -121,7 +126,7 @@ class _DoctorPageState extends State<DoctorPage> {
               child: Column(
                 children: [
                   // Container chứa ảnh và thông tin bác sĩ
-                  
+
                   Container(
                     padding: EdgeInsets.all(16.0),
                     child: Row(
@@ -133,35 +138,38 @@ class _DoctorPageState extends State<DoctorPage> {
                               )
                             : CircleAvatar(
                                 radius: 60,
-                                backgroundImage: AssetImage('assets/images/doctor.jpg'),
+                                backgroundImage:
+                                    AssetImage('assets/images/doctor.jpg'),
                               ),
                         SizedBox(width: 16.0),
-                        Container( 
-                          constraints: BoxConstraints( maxWidth: 235), // Giới hạn chiều rộng tối đa của đoạn text ),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              doctor.name,
-                              style: TextStyle(
-                                fontSize: 18.0,
-                                fontWeight: FontWeight.bold,
+                        Container(
+                          constraints: BoxConstraints(
+                              maxWidth:
+                                  235), // Giới hạn chiều rộng tối đa của đoạn text ),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                doctor.name,
+                                style: TextStyle(
+                                  fontSize: 18.0,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                                overflow: TextOverflow.ellipsis,
+                                maxLines: 2,
                               ),
-                              overflow: TextOverflow.ellipsis,
-                              maxLines: 2,
-                            ),
-                            SizedBox(height: 16),
-                            Container(
-                              constraints: BoxConstraints(
-                                maxWidth: 235,
+                              SizedBox(height: 16),
+                              Container(
+                                constraints: BoxConstraints(
+                                  maxWidth: 235,
+                                ),
+                                child: Text(
+                                  'Chuyên khoa: ' + doctor.department.name,
+                                  style: TextStyle(fontSize: 16.0),
+                                ),
                               ),
-                              child: Text(
-                                'Chuyên khoa: ' + doctor.department.name,
-                                style: TextStyle(fontSize: 16.0),
-                              ),
-                            ),
-                          ],
-                        ),
+                            ],
+                          ),
                         ),
                       ],
                     ),
@@ -169,59 +177,199 @@ class _DoctorPageState extends State<DoctorPage> {
 
                   // Đoạn text chứa tên bệnh viện và địa chỉ
                   Container(
-                    padding: EdgeInsets.all(16.0),
-                    child: Row(
-                      children: [
-                        Icon(
-                          Icons.local_hospital,
-                          size: 24.0,
+                      padding: EdgeInsets.all(16.0),
+                      child: Column(children: [
+                        Row(
+                          children: [
+                            Icon(
+                              Icons.local_hospital,
+                              size: 24.0,
+                            ),
+                            SizedBox(width: 8.0),
+                            Container(
+                              constraints: BoxConstraints(
+                                maxWidth:
+                                    MediaQuery.of(context).size.width - 100,
+                              ),
+                              child: Text(
+                                'Đang làm việc tại ' + doctor.hospital.name,
+                                style: TextStyle(fontSize: 18.0),
+                                softWrap: true,
+                              ),
+                            ),
+                          ],
                         ),
-                        SizedBox(width: 8.0),
-                        Container(
-                          constraints: BoxConstraints(
-                            maxWidth: MediaQuery.of(context).size.width - 100,
-                          ),
-                          child: Text(
-                            'Đang làm việc tại ' + doctor.hospital.name,
-                            style: TextStyle(fontSize: 18.0),
-                            softWrap: true,
-                          ),
+                        SizedBox(height: 8),
+                        Row(
+                          children: [
+                            Icon(
+                              Icons.email,
+                              size: 24.0,
+                            ),
+                            SizedBox(width: 8.0),
+                            Container(
+                              constraints: BoxConstraints(
+                                maxWidth:
+                                    MediaQuery.of(context).size.width - 100,
+                              ),
+                              child: Text(
+                                doctor.email,
+                                style: TextStyle(fontSize: 18.0),
+                                softWrap: true,
+                              ),
+                            ),
+                          ],
                         ),
-                      ],
-                    ),
-                  ),
+                        SizedBox(height: 8),
+                        Row(
+                          children: [
+                            Icon(
+                              Icons.phone,
+                              size: 24.0,
+                            ),
+                            SizedBox(width: 8.0),
+                            Container(
+                              constraints: BoxConstraints(
+                                maxWidth:
+                                    MediaQuery.of(context).size.width - 100,
+                              ),
+                              child: Text(
+                                doctor.phone,
+                                style: TextStyle(fontSize: 18.0),
+                                softWrap: true,
+                              ),
+                            ),
+                          ],
+                        ),
+                        SizedBox(height: 8),
+                        Row(
+                          children: [
+                            Icon(
+                              Icons.local_activity,
+                              size: 24.0,
+                            ),
+                            SizedBox(width: 8.0),
+                            Container(
+                              constraints: BoxConstraints(
+                                maxWidth:
+                                    MediaQuery.of(context).size.width - 100,
+                              ),
+                              child: Text(
+                                doctor.address,
+                                style: TextStyle(fontSize: 18.0),
+                                softWrap: true,
+                              ),
+                            ),
+                          ],
+                        )
+                      ])),
 
                   Container(
+                    height: 550,
                     padding: EdgeInsets.all(16.0),
-                    child: Row(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Icon(
-                          Icons.location_pin,
-                          size: 24.0,
-                        ),
-                        SizedBox(width: 8.0),
-                        Container(
-                          constraints: BoxConstraints(
-                            maxWidth: MediaQuery.of(context).size.width - 100,
-                          ),
-                          child: Text(
-                            doctor.address,
-                            style: TextStyle(fontSize: 18.0),
-                            softWrap: true,
+                        Text(
+                          'Thời gian làm việc',
+                          style: TextStyle(
+                            fontSize: 20.0,
+                            fontWeight: FontWeight.bold,
                           ),
                         ),
+                        SizedBox(height: 8.0),
+                        Expanded(
+                            child: TimeWorkContainer(timeWork: doctor.timeWork))
                       ],
                     ),
                   ),
 
                   // Container chứa tiêu đề thông tin nổi bật
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      GestureDetector(
+                        onTap: () {
+                          setState(() {
+                            isExpanded1 = !isExpanded1;
+                          });
+                        },
+                        child: Container(
+                          padding: EdgeInsets.only(left: 16.0),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: <Widget>[
+                              Text(
+                                'Điểm nổi bật nhất',
+                                style: TextStyle(
+                                  fontSize: 20.0,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                              SizedBox(height: 16.0),
+                              ListView.builder(
+                                itemCount: isExpanded1
+                                    ? doctor.inforExtend.prominent.length
+                                    : 2, // Show only one item initially
+                                shrinkWrap: true,
+                                physics: NeverScrollableScrollPhysics(),
+                                itemBuilder: (context, index) {
+                                  final prominent =
+                                      doctor.inforExtend.prominent[index];
+                                  return Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        '• ' + prominent.title,
+                                        style: TextStyle(
+                                          fontSize: 16.0,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                      SizedBox(height: 4.0),
+                                      Text(
+                                        prominent.subtitle.join(', '),
+                                        style: TextStyle(
+                                          fontSize: 14.0,
+                                        ),
+                                      ),
+                                      SizedBox(height: 8.0),
+                                    ],
+                                  );
+                                },
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                      GestureDetector(
+                          onTap: () {
+                            setState(() {
+                              isExpanded1 = !isExpanded1;
+                            });
+                          },
+                          child: Container(
+                            padding: EdgeInsets.only(left: 16.0),
+                            child: Text(
+                              isExpanded1 ? 'Thu gọn' : 'Xem thêm...',
+                              style: TextStyle(
+                                color: Colors.blue,
+                                fontSize: 16.0,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          )),
+                    ],
+                  ),
+                  SizedBox(height: 16,),
                   Container(
                     padding: EdgeInsets.all(16.0),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          'Thông tin nổi bật:',
+                          'Thông tin cơ bản',
                           style: TextStyle(
                             fontSize: 20.0,
                             fontWeight: FontWeight.bold,
@@ -234,6 +382,241 @@ class _DoctorPageState extends State<DoctorPage> {
                       ],
                     ),
                   ),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      GestureDetector(
+                        onTap: () {
+                          setState(() {
+                            isExpanded2 = !isExpanded2;
+                          });
+                        },
+                        child: Container(
+                          padding: EdgeInsets.only(left: 16.0),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: <Widget>[
+                              Text(
+                                'Kinh nghiệm làm việc',
+                                style: TextStyle(
+                                  fontSize: 20.0,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                              SizedBox(height: 16.0),
+                              ListView.builder(
+                                itemCount: isExpanded2
+                                    ? doctor.inforExtend.workExperience.length
+                                    : 2, // Show only one item initially
+                                shrinkWrap: true,
+                                physics: NeverScrollableScrollPhysics(),
+                                itemBuilder: (context, index) {
+                                  final experience =
+                                      doctor.inforExtend.workExperience[index];
+                                  return Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        '• ' + experience.title,
+                                        style: TextStyle(
+                                          fontSize: 16.0,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                      SizedBox(height: 4.0),
+                                      Text(
+                                        experience.subtitle.join(', '),
+                                        style: TextStyle(
+                                          fontSize: 14.0,
+                                        ),
+                                      ),
+                                      SizedBox(height: 8.0),
+                                    ],
+                                  );
+                                },
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                      GestureDetector(
+                          onTap: () {
+                            setState(() {
+                              isExpanded2 = !isExpanded2;
+                            });
+                          },
+                          child: Container(
+                            padding: EdgeInsets.only(left: 16.0),
+                            child: Text(
+                              isExpanded2 ? 'Thu gọn' : 'Xem thêm...',
+                              style: TextStyle(
+                                color: Colors.blue,
+                                fontSize: 16.0,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          )),
+                    ],
+                  ),
+                  SizedBox(height: 16),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      GestureDetector(
+                        onTap: () {
+                          setState(() {
+                            isExpanded3 = !isExpanded3;
+                          });
+                        },
+                        child: Container(
+                          padding: EdgeInsets.only(left: 16.0),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: <Widget>[
+                              Text(
+                                'Quá trình đào tạo',
+                                style: TextStyle(
+                                  fontSize: 20.0,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                              SizedBox(height: 16.0),
+                              ListView.builder(
+                                itemCount: isExpanded3
+                                    ? doctor.inforExtend.trainingProcess.length
+                                    : 2, // Show only one item initially
+                                shrinkWrap: true,
+                                physics: NeverScrollableScrollPhysics(),
+                                itemBuilder: (context, index) {
+                                  final trainingProcess =
+                                      doctor.inforExtend.trainingProcess[index];
+                                  return Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        '• ' + trainingProcess.title,
+                                        style: TextStyle(
+                                          fontSize: 16.0,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                      SizedBox(height: 4.0),
+                                      Text(
+                                        trainingProcess.subtitle.join(', '),
+                                        style: TextStyle(
+                                          fontSize: 14.0,
+                                        ),
+                                      ),
+                                      SizedBox(height: 8.0),
+                                    ],
+                                  );
+                                },
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                      GestureDetector(
+                          onTap: () {
+                            setState(() {
+                              isExpanded3 = !isExpanded3;
+                            });
+                          },
+                          child: Container(
+                            padding: EdgeInsets.only(left: 16.0),
+                            child: Text(
+                              isExpanded3 ? 'Thu gọn' : 'Xem thêm...',
+                              style: TextStyle(
+                                color: Colors.blue,
+                                fontSize: 16.0,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          )),
+                    ],
+                  ),
+                  SizedBox(height: 16,),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      GestureDetector(
+                        onTap: () {
+                          setState(() {
+                            isExpanded4 = !isExpanded4;
+                          });
+                        },
+                        child: Container(
+                          padding: EdgeInsets.only(left: 16.0),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: <Widget>[
+                              Text(
+                                'Giải thưởng và ghi nhận',
+                                style: TextStyle(
+                                  fontSize: 20.0,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                              SizedBox(height: 16.0),
+                              ListView.builder(
+                                itemCount: isExpanded4
+                                    ? doctor.inforExtend.awardsRecognition.length
+                                    : 2, // Show only one item initially
+                                shrinkWrap: true,
+                                physics: NeverScrollableScrollPhysics(),
+                                itemBuilder: (context, index) {
+                                  final awardsRecognition =
+                                      doctor.inforExtend.awardsRecognition[index];
+                                  return Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        '• ' + awardsRecognition.title,
+                                        style: TextStyle(
+                                          fontSize: 16.0,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                      SizedBox(height: 4.0),
+                                      Text(
+                                        awardsRecognition.subtitle.join(', '),
+                                        style: TextStyle(
+                                          fontSize: 14.0,
+                                        ),
+                                      ),
+                                      SizedBox(height: 8.0),
+                                    ],
+                                  );
+                                },
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                      GestureDetector(
+                          onTap: () {
+                            setState(() {
+                              isExpanded4 = !isExpanded4;
+                            });
+                          },
+                          child: Container(
+                            padding: EdgeInsets.only(left: 16.0),
+                            child: Text(
+                              isExpanded4 ? 'Thu gọn' : 'Xem thêm...',
+                              style: TextStyle(
+                                color: Colors.blue,
+                                fontSize: 16.0,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          )),
+                    ],
+                  ),
+                  SizedBox(height: 16,),
+                  
 
                   // Kinh nghiệm làm việc
                   // Container(

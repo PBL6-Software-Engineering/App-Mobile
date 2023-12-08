@@ -4,7 +4,10 @@ import 'package:health_care/objects/hospitals.dart';
 import 'package:health_care/objects/timework.dart';
 import 'package:health_care/components/timework.dart';
 import 'package:health_care/components/doctor.dart';
+import 'package:health_care/components/service.dart';
+import 'package:health_care/components/timework.dart';
 import 'package:health_care/objects/doctors.dart';
+import 'package:health_care/objects/services.dart';
 
 class HospitalPage extends StatefulWidget {
   final int id;
@@ -19,10 +22,15 @@ class HospitalPage extends StatefulWidget {
 class _HospitalPageState extends State<HospitalPage>
     with SingleTickerProviderStateMixin {
   HospitalService hospitalService = HospitalService();
+  ServiceService serviceService = ServiceService();
   DoctorService doctorService = DoctorService();
   bool loading = true;
   bool loadingdoctors = true;
+  bool loadingservices = true;
+  bool isExpanded1 = false;
+  bool isExpanded2 = false;
   List<Doctor> doctors = [];
+  List<Service> services = [];
   HospitalDetail hospital = HospitalDetail(
     id: 1,
     email: "",
@@ -49,31 +57,46 @@ class _HospitalPageState extends State<HospitalPage>
   void initState() {
     fetchHospital();
     fetchDoctorsHospital();
+    fetchServicesHospital();
     super.initState();
   }
 
   void fetchHospital() async {
     try {
-      loadingdoctors = true;
+      loading = true;
       hospital = await hospitalService.fetchHospitalDetail(widget.id);
       //print(hospital);
       setState(() {
-        loadingdoctors = false;
+        loading = false;
       });
     } catch (e) {
-      print('Error fetch Hospital at page: $e');
+      print('Error fetch Hospital Detail: $e');
     }
   }
 
   void fetchDoctorsHospital() async {
     try {
-      loading = true;
+      loadingdoctors = true;
       doctors = await doctorService.fetchDoctorsHospital(widget.id);
+      print(doctors.length);
       setState(() {
-        loading = false;
+        loadingdoctors = false;
       });
     } catch (e) {
       print('Error fetch doctors hospital: $e');
+    }
+  }
+
+  void fetchServicesHospital() async {
+    try {
+      loadingservices = true;
+      services = await serviceService.fetchServicesHospital(widget.id);
+      print(doctors.length);
+      setState(() {
+        loadingservices = false;
+      });
+    } catch (e) {
+      print('Error fetch servcice hospital: $e');
     }
   }
 
@@ -139,84 +162,146 @@ class _HospitalPageState extends State<HospitalPage>
                       )),
                   //SizedBox(height: 20),
                   Container(
-                    padding: EdgeInsets.only(
-                        top: 20, bottom: 16, left: 16, right: 16),
-                    child: Row(
-                      children: [
-                        Icon(
-                          Icons.location_pin,
-                          size: 24.0,
-                        ),
-                        SizedBox(width: 8.0),
-                        Container(
-                          constraints: BoxConstraints(
-                            maxWidth: MediaQuery.of(context).size.width - 100,
-                          ),
-                          child: Text(
-                            hospital.address,
-                            style: TextStyle(fontSize: 18.0),
-                            softWrap: true,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-
+                      padding: EdgeInsets.only(
+                          top: 20, bottom: 16, left: 16, right: 16),
+                      child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Row(
+                              children: [
+                                Icon(
+                                  Icons.location_pin,
+                                  size: 24.0,
+                                ),
+                                SizedBox(width: 8.0),
+                                Container(
+                                  constraints: BoxConstraints(
+                                    maxWidth:
+                                        MediaQuery.of(context).size.width - 100,
+                                  ),
+                                  child: Text(
+                                    hospital.address,
+                                    style: TextStyle(fontSize: 18.0),
+                                    softWrap: true,
+                                  ),
+                                ),
+                              ],
+                            ),
+                            SizedBox(height: 8),
+                            Row(
+                              children: [
+                                Icon(
+                                  Icons.email,
+                                  size: 24.0,
+                                ),
+                                SizedBox(width: 8.0),
+                                Container(
+                                  constraints: BoxConstraints(
+                                    maxWidth:
+                                        MediaQuery.of(context).size.width - 100,
+                                  ),
+                                  child: Text(
+                                    hospital.email,
+                                    style: TextStyle(fontSize: 18.0),
+                                    softWrap: true,
+                                  ),
+                                ),
+                              ],
+                            ),
+                            SizedBox(height: 8),
+                            Row(
+                              children: [
+                                Icon(
+                                  Icons.phone,
+                                  size: 24.0,
+                                ),
+                                SizedBox(width: 8.0),
+                                Container(
+                                  constraints: BoxConstraints(
+                                    maxWidth:
+                                        MediaQuery.of(context).size.width - 100,
+                                  ),
+                                  child: Text(
+                                    hospital.phone,
+                                    style: TextStyle(fontSize: 18.0),
+                                    softWrap: true,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ])),
                   Container(
-                    padding: EdgeInsets.all(16.0),
-                    height: 400,
-                    child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            'Đội ngũ bác sĩ',
-                            style: TextStyle(
-                                fontSize: 24, fontWeight: FontWeight.bold),
-                          ),
-                          SizedBox(height: 16),
-                          Expanded(
-                            child: loadingdoctors == true
+                      padding: EdgeInsets.all(16.0),
+                      child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              'Đội ngũ bác sĩ',
+                              style: TextStyle(
+                                  fontSize: 20, fontWeight: FontWeight.bold),
+                            ),
+                            SizedBox(height: 16),
+                            loadingdoctors == true
                                 ? Center(
                                     child: CircularProgressIndicator(),
                                   )
-                                : ListView.builder(
-                                    scrollDirection: Axis.horizontal,
-                                    itemCount: doctors.length,
-                                    itemBuilder: (context, index) {
-                                      return DoctorContainer(
-                                          doctor: doctors[index]);
-                                    },
-                                  ),
-                          )
-                        ]),
-                  ),
-                  // Container(
-                  //   padding: EdgeInsets.all(16.0),
-                  //   child: Column(
-                  //     crossAxisAlignment: CrossAxisAlignment.start,
-                  //     children: [
-                  //       Text(
-                  //         'Thời gian làm việc:',
-                  //         style: TextStyle(
-                  //           fontSize: 20.0,
-                  //           fontWeight: FontWeight.bold,
-                  //         ),
-                  //       ),
-                  //       SizedBox(height: 8.0),
-                  //       TimeWorkContainer(
-                  //         timeWork: hospitaldetail.timeWork, // Replace with your actual TimeWork object
-                  //       ),
-                  //     ],
-                  //   ),
-                  // ),
+                                : doctors.length != 0
+                                    ? Container(
+                                        padding: EdgeInsets.all(16.0),
+                                        height: 360,
+                                        child: Expanded(
+                                            child: ListView.builder(
+                                          scrollDirection: Axis.horizontal,
+                                          itemCount: doctors.length,
+                                          itemBuilder: (context, index) {
+                                            return DoctorContainer(
+                                                doctor: doctors[index]);
+                                          },
+                                        )))
+                                    : Center(
+                                        child: Text("Chưa cập nhật"),
+                                      ),
+                          ])),
                   Container(
-                    height: 300,
+                      padding: EdgeInsets.all(16.0),
+                      child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              'Dịch vụ nổi bật',
+                              style: TextStyle(
+                                  fontSize: 20, fontWeight: FontWeight.bold),
+                            ),
+                            SizedBox(height: 16),
+                            loadingservices == true
+                                ? Center(
+                                    child: CircularProgressIndicator(),
+                                  )
+                                : services.length != 0
+                                    ? Container(
+                                        padding: EdgeInsets.all(16.0),
+                                        height: 340,
+                                        child: Expanded(
+                                            child: ListView.builder(
+                                          scrollDirection: Axis.horizontal,
+                                          itemCount: services.length,
+                                          itemBuilder: (context, index) {
+                                            return ServiceComponent(
+                                                service: services[index]);
+                                          },
+                                        )))
+                                    : Center(
+                                        child: Text("Chưa cập nhật"),
+                                      ),
+                          ])),
+                  Container(
+                    height: 550,
                     padding: EdgeInsets.all(16.0),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          'Chuyên khoa',
+                          'Thời gian làm việc',
                           style: TextStyle(
                             fontSize: 20.0,
                             fontWeight: FontWeight.bold,
@@ -224,63 +309,134 @@ class _HospitalPageState extends State<HospitalPage>
                         ),
                         SizedBox(height: 8.0),
                         Expanded(
-                            child: ListView.builder(
-                          itemCount: hospital.departments.length,
-                          //separatorBuilder: (context, index) => SizedBox(height: 16),
-                          itemBuilder: (context, index) {
-                            return Container(
-                                child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                  Text(
-                                    '- ' + hospital.departments[index],
-                                    style: TextStyle(
-                                      fontSize: 16.0,
-                                      //fontWeight: FontWeight.bold,
-                                    ),
-                                  )
-                                ]));
-                          },
-                        ))
+                            child:
+                                TimeWorkContainer(timeWork: hospital.timeWork))
                       ],
                     ),
                   ),
-                  Container(
-                    height: 300,
-                    padding: EdgeInsets.all(16.0),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          'Cơ sở vật chất',
-                          style: TextStyle(
-                            fontSize: 20.0,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                        SizedBox(height: 8.0),
-                        Expanded(
-                            child: ListView.builder(
-                          itemCount: hospital.infrastructure.length,
-                          itemBuilder: (context, index) {
-                            return Container(
-                                child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                  Text(
-                                    '- ' + hospital.infrastructure[index],
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      GestureDetector(
+                        onTap: () {
+                          setState(() {
+                            isExpanded1 = !isExpanded1;
+                          });
+                        },
+                        child: Container(
+                          padding: EdgeInsets.only(left: 16.0),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: <Widget>[
+                              Text(
+                                'Chuyên khoa',
+                                style: TextStyle(
+                                  fontSize: 20.0,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                              SizedBox(height: 16.0),
+                              ListView.builder(
+                                itemCount: isExpanded1
+                                    ? hospital.departments.length
+                                    : 4, // Show only one item initially
+                                shrinkWrap: true,
+                                physics: NeverScrollableScrollPhysics(),
+                                itemBuilder: (context, index) {
+                                  return Text(
+                                    '• ' + hospital.departments[index],
                                     style: TextStyle(
                                       fontSize: 16.0,
-                                      //fontWeight: FontWeight.bold,
+                                      
                                     ),
-                                  )
-                                ]));
+                                  );
+                                },
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                      GestureDetector(
+                          onTap: () {
+                            setState(() {
+                              isExpanded1 = !isExpanded1;
+                            });
                           },
-                        ))
-                      ],
-                    ),
+                          child: Container(
+                            padding: EdgeInsets.only(left: 16.0),
+                            child: Text(
+                              isExpanded1 ? 'Thu gọn' : 'Xem thêm...',
+                              style: TextStyle(
+                                color: Colors.blue,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 16.0,
+                                
+                              ),
+                            ),
+                          )),
+                    ],
+                  ),
+
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      GestureDetector(
+                        onTap: () {
+                          setState(() {
+                            isExpanded2 = !isExpanded2;
+                          });
+                        },
+                        child: Container(
+                          padding: EdgeInsets.only(left: 16.0),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: <Widget>[
+                              Text(
+                                'Cơ sở vật chất',
+                                style: TextStyle(
+                                  fontSize: 20.0,
+                                  
+                                ),
+                              ),
+                              SizedBox(height: 16.0),
+                              ListView.builder(
+                                itemCount: isExpanded2
+                                    ? hospital.departments.length
+                                    : 4, // Show only one item initially
+                                shrinkWrap: true,
+                                physics: NeverScrollableScrollPhysics(),
+                                itemBuilder: (context, index) {
+                                  return Text(
+                                    '• ' + hospital.departments[index],
+                                    style: TextStyle(
+                                      fontSize: 16.0,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  );
+                                },
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                      GestureDetector(
+                          onTap: () {
+                            setState(() {
+                              isExpanded2 = !isExpanded2;
+                            });
+                          },
+                          child: Container(
+                            padding: EdgeInsets.only(left: 16.0),
+                            child: Text(
+                              isExpanded2 ? 'Thu gọn' : 'Xem thêm...',
+                              style: TextStyle(
+                                color: Colors.blue,
+                                fontSize: 16.0,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          )),
+                    ],
                   ),
                 ],
               ),

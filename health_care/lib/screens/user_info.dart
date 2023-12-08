@@ -309,21 +309,48 @@ class UserProfileFormDialog extends StatelessWidget {
           Config.spaceSmall,
           TextFormField(
             controller: dobController,
-            //inputFormatters: [
-              //FilteringTextInputFormatter.allow(RegExp(r'^\d{2}/\d{2}/\d{4}$')),
-              //_DateInputFormatter(),
-            //],
-            keyboardType: TextInputType.datetime,
-            style: TextStyle(
-              fontSize: 15,
-              fontWeight: FontWeight.bold, // Kích thước font chữ mong muốn
-            ),
-            decoration: InputDecoration(
-              labelText: 'Ngày sinh',
-              labelStyle: TextStyle(
-                color: Config.blueColor, // Màu sắc mong muốn cho nhãn
-              ),
-            ),
+  readOnly: true,
+  onTap: () async {
+    DateTime? selectedDate = await showDatePicker(
+      context: context,
+      initialDate: DateTime.now(),
+      firstDate: DateTime(1900),
+      lastDate: DateTime.now(),
+    );
+
+    if (selectedDate != null) {
+      // Định dạng ngày theo kiểu dd/MM/yyyy
+      String formattedDate = DateFormat('dd/MM/yyyy').format(selectedDate);
+        dobController.text = formattedDate;
+    }
+  },
+  keyboardType: TextInputType.datetime,
+  style: TextStyle(
+    fontSize: 15,
+    fontWeight: FontWeight.bold,
+  ),
+  decoration: InputDecoration(
+    labelText: 'Ngày sinh',
+    labelStyle: TextStyle(
+      color: Config.blueColor,
+    ),
+  ),
+            // controller: dobController,
+            // //inputFormatters: [
+            //   //FilteringTextInputFormatter.allow(RegExp(r'^\d{2}/\d{2}/\d{4}$')),
+            //   //_DateInputFormatter(),
+            // //],
+            // keyboardType: TextInputType.datetime,
+            // style: TextStyle(
+            //   fontSize: 15,
+            //   fontWeight: FontWeight.bold, // Kích thước font chữ mong muốn
+            // ),
+            // decoration: InputDecoration(
+            //   labelText: 'Ngày sinh',
+            //   labelStyle: TextStyle(
+            //     color: Config.blueColor, // Màu sắc mong muốn cho nhãn
+            //   ),
+            // ),
           ),
         ],
       ),

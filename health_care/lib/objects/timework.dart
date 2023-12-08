@@ -28,7 +28,7 @@ class TimeWork {
 class DayTime {
   final TimeRange night;
   final bool enable;
-  final TimeRange? morning;
+  final TimeRange morning;
   final TimeRange afternoon;
 
   DayTime({
@@ -42,9 +42,7 @@ class DayTime {
     return DayTime(
       night: TimeRange.fromJson(json['night']),
       enable: json['enable'],
-      morning: json.containsKey('morning')
-          ? TimeRange.fromJson(json['morning'])
-          : null,
+      morning: TimeRange.fromJson(json['afternoon']),
       afternoon: TimeRange.fromJson(json['afternoon']),
     );
   }
@@ -53,19 +51,19 @@ class DayTime {
 class TimeRange {
   final List<String> time;
   final bool enable;
-  final List<List<String>> dividedTimes;
+  //final List<List<String>> dividedTimes;
 
   TimeRange({
     required this.time,
     required this.enable,
-    required this.dividedTimes,
+    //required this.dividedTimes,
   });
 
   factory TimeRange.fromJson(Map<String, dynamic> json) {
     return TimeRange(
       time: List<String>.from(json['time']) ?? [],
       enable: json['enable'],
-      dividedTimes: List<List<String>>.from(json['divided_times'] ?? []),
+      //dividedTimes: List<List<String>>.from(json['divided_times'] ?? []),
     );
   }
 }
