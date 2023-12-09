@@ -6,6 +6,9 @@ import 'package:health_care/objects/doctors.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:health_care/objects/hospitals.dart';
 import 'package:health_care/objects/timework.dart';
+import 'package:health_care/objects/rating.dart';
+import 'package:health_care/components/rating.dart';
+import 'dart:math';
 
 class DoctorPage extends StatefulWidget {
   final int id;
@@ -62,18 +65,18 @@ class _DoctorPageState extends State<DoctorPage> {
       createdAt: DateTime.now(),
       updatedAt: DateTime.now(),
     ),
-    // rating: Rating(
-    //   countRating: 100,
-    //   numberRating: 4.5,
-    //   countDetails: RatingDetails(
-    //     oneStar: 10,
-    //     twoStar: 20,
-    //     threeStar: 30,
-    //     fourStar: 25,
-    //     fiveStar: 15,
-    //   ),
-    //   ratings: [],
-    // ),
+    rating: Rating(
+      countRating: 100,
+      numberRating: 4,
+      countDetails: RatingDetails(
+        oneStar: 10,
+        twoStar: 20,
+        threeStar: 30,
+        fourStar: 25,
+        fiveStar: 15,
+      ),
+      ratings: [],
+    ),
     department: Department(
       id: 1,
       name: '',
@@ -88,6 +91,7 @@ class _DoctorPageState extends State<DoctorPage> {
   bool isExpanded2 = false;
   bool isExpanded3 = false;
   bool isExpanded4 = false;
+  bool isExpanded5 = false;
 
   void initState() {
     fetchDoctor();
@@ -307,10 +311,11 @@ class _DoctorPageState extends State<DoctorPage> {
                                 ),
                               ),
                               SizedBox(height: 16.0),
+                              doctor.inforExtend.prominent.length !=0 ?
                               ListView.builder(
                                 itemCount: isExpanded1
                                     ? doctor.inforExtend.prominent.length
-                                    : 2, // Show only one item initially
+                                    : min(2,doctor.inforExtend.prominent.length), // Show only one item initially
                                 shrinkWrap: true,
                                 physics: NeverScrollableScrollPhysics(),
                                 itemBuilder: (context, index) {
@@ -338,6 +343,8 @@ class _DoctorPageState extends State<DoctorPage> {
                                     ],
                                   );
                                 },
+                              ): Center(
+                                child: Text('Chưa cập nhật')
                               ),
                             ],
                           ),
@@ -362,7 +369,9 @@ class _DoctorPageState extends State<DoctorPage> {
                           )),
                     ],
                   ),
-                  SizedBox(height: 16,),
+                  SizedBox(
+                    height: 16,
+                  ),
                   Container(
                     padding: EdgeInsets.all(16.0),
                     child: Column(
@@ -404,10 +413,11 @@ class _DoctorPageState extends State<DoctorPage> {
                                 ),
                               ),
                               SizedBox(height: 16.0),
+                              doctor.inforExtend.workExperience.length!=0 ?
                               ListView.builder(
                                 itemCount: isExpanded2
                                     ? doctor.inforExtend.workExperience.length
-                                    : 2, // Show only one item initially
+                                    : min(2,doctor.inforExtend.workExperience.length), // Show only one item initially
                                 shrinkWrap: true,
                                 physics: NeverScrollableScrollPhysics(),
                                 itemBuilder: (context, index) {
@@ -435,6 +445,8 @@ class _DoctorPageState extends State<DoctorPage> {
                                     ],
                                   );
                                 },
+                              ): Center(
+                                child: Text('Chưa cập nhật')
                               ),
                             ],
                           ),
@@ -482,10 +494,11 @@ class _DoctorPageState extends State<DoctorPage> {
                                 ),
                               ),
                               SizedBox(height: 16.0),
+                              doctor.inforExtend.trainingProcess.length !=0 ?
                               ListView.builder(
                                 itemCount: isExpanded3
                                     ? doctor.inforExtend.trainingProcess.length
-                                    : 2, // Show only one item initially
+                                    : min(2, doctor.inforExtend.trainingProcess.length), // Show only one item initially
                                 shrinkWrap: true,
                                 physics: NeverScrollableScrollPhysics(),
                                 itemBuilder: (context, index) {
@@ -513,7 +526,10 @@ class _DoctorPageState extends State<DoctorPage> {
                                     ],
                                   );
                                 },
-                              ),
+                              ): Center(
+                                child: Text('Chưa cập nhật')
+                              )
+                              ,
                             ],
                           ),
                         ),
@@ -537,7 +553,9 @@ class _DoctorPageState extends State<DoctorPage> {
                           )),
                     ],
                   ),
-                  SizedBox(height: 16,),
+                  SizedBox(
+                    height: 16,
+                  ),
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
@@ -560,15 +578,17 @@ class _DoctorPageState extends State<DoctorPage> {
                                 ),
                               ),
                               SizedBox(height: 16.0),
+                              doctor.inforExtend.awardsRecognition.length !=0 ?
                               ListView.builder(
                                 itemCount: isExpanded4
-                                    ? doctor.inforExtend.awardsRecognition.length
-                                    : 2, // Show only one item initially
+                                    ? doctor
+                                        .inforExtend.awardsRecognition.length
+                                    : min(2,doctor.inforExtend.awardsRecognition.length), // Show only one item initially
                                 shrinkWrap: true,
                                 physics: NeverScrollableScrollPhysics(),
                                 itemBuilder: (context, index) {
-                                  final awardsRecognition =
-                                      doctor.inforExtend.awardsRecognition[index];
+                                  final awardsRecognition = doctor
+                                      .inforExtend.awardsRecognition[index];
                                   return Column(
                                     crossAxisAlignment:
                                         CrossAxisAlignment.start,
@@ -591,7 +611,10 @@ class _DoctorPageState extends State<DoctorPage> {
                                     ],
                                   );
                                 },
-                              ),
+                              ): Center(
+                                child: Text('Chưa cập nhật')
+                              )
+                              ,
                             ],
                           ),
                         ),
@@ -615,73 +638,91 @@ class _DoctorPageState extends State<DoctorPage> {
                           )),
                     ],
                   ),
-                  SizedBox(height: 16,),
-                  
-
-                  // Kinh nghiệm làm việc
-                  // Container(
-                  //   padding: EdgeInsets.all(16.0),
-                  //   child: Column(
-                  //     crossAxisAlignment: CrossAxisAlignment.start,
-                  //     children: [
-                  //       Text(
-                  //         'Kinh nghiệm làm việc',
-                  //         style: TextStyle(
-                  //           fontSize: 20.0,
-                  //           fontWeight: FontWeight.bold,
-                  //         ),
-                  //       ),
-                  //       SizedBox(height: 8.0),
-                  //       Text(
-                  //         doctor.experience.toString() + ' năm làm việc',
-                  //         style: TextStyle(fontSize: 16.0),
-                  //       ),
-                  //     ],
-                  //   ),
-                  // ),
-
-                  // Giờ làm việc trong tuần
-                  // Container(
-                  //   padding: EdgeInsets.all(16.0),
-                  //   child: Column(
-                  //     crossAxisAlignment: CrossAxisAlignment.start,
-                  //     children: [
-                  //       Text(
-                  //         'Thời gian làm việc:',
-                  //         style: TextStyle(
-                  //           fontSize: 20.0,
-                  //           fontWeight: FontWeight.bold,
-                  //         ),
-                  //       ),
-                  //       SizedBox(height: 8.0),
-                  //       ListView(
-                  //         shrinkWrap: true,
-                  //         children: [
-                  //           ListTile(
-                  //             leading: Text('Thứ 2:'),
-                  //             title: Text('8:00 AM - 5:00 PM'),
-                  //           ),
-                  //           ListTile(
-                  //             leading: Text('Thứ 3:'),
-                  //             title: Text('9:00 AM - 6:00 PM'),
-                  //           ),
-                  //           ListTile(
-                  //             leading: Text('Thứ 4:'),
-                  //             title: Text('8:30 AM - 4:30 PM'),
-                  //           ),
-                  //           ListTile(
-                  //             leading: Text('Thứ 5:'),
-                  //             title: Text('10:00 AM - 7:00 PM'),
-                  //           ),
-                  //           ListTile(
-                  //             leading: Text('Thứ 6:'),
-                  //             title: Text('8:00 AM - 5:00 PM'),
-                  //           ),
-                  //         ],
-                  //       ),
-                  //     ],
-                  //   ),
-                  // ),
+                  SizedBox(
+                    height: 16,
+                  ),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      GestureDetector(
+                        onTap: () {
+                          setState(() {
+                            isExpanded5 = !isExpanded5;
+                          });
+                        },
+                        child: Container(
+                          padding: EdgeInsets.only(left: 16.0),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: <Widget>[
+                              Text(
+                                'Đánh gía khách hàng',
+                                style: TextStyle(
+                                  fontSize: 20.0,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                              Row(children: [
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                              
+                                  children: List.generate(5, (index) {
+                                    if (index < doctor.rating.numberRating) {
+                                      return Icon(Icons.star,
+                                          color: Colors.yellow);
+                                    } else {
+                                      return Icon(Icons.star, color: Colors.grey);
+                                    }
+                                  }),
+                                ),
+                                SizedBox(width: 16.0),
+                                Text('(' + doctor.rating.countRating.toString()+ ' đánh giá)')
+                                ]
+                              ),
+                              SizedBox(height: 16.0),
+                              doctor.rating.ratings.length != 0 ?
+                              ListView.builder(
+                                itemCount: isExpanded5
+                                    ? doctor
+                                        .rating.ratings.length
+                                    : min(2, doctor.rating.ratings.length), // Show only one item initially
+                                shrinkWrap: true,
+                                physics: NeverScrollableScrollPhysics(),
+                                itemBuilder: (context, index) {
+                                  final rating = doctor
+                                      .rating.ratings[index];
+                                  return RatingComponent(
+                                    rating : rating
+                                  );
+                                },
+                              ):
+                              Center(
+                                child: Text('Chưa có đánh giá nào'),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                      GestureDetector(
+                          onTap: () {
+                            setState(() {
+                              isExpanded5 = !isExpanded5;
+                            });
+                          },
+                          child: Container(
+                            padding: EdgeInsets.only(left: 16.0),
+                            child: Text(
+                              isExpanded5 ? 'Thu gọn' : 'Xem thêm...',
+                              style: TextStyle(
+                                color: Colors.blue,
+                                fontSize: 16.0,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          )),
+                    ],
+                  ),
+                  SizedBox(height: 16),
                   Center(
                     child: BookingForm(id: doctor.idDoctor, name: doctor.name),
                   ),
