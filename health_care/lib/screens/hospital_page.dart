@@ -8,6 +8,7 @@ import 'package:health_care/components/service.dart';
 import 'package:health_care/components/timework.dart';
 import 'package:health_care/objects/doctors.dart';
 import 'package:health_care/objects/services.dart';
+import 'dart:math';
 
 class HospitalPage extends StatefulWidget {
   final int id;
@@ -336,10 +337,11 @@ class _HospitalPageState extends State<HospitalPage>
                                 ),
                               ),
                               SizedBox(height: 16.0),
+                              hospital.departments.length !=0 ?
                               ListView.builder(
                                 itemCount: isExpanded1
                                     ? hospital.departments.length
-                                    : 4, // Show only one item initially
+                                    : min(4, hospital.departments.length), // Show only one item initially
                                 shrinkWrap: true,
                                 physics: NeverScrollableScrollPhysics(),
                                 itemBuilder: (context, index) {
@@ -347,11 +349,14 @@ class _HospitalPageState extends State<HospitalPage>
                                     '• ' + hospital.departments[index],
                                     style: TextStyle(
                                       fontSize: 16.0,
-                                      
                                     ),
                                   );
                                 },
-                              ),
+                              ):
+                              Center(
+                                child: Text('Chưa cập nhật')
+                              )
+                              ,
                             ],
                           ),
                         ),
@@ -370,13 +375,11 @@ class _HospitalPageState extends State<HospitalPage>
                                 color: Colors.blue,
                                 fontWeight: FontWeight.bold,
                                 fontSize: 16.0,
-                                
                               ),
                             ),
                           )),
                     ],
                   ),
-
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
@@ -395,14 +398,15 @@ class _HospitalPageState extends State<HospitalPage>
                                 'Cơ sở vật chất',
                                 style: TextStyle(
                                   fontSize: 20.0,
-                                  
+                                  fontWeight: FontWeight.bold,
                                 ),
                               ),
                               SizedBox(height: 16.0),
+                              hospital.departments.length != 0 ?
                               ListView.builder(
                                 itemCount: isExpanded2
                                     ? hospital.departments.length
-                                    : 4, // Show only one item initially
+                                    : min(4,hospital.departments.length), // Show only one item initially
                                 shrinkWrap: true,
                                 physics: NeverScrollableScrollPhysics(),
                                 itemBuilder: (context, index) {
@@ -410,11 +414,14 @@ class _HospitalPageState extends State<HospitalPage>
                                     '• ' + hospital.departments[index],
                                     style: TextStyle(
                                       fontSize: 16.0,
-                                      fontWeight: FontWeight.bold,
                                     ),
                                   );
                                 },
-                              ),
+                              ):
+                              Center(
+                                child: Text('Chưa cập nhật')
+                              )
+                              ,
                             ],
                           ),
                         ),

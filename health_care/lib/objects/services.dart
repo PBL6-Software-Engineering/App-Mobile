@@ -2,6 +2,7 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:health_care/providers/http_provider.dart';
 import 'package:intl/intl.dart';
+import 'package:health_care/objects/rating.dart';
 class ServiceService{
   final HttpProvider _httpProvider = HttpProvider();
   final String _url = HttpProvider.url;
@@ -40,6 +41,23 @@ class ServiceService{
     }
   }
 
+  Future<ServiceRating> fetchServiceRating(int id) async {
+    final response = await _httpProvider
+        .getData('api/hospital-service/detail/${id.toString()}');
+    //print(response);
+    if (response != null) {
+      final responseData = json.decode(response.body);
+      //final List<dynamic> jsonList = responseData['data'];
+      //print('api/infor-doctor/view-profile/${id.toString()}');
+      print(responseData);
+
+      ServiceRating rating = ServiceRating.fromJson(responseData['data']);
+      //print(doctorDetail);
+      return rating;
+    } else {
+      throw Exception('Failed to fetch doctor detail');
+    }
+  }
 }
 class Service {
   int id;
@@ -90,6 +108,28 @@ class ServiceInformation {
       aboutService: json['about_service'],
       prepareProcess: json['prepare_process'],
       serviceDetails: json['service_details'],
+    );
+  }
+}
+class ServiceRating {
+  int id;
+  int countRating;
+  double numberRating;
+  RatingDetails countDetails;
+  List<RatingItem> ratings;
+  ServiceRating({required this.id, required this.countRating,
+    required this.numberRating,
+    required this.countDetails,
+    required this.ratings,});
+
+  factory ServiceRating.fromJson(Map<String, dynamic> json) {
+    var ratingsList = json['ratings']['data'] as List;
+    return ServiceRating(
+      id: json['id_hospital_service'],
+      countRating: json['cout_rating'],
+      numberRating: json['number_rating'].toDouble(),
+      countDetails: RatingDetails.fromJson(json['cout_details']),
+      ratings: ratingsList.map((e) => RatingItem.fromJson(e)).toList() ?? [],
     );
   }
 }
