@@ -48,10 +48,12 @@ class ArticleContainer extends StatelessWidget {
                             color: Color.fromARGB(255, 1, 1, 1),
                             fontSize: 20,
                           ),
+                          overflow: TextOverflow.ellipsis,
+                          maxLines: 3,
                         ),
                         SizedBox(height: 8),
                         Text(
-                          article.author,
+                          article.author  == '' ? 'Health Care' : article.author,
                           style: TextStyle(
                             fontSize: 14,
                             color: Color.fromARGB(255, 6, 6, 6),

@@ -11,6 +11,7 @@ import 'package:health_care/screens/all_categories_page.dart';
 import 'package:health_care/utils/config.dart';
 import 'package:health_care/objects/user.dart';
 import 'package:health_care/components/category.dart';
+import 'package:health_care/screens/all_articles_page.dart';
 
 class HomePage extends StatefulWidget {
   final User user;
@@ -358,7 +359,16 @@ class _HomePageState extends State<HomePage> {
                                           ),
                                         ),
                                         TextButton(
-                                          onPressed: () {},
+                                          onPressed: () {
+                                            Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                builder: (context) =>
+                                                    AllArticlePage(
+                                                        articles: articles),
+                                              ),
+                                            );
+                                          },
                                           child: Text(
                                             'Xem thêm >>',
                                             

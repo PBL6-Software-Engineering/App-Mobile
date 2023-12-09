@@ -18,7 +18,7 @@ class CategoryContainer extends StatelessWidget {
             context,
             MaterialPageRoute(
               builder: (context) =>
-                  CategoryPage(categoryName: category.name),
+                  CategoryPage(category: category),
             ),
           );
         },

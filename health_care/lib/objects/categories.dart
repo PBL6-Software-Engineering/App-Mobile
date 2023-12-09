@@ -27,6 +27,7 @@ class Category {
   String name;
   String thumbnail;
   int searchNumber;
+  String description;
   //DateTime createdAt;
   //DateTime updatedAt;
 
@@ -35,6 +36,7 @@ class Category {
     required this.name,
     required this.thumbnail,
     required this.searchNumber,
+    required this.description
     //required this.createdAt,
     //required this.updatedAt,
   });
@@ -47,6 +49,7 @@ class Category {
       name: json['name'],
       thumbnail: _url+json['thumbnail'],
       searchNumber: json['search_number'],
+      description: json['description_category'],
       //createdAt: DateTime.parse(json['created_at']),
       //updatedAt: DateTime.parse(json['updated_at']),
     );

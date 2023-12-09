@@ -22,6 +22,24 @@ class ServiceService{
       throw Exception('Failed to fetch hospitals');
     }
   }
+
+  Future<List<Service>> fetchServicesHospital( int id) async {
+    final response = await _httpProvider.getData('api/hospital-service/hospital/${id.toString()}');
+    //print(response);
+    if (response !=null) {
+      final responseData = json.decode(response.body);
+      final List<dynamic> jsonList = responseData['data'];
+      //print(responseData);
+
+      List<Service> ServiceList =
+          jsonList.map((json) => Service.fromJson(json)).toList();
+      //print(HospitalList);
+      return ServiceList;
+    } else {
+      throw Exception('Failed to fetch hospitals');
+    }
+  }
+
 }
 class Service {
   int id;

@@ -2,11 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:health_care/components/article.dart';
 import 'package:health_care/objects/articles.dart';
+import 'package:health_care/objects/categories.dart';
 
 class CategoryPage extends StatefulWidget {
-  final String categoryName;
+  final Category category;
 
-  CategoryPage({required this.categoryName});
+  CategoryPage({required this.category});
 
   @override
   _CategoryPageState createState() => _CategoryPageState();
@@ -32,7 +33,7 @@ class _CategoryPageState extends State<CategoryPage> {
     try {
       loading = true;
       List<Article> fetchedArticles = await articleService
-          .fetchArticles('api/article?name_category=${widget.categoryName}');
+          .fetchArticles('api/article?name_category=${widget.category.name}');
       setState(() {
         articles = fetchedArticles;
         loading = false;
@@ -64,13 +65,16 @@ class _CategoryPageState extends State<CategoryPage> {
                     Align(
                         alignment: Alignment.topLeft,
                         child: Text(
-                          widget.categoryName,
+                          widget.category.name,
                           style: TextStyle(
                             fontWeight: FontWeight.bold,
                             fontSize: 24,
                             color: Color.fromARGB(255, 7, 8, 8),
                           ),
                         )),
+                    SizedBox(height: 16),
+                    Text(widget.category.description,
+                        style: TextStyle(fontSize: 16)),
                     SizedBox(height: 16),
                     Expanded(
                       child: ListView.builder(
