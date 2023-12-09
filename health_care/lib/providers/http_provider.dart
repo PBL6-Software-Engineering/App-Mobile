@@ -3,8 +3,8 @@ import 'package:health_care/providers/auth_manager.dart';
 import 'package:http/http.dart' as http;
 
 class HttpProvider {
-  static String url = 'https://vanmanh.azurewebsites.net/';
-  // static String url = 'http://192.168.3.197:99/api';
+  // static String url = 'https://vanmanh.azurewebsites.net/';
+  static String url = 'http://192.168.11.250:8000/';
 
   Future<http.Response> postData(data, apiUrl) async {
     var fullUrl = url + apiUrl;
@@ -22,6 +22,16 @@ class HttpProvider {
     Map<String, String> headers = _setHeaders();
 
     return await http.get(
+      Uri.parse(fullUrl),
+      headers: headers,
+    );
+  }
+
+  Future<http.Response> deleteData(apiUrl) async {
+    var fullUrl = url + apiUrl;
+    Map<String, String> headers = _setHeaders();
+
+    return await http.delete(
       Uri.parse(fullUrl),
       headers: headers,
     );

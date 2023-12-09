@@ -8,13 +8,16 @@ import 'package:health_care/components/tab_bar_view.dart';
 import 'package:health_care/objects/doctors.dart';
 import 'package:health_care/objects/timework.dart';
 import 'package:health_care/providers/http_provider.dart';
+import 'package:health_care/screens/confirm_booking_page.dart';
 import 'package:health_care/utils/config.dart';
 import 'package:intl/intl.dart';
 
 class BookingForm extends StatefulWidget {
   final int id;
   final String name;
-  const BookingForm({required this.id, required this.name});
+  final String hospitalName;
+  const BookingForm(
+      {required this.id, required this.name, required this.hospitalName});
 
   @override
   _BookingFormState createState() => _BookingFormState();
@@ -45,7 +48,7 @@ class _BookingFormState extends State<BookingForm> {
     isLoading = true;
     try {
       final response =
-          await HttpProvider().getData('/api/time-work/advise/${widget.id}');
+          await HttpProvider().getData('api/time-work/advise/${widget.id}');
 
       final responseData = json.decode(response.body);
       final data = responseData['data'];
@@ -95,61 +98,6 @@ class _BookingFormState extends State<BookingForm> {
       isLoading = false;
     } catch (error) {
       MessageDialog.showError(context, "An error occurred: $error");
-    }
-  }
-
-  Future<void> _confirmBooking(BuildContext context) async {
-    // Show a confirmation dialog
-    bool confirm = await showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          backgroundColor: Colors.white, // Set the background color
-          contentPadding:
-              EdgeInsets.all(16.0), // Adjust content padding as needed
-          title: Text('Xác nhận đặt lịch'),
-          content: Container(
-            height: 100.0, // Set the height of the content container
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text('Bạn có chắc chắn muốn đặt lịch với:'),
-                SizedBox(height: 8),
-                Text('Bác sĩ: ${widget.name}'),
-                SizedBox(height: 8),
-                Text(
-                  'Thời gian: ${selectedInterval[0]} - ${selectedInterval[1]}, ${selectedDayData['date']}',
-                ),
-              ],
-            ),
-          ),
-          actions: <Widget>[
-            TextButton(
-              onPressed: () {
-                // User canceled the operation
-                Navigator.of(context).pop(false);
-              },
-              child: Text('Hủy'),
-            ),
-            TextButton(
-              onPressed: () {
-                // User confirmed the operation
-                Navigator.of(context).pop(true);
-              },
-              child: Text('Xác nhận'),
-            ),
-          ],
-        );
-      },
-    );
-
-    // If the user confirmed, proceed with booking
-    if (confirm == true) {
-      _bookingForm(
-        widget.id,
-        selectedDayData['date'],
-        selectedInterval,
-      );
     }
   }
 
@@ -292,14 +240,11 @@ class _BookingFormState extends State<BookingForm> {
                         itemCount: sortedEntries.length,
                         itemBuilder: (context, index) {
                           if (sortedEntries == null || sortedEntries.isEmpty) {
-                            // Handle the case where bookingData is null or empty
-                            return Container(); // or a placeholder widget
+                            return Container();
                           }
 
-                          // Verify that the index is within the valid range
                           if (index < 0 || index >= sortedEntries.length) {
-                            print('Invalid index: $index');
-                            return Container(); // or handle the error in another way
+                            return Container();
                           }
 
                           MapEntry<String, dynamic> entry =
@@ -383,7 +328,6 @@ class _BookingFormState extends State<BookingForm> {
                         dayNameData: selectedDayData,
                         onIntervalSelected: (interval) {
                           selectedInterval = interval;
-                          print('selectedInterval: ${selectedInterval}');
                         },
                       ),
                     ),
@@ -393,7 +337,19 @@ class _BookingFormState extends State<BookingForm> {
                       width: Config.screenWidth,
                       title: 'TIẾP TỤC ĐẶT LỊCH',
                       disable: false,
-                      onPressed: () => _confirmBooking(context),
+                      // onPressed: () => _confirmBooking(context),
+                      onPressed: () => Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => ConfirmBookingPage(
+                            hospitalName: widget.hospitalName,
+                            name: widget.name,
+                            id: widget.id,
+                            date: selectedDayData['date'],
+                            interval: selectedInterval,
+                          ),
+                        ),
+                      ),
                     )
                   ],
                 ),

@@ -6,6 +6,7 @@ class Button extends StatelessWidget {
       {Key? key,
       this.height,
       this.width,
+      this.fontSize,
       required this.title,
       this.backgroundColor,
       this.foregroundColor,
@@ -15,6 +16,7 @@ class Button extends StatelessWidget {
 
   final double? height;
   final double? width;
+  final double? fontSize;
   final Color? backgroundColor;
   final Color? foregroundColor;
   final String title;
@@ -34,8 +36,8 @@ class Button extends StatelessWidget {
         onPressed: disable ? null : onPressed,
         child: Text(
           title,
-          style: const TextStyle(
-            fontSize: 18,
+          style: TextStyle(
+            fontSize: fontSize ?? 18,
             fontWeight: FontWeight.bold,
           ),
         ),

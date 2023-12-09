@@ -4,6 +4,7 @@ import 'package:health_care/components/message_dialog.dart';
 import 'package:health_care/providers/auth_intercetor.dart';
 import 'package:health_care/providers/auth_manager.dart';
 import 'package:health_care/providers/http_provider.dart';
+import 'package:health_care/screens/booking_history_page.dart';
 import 'package:health_care/screens/user_info.dart';
 import 'package:health_care/utils/config.dart';
 import 'package:health_care/objects/user.dart';
@@ -23,17 +24,20 @@ class _SettingPageState extends State<SettingPage> {
     //onUpdateUser : updateUser(widget.user);
     //widget.onUpdateUser(widget.user);
   }
+
   void dispose() {
-  // Gọi hàm performActionOnHomePage khi thoát khỏi trang settingpage
-  widget.onUpdateUser(widget.user);
-  super.dispose();
+    // Gọi hàm performActionOnHomePage khi thoát khỏi trang settingpage
+    widget.onUpdateUser(widget.user);
+    super.dispose();
   }
-  void updateUser(User updatedUser) { 
+
+  void updateUser(User updatedUser) {
     setState(() {
       widget.user = updatedUser;
       widget.onUpdateUser(updatedUser);
     });
   }
+
   Future<void> _logOut(BuildContext context) async {
     final token = AuthManager.getToken();
     print('Token Logout: $token');
@@ -91,61 +95,62 @@ class _SettingPageState extends State<SettingPage> {
                       ],
                     ),
                     child: Row(
-                            children: <Widget>[
-                              widget.user.avatar == ''
-                                  ? CircleAvatar(
-                                      backgroundImage:
-                                          AssetImage('assets/images/user.jpeg'),
-                                      radius: 35,
-                                    )
-                                  : CircleAvatar(
-                                      backgroundImage:
-                                          NetworkImage(widget.user.avatar),
-                                      radius: 35,
-                                    ),
-                              Config.gapSmall,
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        widget.user.avatar == ''
+                            ? CircleAvatar(
+                                backgroundImage:
+                                    AssetImage('assets/images/user.jpeg'),
+                                radius: 35,
+                              )
+                            : CircleAvatar(
+                                backgroundImage:
+                                    NetworkImage(widget.user.avatar),
+                                radius: 35,
+                              ),
+                        Config.gapSmall,
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: <Widget>[
+                            Text(
+                              widget.user.name,
+                              style: TextStyle(
+                                fontSize: 20.0,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            // Row(
+                            // mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            // children: <Widget>[
+                            TextButton(
+                              onPressed: () {
+                                Navigator.of(context).push(
+                                  MaterialPageRoute(
+                                    builder: (context) => UserInfoPage(
+                                        user: widget.user,
+                                        onUpdateUser: updateUser),
+                                  ),
+                                );
+                              },
+                              child: Row(
                                 children: <Widget>[
                                   Text(
-                                    widget.user.name,
+                                    'Thông tin cá nhân',
                                     style: TextStyle(
                                       fontSize: 20.0,
-                                      fontWeight: FontWeight.bold,
                                     ),
                                   ),
-                                  // Row(
-                                  // mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                  // children: <Widget>[
-                                  TextButton(
-                                    onPressed: () {
-                                      Navigator.of(context).push(
-                                        MaterialPageRoute(
-                                          builder: (context) =>
-                                              UserInfoPage(user: widget.user, onUpdateUser: updateUser),
-                                        ),
-                                      );
-                                    },
-                                    child: Row(
-                                      children: <Widget>[
-                                        Text(
-                                          'Thông tin cá nhân',
-                                          style: TextStyle(
-                                            fontSize: 20.0,
-                                          ),
-                                        ),
-                                        Icon(
-                                          Icons.keyboard_arrow_right,
-                                        ),
-                                      ],
-                                    ),
+                                  Icon(
+                                    Icons.keyboard_arrow_right,
                                   ),
-                                  //],
-                                  //),
                                 ],
                               ),
-                            ],
-                          ),
+                            ),
+                            //],
+                            //),
+                          ],
+                        ),
+                      ],
+                    ),
                   ),
                   Padding(
                       padding: const EdgeInsets.all(20.0),
@@ -193,7 +198,7 @@ class _SettingPageState extends State<SettingPage> {
                                 ),
                               ],
                             ),
-                            child: const Padding(
+                            child: Padding(
                               padding: EdgeInsets.all(20.0),
                               child: Column(
                                 children: <Widget>[
@@ -201,32 +206,79 @@ class _SettingPageState extends State<SettingPage> {
                                     mainAxisAlignment:
                                         MainAxisAlignment.spaceAround,
                                     children: <Widget>[
-                                      Column(
-                                        children: <Widget>[
-                                          Icon(Icons.schedule,
-                                              size: 60.0, color: Colors.blue),
-                                          Text('Sắp đến',
-                                              style: TextStyle(fontSize: 16.0)),
-                                        ],
+                                      GestureDetector(
+                                        onTap: () {
+                                          Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                              builder: (context) =>
+                                                  BookingHistoryPage(
+                                                index:
+                                                    0, // Use 'index' instead of 'idex'
+                                              ),
+                                            ),
+                                          );
+                                        },
+                                        child: Column(
+                                          children: <Widget>[
+                                            Icon(Icons.schedule,
+                                                size: 60.0, color: Colors.blue),
+                                            Text('Sắp đến',
+                                                style:
+                                                    TextStyle(fontSize: 16.0)),
+                                          ],
+                                        ),
                                       ),
-                                      Column(
-                                        children: <Widget>[
-                                          Icon(Icons.cancel,
-                                              size: 60.0, color: Colors.red),
-                                          Text('Đã huỷ',
-                                              style: TextStyle(fontSize: 16.0)),
-                                        ],
+                                      GestureDetector(
+                                        onTap: () {
+                                          Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                              builder: (context) =>
+                                                  BookingHistoryPage(
+                                                index:
+                                                    1, // Use 'index' instead of 'idex'
+                                              ),
+                                            ),
+                                          );
+                                        },
+                                        child: Column(
+                                          children: <Widget>[
+                                            Icon(Icons.check_circle,
+                                                size: 60.0,
+                                                color: Colors.green),
+                                            Text('Hoàn thành',
+                                                style:
+                                                    TextStyle(fontSize: 16.0)),
+                                          ],
+                                        ),
                                       ),
-                                      Column(
-                                        children: <Widget>[
-                                          Icon(Icons.list,
-                                              size: 60.0, color: Colors.green),
-                                          Text('Tất cả',
-                                              style: TextStyle(fontSize: 16.0)),
-                                        ],
+                                      GestureDetector(
+                                        onTap: () {
+                                          Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                              builder: (context) =>
+                                                  BookingHistoryPage(
+                                                index:
+                                                    2, // Use 'index' instead of 'idex'
+                                              ),
+                                            ),
+                                          );
+                                        },
+                                        child: Column(
+                                          children: <Widget>[
+                                            Icon(Icons.list,
+                                                size: 60.0,
+                                                color: Colors.black),
+                                            Text('Đặt chỗ',
+                                                style:
+                                                    TextStyle(fontSize: 16.0)),
+                                          ],
+                                        ),
                                       ),
                                     ],
-                                  ),
+                                  )
                                 ],
                               ),
                             ),

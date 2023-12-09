@@ -44,6 +44,7 @@ dependencies:
   datetime_picker_formfield: ^2.0.1
   search_page: ^2.3.0
   dropdown_search: ^5.0.6
+  flutter_rating_bar: ^4.0.1
 
 dev_dependencies:
   flutter_test:

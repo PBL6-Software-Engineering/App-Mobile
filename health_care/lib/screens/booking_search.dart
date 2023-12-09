@@ -17,24 +17,10 @@ class BookingSearchPage extends StatefulWidget {
 class _BookingSearchPageState extends State<BookingSearchPage> {
   final String _url = HttpProvider.url;
   Location? selectedLocation;
-  int? selectedId;
+  int? selectedId = null;
   TextEditingController _searchController = TextEditingController();
   final _userEditTextController = TextEditingController();
-
-  // final List<Map<String, dynamic>> _categories = [
-  //   {'id': 'departments', 'label': 'Chuyên khoa', 'icon': Icons.category},
-  //   {
-  //     'id': 'services',
-  //     'label': 'Dịch vụ',
-  //     'icon': Icons.medical_services,
-  //   },
-  //   {
-  //     'id': 'hospitals',
-  //     'label': 'Bệnh viện và phòng khám',
-  //     'icon': Icons.local_hospital,
-  //   },
-  //   {'id': 'doctors', 'label': 'Bác sĩ', 'icon': Icons.person},
-  // ];
+  bool isLoading = true;
 
   Map<String, List<Map<String, dynamic>>> categoryResults = {
     'departments': [],
@@ -58,7 +44,6 @@ class _BookingSearchPageState extends State<BookingSearchPage> {
         setState(() {
           selectedLocation = locations.first;
           selectedId = selectedLocation?.provinceCode;
-          print('selectedId ${selectedId}');
         });
       }
     } catch (e) {
@@ -70,10 +55,12 @@ class _BookingSearchPageState extends State<BookingSearchPage> {
     if (selectedId == null) {
       return;
     }
+    isLoading = true;
+
     try {
       // Make an HTTP request based on the selected location's ID
       final response = await HttpProvider().getData(
-        '/api/public/search-home?search=${_searchController.text ?? ' '}&province_code=${selectedId}',
+        'api/public/search-home?search=${_searchController.text.isNotEmpty ? _searchController.text : ''}&province_code=${selectedId}',
       );
 
       final responseData = json.decode(response.body);
@@ -95,9 +82,11 @@ class _BookingSearchPageState extends State<BookingSearchPage> {
               .map((item) => item as Map<String, dynamic>)
               .toList();
         });
+        isLoading = false;
       }
     } catch (e) {
       print('Error: $e');
+      isLoading = true;
     }
   }
 
@@ -130,19 +119,19 @@ class _BookingSearchPageState extends State<BookingSearchPage> {
                 ),
                 popupProps: PopupProps.menu(
                   showSelectedItems: false,
-                  isFilterOnline: true,
-                  showSearchBox: true,
-                  searchFieldProps: TextFieldProps(
-                    controller: _userEditTextController,
-                    decoration: InputDecoration(
-                      suffixIcon: IconButton(
-                        icon: Icon(Icons.clear),
-                        onPressed: () {
-                          _userEditTextController.clear();
-                        },
-                      ),
-                    ),
-                  ),
+                  // isFilterOnline: true,
+                  // showSearchBox: true,
+                  // searchFieldProps: TextFieldProps(
+                  //   controller: _userEditTextController,
+                  //   decoration: InputDecoration(
+                  //     suffixIcon: IconButton(
+                  //       icon: Icon(Icons.clear),
+                  //       onPressed: () {
+                  //         _userEditTextController.clear();
+                  //       },
+                  //     ),
+                  //   ),
+                  // ),
                 ),
                 items: locations,
                 itemAsString: (Location u) => u.name,
@@ -174,66 +163,75 @@ class _BookingSearchPageState extends State<BookingSearchPage> {
               Config.spaceSmall,
               Column(
                 children: [
-                  buildCategory(
-                    icon: Icons.category,
-                    label: 'Chuyên khoa',
-                    getAll: () {
-                      // Handle the getAll action here
-                    },
-                    getDetail: (int idx) {
-                      // Handle the getAll action here
-                    },
-                    items: categoryResults['departments']!,
-                  ),
-                  buildCategory(
-                    icon: Icons.medical_services,
-                    label: 'Dịch vụ',
-                    getAll: () {
-                      // Handle the getAll action here
-                    },
-                    getDetail: (int idx) {},
-                    items: categoryResults['services']!,
-                    thumbnail: 'thumbnail_department',
-                  ),
-                  buildCategory(
-                    icon: Icons.local_hospital,
-                    label: 'Bệnh viện và phòng khám',
-                    getAll: () {
-                      // Handle the onAll action here
-                    },
-                    getDetail: (int idx) {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => HospitalPage(
-                              id: categoryResults['hospitals']?[idx]['id']),
+                  if (isLoading)
+                    Center(child: CircularProgressIndicator())
+                  else
+                    Column(
+                      children: [
+                        buildCategory(
+                          icon: Icons.category,
+                          label: 'Chuyên khoa',
+                          getAll: () {
+                            // Handle the getAll action here
+                          },
+                          getDetail: (int idx) {
+                            // Handle the getAll action here
+                          },
+                          items: categoryResults['departments']!,
                         ),
-                      );
-                    },
-                    items: categoryResults['hospitals']!,
-                    thumbnail: 'avatar',
-                  ),
-                  buildCategory(
-                    icon: Icons.person,
-                    label: 'Bác sĩ',
-                    getAll: () {
-                      // Handle the onAll action here
-                    },
-                    getDetail: (int idx) {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => DoctorPage(
-                              id: categoryResults['doctors']?[idx]
-                                  ['id_doctor']),
+                        buildCategory(
+                          icon: Icons.medical_services,
+                          label: 'Dịch vụ',
+                          getAll: () {
+                            // Handle the getAll action here
+                          },
+                          getDetail: (int idx) {},
+                          items: categoryResults['services']!,
+                          thumbnail: 'thumbnail_department',
                         ),
-                      );
-                    },
-                    items: categoryResults['doctors']!,
-                    thumbnail: 'avatar',
-                  ),
+                        buildCategory(
+                          icon: Icons.local_hospital,
+                          label: 'Bệnh viện và phòng khám',
+                          getAll: () {
+                            // Handle the onAll action here
+                          },
+                          getDetail: (int idx) {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => HospitalPage(
+                                  id: categoryResults['hospitals']?[idx]['id'],
+                                ),
+                              ),
+                            );
+                          },
+                          items: categoryResults['hospitals']!,
+                          thumbnail: 'avatar',
+                        ),
+                        buildCategory(
+                          icon: Icons.person,
+                          label: 'Bác sĩ',
+                          getAll: () {
+                            // Handle the onAll action here
+                          },
+                          getDetail: (int idx) {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => DoctorPage(
+                                  id: categoryResults['doctors']?[idx]
+                                      ['id_doctor'],
+                                ),
+                              ),
+                            );
+                          },
+                          items: categoryResults['doctors']!,
+                          thumbnail: 'avatar',
+                        ),
+                      ],
+                    ),
                 ],
-              ),
+              )
             ],
           ),
         ),

@@ -27,7 +27,7 @@ class _UserInfoPageState extends State<UserInfoPage> {
     email: '',
     phone: '',
     gender: 0,
-    dateofbirth: '',
+    dateOfBirth: '',
     avatar: '',
     address: '',
   );
@@ -35,11 +35,12 @@ class _UserInfoPageState extends State<UserInfoPage> {
     super.initState();
   }
 
-  void updateUser(User updatedUser) { 
+  void updateUser(User updatedUser) {
     setState(() {
       widget.user = updatedUser;
     });
   }
+
   void _toggleEdit() {
     setState(() {
       isEditing = true;
@@ -48,9 +49,14 @@ class _UserInfoPageState extends State<UserInfoPage> {
       showDialog(
         context: context,
         builder: (BuildContext context) {
-          return UserProfileFormDialog(
-            user: widget.user,
-            onUpdateUser: updateUser,
+          return Theme(
+            data: ThemeData(
+              canvasColor: Colors.white,
+            ),
+            child: UserProfileFormDialog(
+              user: widget.user,
+              onUpdateUser: updateUser,
+            ),
           );
         },
       );
@@ -98,15 +104,15 @@ class _UserInfoPageState extends State<UserInfoPage> {
             ),
           ),
           SizedBox(height: 16.0),
-          UserInfoItem(label: 'Số Điện Thoại', value: widget.user.phone),
-          UserInfoItem(label: 'Email', value: widget.user.email),
+          UserInfoItem(label: 'Số Điện Thoại:', value: widget.user.phone),
+          UserInfoItem(label: 'Email:', value: widget.user.email),
           UserInfoItem(
-              label: 'Giới Tính',
+              label: 'Giới Tính:',
               value: widget.user.gender == 1
                   ? "Nam"
                   : (widget.user.gender == 2 ? "Nữ" : "Không xác định")),
-          UserInfoItem(label: 'Ngày Sinh', value: widget.user.dateofbirth),
-          UserInfoItem(label: 'Địa chỉ', value: widget.user.address),
+          UserInfoItem(label: 'Ngày Sinh:', value: widget.user.dateOfBirth),
+          UserInfoItem(label: 'Địa chỉ:', value: widget.user.address),
           SizedBox(height: 32.0),
           // Button "Chỉnh sửa thông tin"
           Center(
@@ -186,19 +192,20 @@ class UserProfileFormDialog extends StatelessWidget {
       },
     );
   }
+
   String convertDateFormat(String inputDate) {
-  // Định dạng đầu vào: dd/mm/yyyy
-  DateFormat inputFormat = DateFormat('dd/MM/yyyy');
-  
-  // Định dạng đầu ra: yyyy/mm/dd
-  DateFormat outputFormat = DateFormat('yyyy-MM-dd');
-  
-  // Chuyển đổi ngày
-  DateTime date = inputFormat.parse(inputDate);
-  String outputDate = outputFormat.format(date);
-  
-  return outputDate;
-}
+    // Định dạng đầu vào: dd/mm/yyyy
+    DateFormat inputFormat = DateFormat('dd/MM/yyyy');
+
+    // Định dạng đầu ra: yyyy/mm/dd
+    DateFormat outputFormat = DateFormat('yyyy-MM-dd');
+
+    // Chuyển đổi ngày
+    DateTime date = inputFormat.parse(inputDate);
+    String outputDate = outputFormat.format(date);
+
+    return outputDate;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -211,8 +218,8 @@ class UserProfileFormDialog extends StatelessWidget {
         user.gender == 1 ? "Nam" : (user.gender == 2 ? "Nữ" : "Không xác định");
     //genderController.text = user.gender.toString();
     addressController.text = user.address;
-    dobController.text = user.dateofbirth;
-      bool isLoading = false;
+    dobController.text = user.dateOfBirth;
+    bool isLoading = false;
 
     return AlertDialog(
       title: Text('Chỉnh sửa thông tin'),
@@ -309,32 +316,33 @@ class UserProfileFormDialog extends StatelessWidget {
           Config.spaceSmall,
           TextFormField(
             controller: dobController,
-  readOnly: true,
-  onTap: () async {
-    DateTime? selectedDate = await showDatePicker(
-      context: context,
-      initialDate: DateTime.now(),
-      firstDate: DateTime(1900),
-      lastDate: DateTime.now(),
-    );
+            readOnly: true,
+            onTap: () async {
+              DateTime? selectedDate = await showDatePicker(
+                context: context,
+                initialDate: DateTime.now(),
+                firstDate: DateTime(1900),
+                lastDate: DateTime.now(),
+              );
 
-    if (selectedDate != null) {
-      // Định dạng ngày theo kiểu dd/MM/yyyy
-      String formattedDate = DateFormat('dd/MM/yyyy').format(selectedDate);
-        dobController.text = formattedDate;
-    }
-  },
-  keyboardType: TextInputType.datetime,
-  style: TextStyle(
-    fontSize: 15,
-    fontWeight: FontWeight.bold,
-  ),
-  decoration: InputDecoration(
-    labelText: 'Ngày sinh',
-    labelStyle: TextStyle(
-      color: Config.blueColor,
-    ),
-  ),
+              if (selectedDate != null) {
+                // Định dạng ngày theo kiểu dd/MM/yyyy
+                String formattedDate =
+                    DateFormat('dd/MM/yyyy').format(selectedDate);
+                dobController.text = formattedDate;
+              }
+            },
+            keyboardType: TextInputType.datetime,
+            style: TextStyle(
+              fontSize: 15,
+              fontWeight: FontWeight.bold,
+            ),
+            decoration: InputDecoration(
+              labelText: 'Ngày sinh',
+              labelStyle: TextStyle(
+                color: Config.blueColor,
+              ),
+            ),
             // controller: dobController,
             // //inputFormatters: [
             //   //FilteringTextInputFormatter.allow(RegExp(r'^\d{2}/\d{2}/\d{4}$')),
@@ -386,7 +394,7 @@ class UserProfileFormDialog extends StatelessWidget {
                 gender: selectedGender == 'Nam'
                     ? 1
                     : (selectedGender == 'Nữ' ? 2 : 0),
-                dateofbirth: dobController.text,
+                dateOfBirth: dobController.text,
                 avatar: user.avatar,
                 address: addressController.text,
               );
@@ -394,7 +402,7 @@ class UserProfileFormDialog extends StatelessWidget {
               // Hiển thị thông báo bằng Dialog mới
               // _showNotificationDialogOk(
               //     context, json.decode(response.body)['message'], new_user);
-              
+
               // Navigator.of(context).push(
               //   MaterialPageRoute(
               //     builder: (context) => UserInfoPage(user: new_user),
@@ -403,14 +411,16 @@ class UserProfileFormDialog extends StatelessWidget {
             }
             isLoading = false;
             _showNotificationDialog(
-                  context, json.decode(response.body)['message']);
+                context, json.decode(response.body)['message']);
             //if (response.statusCode==200) Navigator.of(context).pop();
           },
           child: Stack(
             alignment: Alignment.center,
             children: [
               Text('Lưu thay đổi'),
-              isLoading == true ? Center(child: CircularProgressIndicator() ) : Text(''),
+              isLoading == true
+                  ? Center(child: CircularProgressIndicator())
+                  : Text(''),
             ],
           ),
         ),
