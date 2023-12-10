@@ -19,7 +19,6 @@ class _TimePickerFieldState extends State<TimePickerField> {
   @override
   Widget build(BuildContext context) {
     Config().init(context);
-    print('times ${widget.times}');
 
     return Center(
       child: Container(

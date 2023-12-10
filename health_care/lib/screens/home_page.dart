@@ -15,7 +15,10 @@ import 'package:health_care/screens/all_articles_page.dart';
 
 class HomePage extends StatefulWidget {
   final User user;
-  const HomePage({Key? key, required this.user,}) : super(key: key);
+  const HomePage({
+    Key? key,
+    required this.user,
+  }) : super(key: key);
   @override
   _HomePageState createState() => _HomePageState();
 }
@@ -371,7 +374,6 @@ class _HomePageState extends State<HomePage> {
                                           },
                                           child: Text(
                                             'Xem thêm >>',
-                                            
                                             style: TextStyle(
                                               fontSize: 16,
                                               color: Config.blueColor,

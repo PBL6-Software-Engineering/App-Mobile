@@ -26,7 +26,7 @@ class _MainLayoutState extends State<MainLayout> {
     email: '',
     phone: '',
     gender: 0,
-    dateofbirth: '',
+    dateOfBirth: '',
     avatar: '',
     address: '',
   );
@@ -35,11 +35,12 @@ class _MainLayoutState extends State<MainLayout> {
     fetchUser();
   }
 
-  void updateUser(User updatedUser) { 
+  void updateUser(User updatedUser) {
     setState(() {
       user = updatedUser;
     });
   }
+
   void fetchUser() async {
     try {
       loading = true;
@@ -69,7 +70,7 @@ class _MainLayoutState extends State<MainLayout> {
           HomePage(user: user),
           MessagePage(),
           AppointmentPage(),
-          SettingPage(user: user, onUpdateUser:updateUser),
+          SettingPage(user: user, onUpdateUser: updateUser),
         ],
       ),
       bottomNavigationBar: BottomNavigationBar(

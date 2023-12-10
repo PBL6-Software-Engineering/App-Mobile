@@ -149,7 +149,7 @@ class _DoctorPageState extends State<DoctorPage> {
                         Container(
                           constraints: BoxConstraints(
                               maxWidth:
-                                  235), // Giới hạn chiều rộng tối đa của đoạn text ),
+                                  215), // Giới hạn chiều rộng tối đa của đoạn text ),
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
@@ -723,9 +723,13 @@ class _DoctorPageState extends State<DoctorPage> {
                     ],
                   ),
                   SizedBox(height: 16),
-                  Center(
-                    child: BookingForm(id: doctor.idDoctor, name: doctor.name),
+                 Center(
+                    child: BookingForm(
+                        id: doctor.idDoctor,
+                        name: doctor.name,
+                        hospitalName: doctor.hospital.name),
                   ),
+
                 ],
               ),
             ),
