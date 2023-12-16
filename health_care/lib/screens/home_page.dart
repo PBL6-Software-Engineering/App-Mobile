@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:health_care/components/article.dart';
+import 'package:health_care/components/tag.dart';
 import 'package:health_care/components/search_form.dart';
 import 'package:health_care/components/search_results.dart';
 import 'package:health_care/objects/articles.dart';
@@ -29,10 +30,10 @@ class _HomePageState extends State<HomePage> {
   ArticleService articleService = ArticleService();
   List<Category> categories = [];
   List<Article> articles = [];
+  List<Article> hotarticles =[];
   List<Article> articleResults = [];
   bool loading = true;
   //bool loading = true;
-
   final List<String> catNames = [
     "Đặt lịch hẹn",
     "Kiểm tra sức khoẻ",
@@ -57,6 +58,8 @@ class _HomePageState extends State<HomePage> {
     loading = true;
     try {
       articles = await articleService.fetchArticles('api/article');
+      hotarticles = [...articles];
+      hotarticles.sort((a, b) => b.searchNumber.compareTo(a.searchNumber));
       setState(() {
         loading = false;
       });
@@ -289,14 +292,7 @@ class _HomePageState extends State<HomePage> {
                                       mainAxisAlignment:
                                           MainAxisAlignment.spaceBetween,
                                       children: [
-                                        Text(
-                                          'Chủ Đề',
-                                          style: TextStyle(
-                                            fontSize: 25,
-                                            fontWeight: FontWeight.bold,
-                                            color: Color.fromARGB(255, 4, 4, 4),
-                                          ),
-                                        ),
+                                        TagContainer(tag: "Chủ Đề"),
                                         TextButton(
                                           onPressed: () {
                                             Navigator.push(
@@ -353,14 +349,8 @@ class _HomePageState extends State<HomePage> {
                                       mainAxisAlignment:
                                           MainAxisAlignment.spaceBetween,
                                       children: [
-                                        Text(
-                                          'Bài viết mới',
-                                          style: TextStyle(
-                                            fontSize: 25,
-                                            fontWeight: FontWeight.bold,
-                                            color: Color.fromARGB(255, 4, 4, 4),
-                                          ),
-                                        ),
+                                        TagContainer(tag: 'Bài Viết Mới'),
+                                        
                                         TextButton(
                                           onPressed: () {
                                             Navigator.push(
@@ -398,6 +388,62 @@ class _HomePageState extends State<HomePage> {
                                                 return InkWell(
                                                   child: ArticleContainer(
                                                       article: articles[index]),
+                                                );
+                                              },
+                                            ),
+                                          )
+                                  ],
+                                ),
+                              ),
+                              SizedBox(height: 16),
+                              Container(
+                                height: 500,
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        TagContainer(tag: 'Bài Viết Nổi Bật'),
+                                        
+                                        TextButton(
+                                          onPressed: () {
+                                            Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                builder: (context) =>
+                                                    AllArticlePage(
+                                                        articles: hotarticles),
+                                              ),
+                                            );
+                                          },
+                                          child: Text(
+                                            'Xem thêm >>',
+                                            style: TextStyle(
+                                              fontSize: 16,
+                                              color: Config.blueColor,
+                                              fontWeight: FontWeight.bold,
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                    //Config.spaceSmall,
+                                    loading
+                                        ? Expanded(
+                                            child: Center(
+                                              child:
+                                                  CircularProgressIndicator(),
+                                            ),
+                                          )
+                                        : Expanded(
+                                            child: ListView.builder(
+                                              itemCount: hotarticles.length,
+                                              itemBuilder: (context, index) {
+                                                return InkWell(
+                                                  child: ArticleContainer(
+                                                      article: hotarticles[index]),
                                                 );
                                               },
                                             ),

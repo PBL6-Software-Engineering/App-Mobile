@@ -41,20 +41,25 @@ class ArticleService {
 }
 
 class Article {
-   String _url = HttpProvider.url;
-   int id;
-   String title;
-   String content;
-   String thumbnail;
-   String author;
-   String createdAt;
+  String _url = HttpProvider.url;
+  int id;
+  String title;
+  String content;
+  String thumbnail;
+  String author;
+  String createdAt;
+  int searchNumber;
+  String categoryName;
   Article(
       {required this.id,
       required this.title,
       required this.content,
       required this.thumbnail,
       required this.author,
-      required this.createdAt});
+      required this.createdAt,
+      required this.searchNumber,
+      required this.categoryName});
+
 
   factory Article.fromJson(Map<String, dynamic> json) {
     final HttpProvider _httpProvider = HttpProvider();
@@ -63,12 +68,14 @@ class Article {
       id: json['id'],
       title: json['title'],
       content: json['content'],
-
       thumbnail: _url + json['thumbnail_article'],
       author: json['name_user'] ?? '',
+      searchNumber: json['search_number'],
       createdAt:
           (DateFormat('dd/MM/yyyy').format(DateTime.parse(json['created_at'])))
               .toString(),
+      categoryName: json['name_category'],
+              
     );
   }
 }

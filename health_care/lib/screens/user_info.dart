@@ -3,11 +3,16 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:health_care/utils/config.dart';
 import 'package:health_care/objects/user.dart';
 import 'package:health_care/providers/http_provider.dart';
+import 'package:health_care/providers/auth_manager.dart';
 import 'dart:async';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:intl/intl.dart';
 import 'package:flutter/services.dart';
+import 'package:image_picker/image_picker.dart';
+import 'dart:io';
+import 'package:http_parser/http_parser.dart';
+import 'package:dio/dio.dart';
 
 class UserInfoPage extends StatefulWidget {
   User user;
@@ -34,7 +39,19 @@ class _UserInfoPageState extends State<UserInfoPage> {
   void initState() {
     super.initState();
   }
+  String convertDateFormat(String inputDate) {
+    // Định dạng đầu vào: dd/mm/yyyy
+    DateFormat inputFormat = DateFormat('dd/MM/yyyy');
 
+    // Định dạng đầu ra: yyyy/mm/dd
+    DateFormat outputFormat = DateFormat('yyyy-MM-dd');
+
+    // Chuyển đổi ngày
+    DateTime date = inputFormat.parse(inputDate);
+    String outputDate = outputFormat.format(date);
+
+    return outputDate;
+  }
   void updateUser(User updatedUser) {
     setState(() {
       widget.user = updatedUser;
@@ -63,6 +80,52 @@ class _UserInfoPageState extends State<UserInfoPage> {
     }
   }
 
+  File? _image;
+
+  Future _getImage() async {
+    final picker = ImagePicker();
+    final pickedFile = await picker.getImage(source: ImageSource.gallery);
+    String _url = HttpProvider.url;
+    final data = http.MultipartRequest('POST', Uri.parse('https://vanmanh.azurewebsites.net/api/infor-user/update'));
+    if (pickedFile != null) {
+    setState(() {
+      _image = File(pickedFile.path);
+      
+    });
+    UserService userService = UserService();
+    userService.uploadImage(File(pickedFile.path), widget.user);
+    
+
+    var map = new Map<String, dynamic>();
+    //map['avatar'] = _image;
+    map['avatar'] = await _image?.readAsBytes();
+    map['name'] = widget.user.name;
+    map['phone'] = widget.user.phone;
+    map['username'] = widget.user.username;
+    map['email'] = widget.user.email;
+    map['gender'] = widget.user.gender;
+    map['address'] = widget.user.address;
+    map['date_of_birth'] = convertDateFormat(widget.user.dateOfBirth);
+
+    FormData formData = FormData.fromMap({
+      'name': widget.user.name,
+      'phone': widget.user.phone,
+      'username': widget.user.username,
+      'email': widget.user.email,
+      'gender': widget.user.gender,
+      'address': widget.user.address,
+      'date_of_birth': convertDateFormat(widget.user.dateOfBirth),
+      'avatar': await MultipartFile.fromFile(_image!.path, filename: 'avatar.jpg'),
+    });
+    // Dio dio = Dio();
+    // dio.options.headers['Authorization'] = AuthManager.getToken();
+    // var response = await dio.post('https://vanmanh.azurewebsites.net/api/infor-user/update',data: formData );
+    // print(json.decode(response.data));
+  } else {
+    print('No image selected.');
+  }
+  }
+
   @override
   Widget build(BuildContext context) {
     Config().init(context);
@@ -83,16 +146,24 @@ class _UserInfoPageState extends State<UserInfoPage> {
         padding: EdgeInsets.all(16.0),
         children: [
           Center(
+              child: GestureDetector(
+            onTap: () {
+              _getImage();
+            },
             child: widget.user.avatar != ''
                 ? CircleAvatar(
                     radius: 60,
-                    backgroundImage: NetworkImage(widget.user.avatar),
+                    backgroundImage: _image != null
+                        ? FileImage(_image!) as ImageProvider<Object>?
+                        : NetworkImage(widget.user.avatar),
                   )
                 : CircleAvatar(
                     radius: 60,
-                    backgroundImage: AssetImage('assets/images/user.jpeg'),
+                    backgroundImage: _image != null
+                        ? FileImage(_image!) as ImageProvider<Object>?
+                        : AssetImage('assets/images/user.jpeg'),
                   ),
-          ),
+          )),
           SizedBox(height: 16.0),
           Center(
             child: Text(
@@ -367,6 +438,7 @@ class UserProfileFormDialog extends StatelessWidget {
           onPressed: () async {
             isLoading = true;
             var updatedProfile = {
+              
               'name': nameController.text,
               'phone': phoneController.text,
               'username': user.username,

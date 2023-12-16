@@ -24,35 +24,40 @@ class ServiceComponent extends StatelessWidget {
           width: 250,
           decoration: BoxDecoration(
             color: Colors.white,
-            border: Border(
-              left: BorderSide(
-                color: Color(0xFF11B3CF),
-                width: 2.0,
-              ),
-              right: BorderSide(
-                color: Color(0xFF11B3CF),
-                width: 2.0,
-              ),
-              top: BorderSide(
-                color: Color(0xFF11B3CF),
-                width: 2.0,
-              ),
-              bottom: BorderSide(
-                color: Color(0xFF0B8AA0),
-                width: 8.0,
-              ),
-            ),
+             border: Border.all(
+               color: Colors.blue,
+               width: 4,
+             ),
+            borderRadius: BorderRadius.circular(10.0),
           ),
           child: Center(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Center(
-                  child: service.thumbnail == ''
-                      ? Image.asset('assets/images/service.dart',
-                          width: 200, height: 100, fit: BoxFit.cover)
-                      : Image.network(service.thumbnail,
-                          width: 200, height: 100, fit: BoxFit.cover),
+                  child: service.thumbnail != '' ? 
+                  Container(
+                    width: 200,
+                    height: 100,
+                    decoration: BoxDecoration(
+                      image: DecorationImage(
+                        image: NetworkImage(service.thumbnail),
+                        fit: BoxFit.cover,
+                      ),
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                  ) : 
+                  Container(
+                    width: 200,
+                    height: 100,
+                    decoration: BoxDecoration(
+                      image: DecorationImage(
+                        image: AssetImage('assets/images/service.dart'),
+                        fit: BoxFit.cover,
+                      ),
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                  ),
                 ),
                 SizedBox(height: 8.0),
                 Center(

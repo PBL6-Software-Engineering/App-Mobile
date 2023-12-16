@@ -25,32 +25,30 @@ class HospitalContainer extends StatelessWidget {
         child: Container(
           decoration: BoxDecoration(
             color: Colors.white,
-            border: Border(
-              left: BorderSide(
-                color: Color(0xFF0B8AA0),
-                width: 8.0,
-              ),
-              right: BorderSide(
-                color: Color(0xFF11B3CF),
-                width: 2.0,
-              ),
-              top: BorderSide(
-                color: Color(0xFF11B3CF),
-                width: 2.0,
-              ),
-              bottom: BorderSide(
-                color: Color(0xFF11B3CF),
-                width: 2.0,
-              ),
-            ),
+             border: Border.all(
+               color: Colors.blue,
+               width: 4,
+             ),
+            borderRadius: BorderRadius.circular(10.0),
+            // border: Border(
+            //   left: BorderSide(
+            //     color: Color(0xFF0B8AA0),
+            //     width: 8.0,
+            //   ),
+            //   right: BorderSide(
+            //     color: Color(0xFF11B3CF),
+            //     width: 2.0,
+            //   ),
+            //   top: BorderSide(
+            //     color: Color(0xFF11B3CF),
+            //     width: 2.0,
+            //   ),
+            //   bottom: BorderSide(
+            //     color: Color(0xFF11B3CF),
+            //     width: 2.0,
+            //   ),
+            // ),
           ),
-          // decoration: BoxDecoration(
-          //   borderRadius: BorderRadius.circular(8),
-          //   border: Border.all(
-          //     color: Colors.grey,
-          //     width: 1,
-          //   ),
-          // ),
           padding: EdgeInsets.all(16),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -85,6 +83,7 @@ class HospitalContainer extends StatelessWidget {
                             maxLines: 1,
                           ),
                         ),
+                        SizedBox(height: 16),
                         Row(
                           children: [
                             Icon(Icons.location_on, size: 20),

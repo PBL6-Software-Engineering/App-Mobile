@@ -31,6 +31,7 @@ dependencies:
   #flutter_html: ^2.2.1
   flutter:
     sdk: flutter
+  image_picker: ^0.8.4+4
   flutter_html: ^3.0.0-beta
   flutter_svg: ^0.22.0
   intl: ^0.17.0
@@ -40,11 +41,14 @@ dependencies:
   cupertino_icons: ^1.0.2
   http: ^0.13.6
   http_interceptor: ^1.0.2
+  http_parser: ^4.0.0
   shared_preferences: ^2.2.2
   datetime_picker_formfield: ^2.0.1
   search_page: ^2.3.0
   dropdown_search: ^5.0.6
   flutter_rating_bar: ^4.0.1
+  dio: ^5.4.0
+  mime: ^1.0.4
 
 dev_dependencies:
   flutter_test:

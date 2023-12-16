@@ -23,7 +23,7 @@ class TimeWorkContainer extends StatelessWidget {
                 alignment: WrapAlignment.start,
                 //alignment: WrapAlignment.center,
                 spacing:
-                    20.0, // Khoảng cách giữa các component theo chiều ngang
+                    16.0, // Khoảng cách giữa các component theo chiều ngang
                 runSpacing: 16.0, // Khoảng cách giữa các hàng theo chiều dọc
                 children:[
         Column(crossAxisAlignment: CrossAxisAlignment.start, children: [

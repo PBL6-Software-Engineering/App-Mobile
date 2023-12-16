@@ -3,14 +3,15 @@ import 'dart:convert';
 import 'package:health_care/providers/http_provider.dart';
 import 'package:intl/intl.dart';
 import 'package:health_care/objects/rating.dart';
-class ServiceService{
+
+class ServiceService {
   final HttpProvider _httpProvider = HttpProvider();
   final String _url = HttpProvider.url;
 
   Future<List<Service>> fetchServices() async {
     final response = await _httpProvider.getData('api/hospital-service/all');
     //print(response);
-    if (response !=null) {
+    if (response != null) {
       final responseData = json.decode(response.body);
       final List<dynamic> jsonList = responseData['data'];
       //print(responseData);
@@ -24,10 +25,11 @@ class ServiceService{
     }
   }
 
-  Future<List<Service>> fetchServicesHospital( int id) async {
-    final response = await _httpProvider.getData('api/hospital-service/hospital/${id.toString()}');
+  Future<List<Service>> fetchServicesHospital(int id) async {
+    final response = await _httpProvider
+        .getData('api/hospital-service/hospital/${id.toString()}');
     //print(response);
-    if (response !=null) {
+    if (response != null) {
       final responseData = json.decode(response.body);
       final List<dynamic> jsonList = responseData['data'];
       //print(responseData);
@@ -59,13 +61,15 @@ class ServiceService{
     }
   }
 }
+
 class Service {
   int id;
   String name;
   int price;
   String hospital_name;
-  String thumbnail ;
+  String thumbnail;
   ServiceInformation infor;
+  int searchNumber;
 
   Service({
     required this.id,
@@ -74,17 +78,21 @@ class Service {
     required this.hospital_name,
     required this.infor,
     required this.thumbnail,
+    required this.searchNumber,
   });
-  factory  Service.fromJson(Map<String, dynamic> json){
-  final HttpProvider _httpProvider = HttpProvider();
-  final String _url = HttpProvider.url;
+  factory Service.fromJson(Map<String, dynamic> json) {
+    final HttpProvider _httpProvider = HttpProvider();
+    final String _url = HttpProvider.url;
     return Service(
       id: json['id_hospital_service'],
       name: json['name'],
       price: json['price'],
       hospital_name: json['name_hospital'],
       infor: ServiceInformation.fromJson(json['infor']),
-      thumbnail: json['thumbnail_service'] == null  ? '' : _url + json['thumbnail_service'],
+      thumbnail: json['thumbnail_service'] == null
+          ? ''
+          : _url + json['thumbnail_service'],
+      searchNumber: json['search_number_service'],
     );
   }
 }
@@ -111,16 +119,20 @@ class ServiceInformation {
     );
   }
 }
+
 class ServiceRating {
   int id;
   int countRating;
   double numberRating;
   RatingDetails countDetails;
   List<RatingItem> ratings;
-  ServiceRating({required this.id, required this.countRating,
+  ServiceRating({
+    required this.id,
+    required this.countRating,
     required this.numberRating,
     required this.countDetails,
-    required this.ratings,});
+    required this.ratings,
+  });
 
   factory ServiceRating.fromJson(Map<String, dynamic> json) {
     var ratingsList = json['ratings']['data'] as List;
