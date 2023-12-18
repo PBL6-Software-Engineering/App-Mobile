@@ -51,9 +51,11 @@ class DoctorService {
       final responseData = json.decode(response.body);
       //final List<dynamic> jsonList = responseData['data'];
       //print('api/infor-doctor/view-profile/${id.toString()}');
-      print(responseData);
+      //print(responseData);
+      print(responseData['data']);
 
       DoctorDetail doctorDetail = DoctorDetail.fromJson(responseData['data']);
+      print(doctorDetail);
       //print(doctorDetail);
       return doctorDetail;
     } else {
@@ -147,7 +149,7 @@ class DoctorDetail {
       id: json['id_doctor'],
       email: json['email'] ?? 'Chưa cập nhật',
       username: json['username'] ?? 'Chưa cập nhật',
-      name: json['name'],
+      name: json['name'] ?? 'Chưa cập nhật',
       phone: json['phone'] ?? 'Chưa cập nhật',
       address: json['address'] ?? 'Chưa cập nhật',
       avatar: json['avatar'] != null ? _url + json['avatar'] : '',
@@ -215,13 +217,13 @@ class InforExtend {
       id: json['id'],
       idDoctor: json['id_doctor'],
       prominent: prominentList.map((e) => Prominent.fromJson(e)).toList(),
-      information: json['information'],
-      strengths: json['strengths'].cast<String>(),
+      information: json['information'] ?? '',
+      strengths: json['strengths']?.cast<String>() ?? [],
       workExperience:
           workExperienceList.map((e) => WorkExperience.fromJson(e)).toList(),
       trainingProcess:
           trainingProcessList.map((e) => TrainingProcess.fromJson(e)).toList(),
-      language: json['language'].cast<String>(),
+      language: json['language']?.cast<String>() ?? [],
       awardsRecognition: awardsRecognitionList
           .map((e) => AwardsRecognition.fromJson(e))
           .toList(),
@@ -242,7 +244,7 @@ class Prominent {
   factory Prominent.fromJson(Map<String, dynamic> json) {
     return Prominent(
       title: json['title'],
-      subtitle: json['subtitle'].cast<String>(),
+      subtitle: json['subtitle']?.cast<String>(),
     );
   }
 }
@@ -256,7 +258,7 @@ class WorkExperience {
   factory WorkExperience.fromJson(Map<String, dynamic> json) {
     return WorkExperience(
       title: json['title'],
-      subtitle: json['subtitle'].cast<String>(),
+      subtitle: json['subtitle']?.cast<String>(),
     );
   }
 }
@@ -284,7 +286,7 @@ class AwardsRecognition {
   factory AwardsRecognition.fromJson(Map<String, dynamic> json) {
     return AwardsRecognition(
       title: json['title'],
-      subtitle: json['subtitle'].cast<String>(),
+      subtitle: json['subtitle']?.cast<String>(),
     );
   }
 }
@@ -306,14 +308,20 @@ class ResearchWork {
 class Hospitalinfor {
   int id;
   String name;
+  String coverimage;
   Hospitalinfor({
     required this.id,
     required this.name,
+    required this.coverimage,
   });
+
   factory Hospitalinfor.fromJson(Map<String, dynamic> json) {
+    final HttpProvider _httpProvider = HttpProvider();
+    final String _url = HttpProvider.url;
     return Hospitalinfor(
       id: json['id_hospital'],
       name: json['name'],
+      coverimage: json['cover_hospital'] == null ? '' : _url+json['cover_hospital'],
     );
   }
 }

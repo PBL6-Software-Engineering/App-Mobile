@@ -2,6 +2,46 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:health_care/providers/http_provider.dart';
 import 'package:intl/intl.dart';
+class RatingService {
+  final HttpProvider _httpProvider = HttpProvider();
+  final String _url = HttpProvider.url;
+  Future<Rating> fetchRating(String api) async {
+    //final response =
+      //  await _httpProvider.getData('api/infor-doctor/more-rating/${id.toString()}');
+    //print(response);
+    final response =
+        await _httpProvider.getData(api);
+    if (response.statusCode == 200) {
+      final responseData = json.decode(response.body);
+      //print(responseData);
+
+      Rating rating = Rating.fromJson(responseData['data']);
+
+      //print(doctorDetail);
+      return rating;
+    } else {
+      throw Exception('Failed to fetch rating');
+    }
+  }
+
+  // Future<List<Rating>> fetchRatingService(int id) async {
+  //   final response =
+  //       await _httpProvider.getData('api/hospital-service/more-rating/${id.toString()}');
+  //   //print(response);
+  //   if (response.statusCode == 200) {
+  //     final responseData = json.decode(response.body);
+  //     final List<dynamic> jsonList = responseData['data'];
+  //     //print(responseData);
+
+  //     List<Rating> RatingList =
+  //         jsonList.map((json) => Rating.fromJson(json)).toList();
+  //     return RatingList;
+  //   } else {
+  //     throw Exception('Failed to fetch rating service');
+  //   }
+  // }
+
+}
 class Rating {
   int countRating;
   double numberRating;
@@ -20,7 +60,13 @@ class Rating {
     return Rating(
       countRating: json['cout_rating'],
       numberRating: json['number_rating'].toDouble(),
-      countDetails: RatingDetails.fromJson(json['cout_details']),
+      countDetails: RatingDetails.fromJson(json['cout_details']) ?? RatingDetails(
+        oneStar: 0,
+        twoStar: 0,
+        threeStar: 0,
+        fourStar: 0,
+        fiveStar: 0,
+      ),
       ratings: ratingsList.map((e) => RatingItem.fromJson(e)).toList() ?? [],
     );
   }

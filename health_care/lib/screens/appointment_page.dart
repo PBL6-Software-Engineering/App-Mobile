@@ -5,6 +5,7 @@ import 'package:health_care/objects/hospitals.dart';
 import 'package:health_care/components/doctor.dart';
 import 'package:health_care/objects/doctors.dart';
 import 'package:health_care/components/service.dart';
+import 'package:health_care/components/tag.dart';
 import 'package:health_care/objects/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
@@ -93,11 +94,7 @@ class _AppointmentPageState extends State<AppointmentPage> {
                     child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text(
-                            'Top Bệnh Viện/Phòng Khám Nổi Bật',
-                            style: TextStyle(
-                                fontSize: 20, fontWeight: FontWeight.bold),
-                          ),
+                          TagContainer(tag: "Top Bệnh Viện/Phòng Khám nổi bật"),
                           SizedBox(height: 8),
                           loading
                               ? Expanded(
@@ -123,11 +120,8 @@ class _AppointmentPageState extends State<AppointmentPage> {
                     child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text(
-                            'Top Bác Sĩ Hàng Đầu',
-                            style: TextStyle(
-                                fontSize: 20, fontWeight: FontWeight.bold),
-                          ),
+                          
+                          TagContainer(tag: "Đội Ngũ Bác Sĩ"),
                           SizedBox(height: 8),
                           // Expanded(
                           //     child: ListView.separated(
@@ -164,11 +158,8 @@ class _AppointmentPageState extends State<AppointmentPage> {
                     child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text(
-                            'Top dịch vụ nổi bật',
-                            style: TextStyle(
-                                fontSize: 20, fontWeight: FontWeight.bold),
-                          ),
+                          TagContainer(tag: "Top dịch vụ nổi bật"),
+                          
                           SizedBox(height: 8),
                           loading
                               ? Expanded(

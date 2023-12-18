@@ -3,8 +3,8 @@ import 'package:health_care/providers/auth_manager.dart';
 import 'package:http/http.dart' as http;
 
 class HttpProvider {
-  // static String url = 'https://vanmanh.azurewebsites.net/';
-  static String url = 'http://192.168.11.250:8000/';
+   static String url = 'https://vanmanh.azurewebsites.net/';
+  //static String url = 'http://192.168.11.250:8000/';
 
   Future<http.Response> postData(data, apiUrl) async {
     var fullUrl = url + apiUrl;

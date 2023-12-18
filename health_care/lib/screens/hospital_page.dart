@@ -8,6 +8,11 @@ import 'package:health_care/components/service.dart';
 import 'package:health_care/components/timework.dart';
 import 'package:health_care/objects/doctors.dart';
 import 'package:health_care/objects/services.dart';
+import 'package:health_care/objects/insurance.dart';
+import 'package:health_care/utils/config.dart';
+import 'package:health_care/components/tag.dart';
+import 'package:health_care/components/footer.dart';
+
 import 'dart:math';
 
 class HospitalPage extends StatefulWidget {
@@ -25,13 +30,16 @@ class _HospitalPageState extends State<HospitalPage>
   HospitalService hospitalService = HospitalService();
   ServiceService serviceService = ServiceService();
   DoctorService doctorService = DoctorService();
+  InsuranceService insuranceService = InsuranceService();
   bool loading = true;
   bool loadingdoctors = true;
   bool loadingservices = true;
   bool isExpanded1 = false;
   bool isExpanded2 = false;
+  bool isExpanded3 = false;
   List<Doctor> doctors = [];
   List<Service> services = [];
+  List<Insurance> insurances = [];
   HospitalDetail hospital = HospitalDetail(
     id: 1,
     email: "",
@@ -59,7 +67,17 @@ class _HospitalPageState extends State<HospitalPage>
     fetchHospital();
     fetchDoctorsHospital();
     fetchServicesHospital();
+    fetchInsurancesHospital();
     super.initState();
+  }
+
+  void fetchInsurancesHospital() async {
+    try {
+      insurances = await insuranceService.fetchInsurances(widget.id);
+      //print(hospital);
+    } catch (e) {
+      print('Error fetch Hospital insurance: $e');
+    }
   }
 
   void fetchHospital() async {
@@ -156,7 +174,7 @@ class _HospitalPageState extends State<HospitalPage>
                               ),
                               overflow: TextOverflow
                                   .ellipsis, // Hiển thị dấu "..." nếu text quá dài
-                              maxLines: 1,
+                              maxLines: 2,
                             ),
                           ),
                         ],
@@ -233,14 +251,21 @@ class _HospitalPageState extends State<HospitalPage>
                           ])),
                   Container(
                       padding: EdgeInsets.all(16.0),
+                      alignment: Alignment.centerLeft,
                       child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text(
-                              'Đội ngũ bác sĩ',
-                              style: TextStyle(
-                                  fontSize: 20, fontWeight: FontWeight.bold),
-                            ),
+                            TagContainer(tag: "Thông tin bệnh viện"),
+                            SizedBox(height: 16),
+                            Text(hospital.description,
+                                style: TextStyle(fontSize: 16.0))
+                          ])),
+                  Container(
+                      padding: EdgeInsets.all(16.0),
+                      child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            TagContainer(tag: "Đội ngũ bác sĩ"),
                             SizedBox(height: 16),
                             loadingdoctors == true
                                 ? Center(
@@ -260,7 +285,9 @@ class _HospitalPageState extends State<HospitalPage>
                                           },
                                         )))
                                     : Center(
-                                        child: Text("Chưa cập nhật"),
+                                        child: Text(
+                                          "Chưa cập nhật",
+                                        ),
                                       ),
                           ])),
                   Container(
@@ -268,11 +295,20 @@ class _HospitalPageState extends State<HospitalPage>
                       child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
+                            TagContainer(tag: "Hướng dẫn khám bệnh"),
+                            SizedBox(height: 16),
                             Text(
-                              'Dịch vụ nổi bật',
-                              style: TextStyle(
-                                  fontSize: 20, fontWeight: FontWeight.bold),
-                            ),
+                                "Nếu khách hàng muốn đến trị liệu và điều trị bệnh tại bệnh viện Đa khoa Vạn Phúc 1 có thể đặt lịch hẹn trước với bác sĩ. Nếu khách hàng chưa đặt lịch hẹn với bác sĩ thì thực hiện theo các bước sau: \n• Bước 1: Đến quầy lễ tân, bốc số và chờ theo thứ tự. \n• Bước 2: Vào gặp bác sĩ trao đổi tình trạng bệnh và làm một số kiểm tra (nếu có). \n• Bước 3: Đến quầy nhận thuốc và thanh toán chi phí khám chữa bệnh trước khi ra về.",
+                                style: TextStyle(
+                                  fontSize: 16,
+                                ))
+                          ])),
+                  Container(
+                      padding: EdgeInsets.all(16.0),
+                      child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            TagContainer(tag: "Dịch vụ nổi bật"),
                             SizedBox(height: 16),
                             loadingservices == true
                                 ? Center(
@@ -295,19 +331,14 @@ class _HospitalPageState extends State<HospitalPage>
                                         child: Text("Chưa cập nhật"),
                                       ),
                           ])),
+
                   Container(
                     height: 550,
                     padding: EdgeInsets.all(16.0),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(
-                          'Thời gian làm việc',
-                          style: TextStyle(
-                            fontSize: 20.0,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
+                        TagContainer(tag: "Thời gian làm việc"),
                         SizedBox(height: 8.0),
                         Expanded(
                             child:
@@ -329,34 +360,28 @@ class _HospitalPageState extends State<HospitalPage>
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: <Widget>[
-                              Text(
-                                'Chuyên khoa',
-                                style: TextStyle(
-                                  fontSize: 20.0,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
+                              TagContainer(tag: "Chuyên khoa"),
                               SizedBox(height: 16.0),
-                              hospital.departments.length !=0 ?
-                              ListView.builder(
-                                itemCount: isExpanded1
-                                    ? hospital.departments.length
-                                    : min(4, hospital.departments.length), // Show only one item initially
-                                shrinkWrap: true,
-                                physics: NeverScrollableScrollPhysics(),
-                                itemBuilder: (context, index) {
-                                  return Text(
-                                    '• ' + hospital.departments[index],
-                                    style: TextStyle(
-                                      fontSize: 16.0,
-                                    ),
-                                  );
-                                },
-                              ):
-                              Center(
-                                child: Text('Chưa cập nhật')
-                              )
-                              ,
+                              hospital.departments.length != 0
+                                  ? ListView.builder(
+                                      itemCount: isExpanded1
+                                          ? hospital.departments.length
+                                          : min(
+                                              4,
+                                              hospital.departments
+                                                  .length), // Show only one item initially
+                                      shrinkWrap: true,
+                                      physics: NeverScrollableScrollPhysics(),
+                                      itemBuilder: (context, index) {
+                                        return Text(
+                                          '• ' + hospital.departments[index],
+                                          style: TextStyle(
+                                            fontSize: 16.0,
+                                          ),
+                                        );
+                                      },
+                                    )
+                                  : Center(child: Text('Chưa cập nhật')),
                             ],
                           ),
                         ),
@@ -380,6 +405,7 @@ class _HospitalPageState extends State<HospitalPage>
                           )),
                     ],
                   ),
+                  SizedBox(height: 8),
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
@@ -394,34 +420,27 @@ class _HospitalPageState extends State<HospitalPage>
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: <Widget>[
-                              Text(
-                                'Cơ sở vật chất',
-                                style: TextStyle(
-                                  fontSize: 20.0,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
+                              TagContainer(tag: 'Bảo hiểm'),
                               SizedBox(height: 16.0),
-                              hospital.departments.length != 0 ?
-                              ListView.builder(
-                                itemCount: isExpanded2
-                                    ? hospital.departments.length
-                                    : min(4,hospital.departments.length), // Show only one item initially
-                                shrinkWrap: true,
-                                physics: NeverScrollableScrollPhysics(),
-                                itemBuilder: (context, index) {
-                                  return Text(
-                                    '• ' + hospital.departments[index],
-                                    style: TextStyle(
-                                      fontSize: 16.0,
-                                    ),
-                                  );
-                                },
-                              ):
-                              Center(
-                                child: Text('Chưa cập nhật')
-                              )
-                              ,
+                              hospital.departments.length != 0
+                                  ? ListView.builder(
+                                      itemCount: isExpanded2
+                                          ? insurances.length
+                                          : min(
+                                              4,
+                                              insurances.length), // Show only one item initially
+                                      shrinkWrap: true,
+                                      physics: NeverScrollableScrollPhysics(),
+                                      itemBuilder: (context, index) {
+                                        return Text(
+                                          '• ' + insurances[index].name,
+                                          style: TextStyle(
+                                            fontSize: 16.0,
+                                          ),
+                                        );
+                                      },
+                                    )
+                                  : Center(child: Text('Chưa cập nhật')),
                             ],
                           ),
                         ),
@@ -445,6 +464,112 @@ class _HospitalPageState extends State<HospitalPage>
                           )),
                     ],
                   ),
+                  SizedBox(height: 8),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      GestureDetector(
+                        onTap: () {
+                          setState(() {
+                            isExpanded3 = !isExpanded3;
+                          });
+                        },
+                        child: Container(
+                          padding: EdgeInsets.only(left: 16.0),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: <Widget>[
+                              TagContainer(tag: 'Cơ sở vật chất'),
+                              SizedBox(height: 16.0),
+                              hospital.departments.length != 0
+                                  ? ListView.builder(
+                                      itemCount: isExpanded3
+                                          ? hospital.departments.length
+                                          : min(
+                                              4,
+                                              hospital.departments
+                                                  .length), // Show only one item initially
+                                      shrinkWrap: true,
+                                      physics: NeverScrollableScrollPhysics(),
+                                      itemBuilder: (context, index) {
+                                        return Text(
+                                          '• ' + hospital.departments[index],
+                                          style: TextStyle(
+                                            fontSize: 16.0,
+                                          ),
+                                        );
+                                      },
+                                    )
+                                  : Center(child: Text('Chưa cập nhật')),
+                            ],
+                          ),
+                        ),
+                      ),
+                      GestureDetector(
+                          onTap: () {
+                            setState(() {
+                              isExpanded3 = !isExpanded3;
+                            });
+                          },
+                          child: Container(
+                            padding: EdgeInsets.only(left: 16.0),
+                            child: Text(
+                              isExpanded3 ? 'Thu gọn' : 'Xem thêm...',
+                              style: TextStyle(
+                                color: Colors.blue,
+                                fontSize: 16.0,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          )),
+                    ],
+                  ),
+                  Container(
+                    alignment: Alignment.centerLeft,
+                    padding: EdgeInsets.all(16.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        TagContainer(tag: "Hình thức thanh toán"),
+                        SizedBox(height: 16.0),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: <Widget>[
+                            Column(
+                              children: <Widget>[
+                                Image.asset('assets/images/cash.png',
+                                    width: 50, height: 50),
+                                Text('Tiền mặt'),
+                              ],
+                            ),
+                            Column(
+                              children: <Widget>[
+                                Image.asset('assets/images/transfer.png',
+                                    width: 50, height: 50),
+                                Text('Chuyển khoản'),
+                              ],
+                            ),
+                            Column(
+                              children: <Widget>[
+                                Image.asset('assets/images/visa.png',
+                                    width: 50, height: 50),
+                                Text('Visa'),
+                              ],
+                            ),
+                            Column(
+                              children: <Widget>[
+                                Image.asset('assets/images/mastercard.png',
+                                    width: 50, height: 50),
+                                Text('Mastercard'),
+                              ],
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
+                  Config.spaceSmall,
+                  Footer(),
                 ],
               ),
             ),
