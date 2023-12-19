@@ -7,6 +7,7 @@ import 'package:health_care/components/message_dialog.dart';
 import 'package:health_care/components/review_dialog.dart';
 import 'package:health_care/providers/http_provider.dart';
 import 'package:health_care/screens/history_detail.dart';
+import 'package:health_care/utils/api_constant.dart';
 import 'package:health_care/utils/config.dart';
 import 'package:intl/intl.dart';
 
@@ -90,7 +91,7 @@ class _HistoryCardState extends State<HistoryCard> {
   Widget build(BuildContext context) {
     Config().init(context);
     final HttpProvider _httpProvider = HttpProvider();
-    final String _url = HttpProvider.url;
+    final String _url = ApiConstant.linkApi;
 
     return InkWell(
       onTap: () {},
@@ -263,7 +264,6 @@ class _HistoryCardState extends State<HistoryCard> {
                                         direction: Axis.horizontal,
                                         allowHalfRating: true,
                                         itemCount: 5,
-                                        
                                         itemBuilder: (context, _) => Icon(
                                           Icons.star,
                                           color: Colors.orangeAccent,

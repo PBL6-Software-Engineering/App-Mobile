@@ -1,3 +1,4 @@
+import 'package:health_care/utils/api_constant.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:health_care/providers/http_provider.dart';
@@ -8,7 +9,7 @@ import 'package:health_care/objects/rating.dart';
 
 class DoctorService {
   final HttpProvider _httpProvider = HttpProvider();
-  final String _url = HttpProvider.url;
+  final String _url = ApiConstant.linkApi;
 
   Future<List<Doctor>> fetchDoctors() async {
     final response =
@@ -26,9 +27,10 @@ class DoctorService {
       throw Exception('Failed to fetch doctors');
     }
   }
+
   Future<List<Doctor>> fetchDoctorsHospital(int id) async {
-    final response =
-        await _httpProvider.getData('api/infor-hospital/doctors-home/${id.toString()}');
+    final response = await _httpProvider
+        .getData('api/infor-hospital/doctors-home/${id.toString()}');
     //print(response);
     if (response.statusCode == 200) {
       final responseData = json.decode(response.body);
@@ -80,7 +82,7 @@ class Doctor {
 
   factory Doctor.fromJson(json) {
     final HttpProvider _httpProvider = HttpProvider();
-    final String _url = HttpProvider.url;
+    final String _url = ApiConstant.linkApi;
     //List<String> infrastructureList = List<String>.from(json['infrastructure']);
     //print(json);
     return Doctor(
@@ -144,7 +146,7 @@ class DoctorDetail {
 
   factory DoctorDetail.fromJson(Map<String, dynamic> json) {
     final HttpProvider _httpProvider = HttpProvider();
-    final String _url = HttpProvider.url;
+    final String _url = ApiConstant.linkApi;
     return DoctorDetail(
       id: json['id_doctor'],
       email: json['email'] ?? 'Chưa cập nhật',
@@ -317,11 +319,13 @@ class Hospitalinfor {
 
   factory Hospitalinfor.fromJson(Map<String, dynamic> json) {
     final HttpProvider _httpProvider = HttpProvider();
-    final String _url = HttpProvider.url;
+    final String _url = ApiConstant.linkApi;
+
     return Hospitalinfor(
       id: json['id_hospital'],
       name: json['name'],
-      coverimage: json['cover_hospital'] == null ? '' : _url+json['cover_hospital'],
+      coverimage:
+          json['cover_hospital'] == null ? '' : _url + json['cover_hospital'],
     );
   }
 }

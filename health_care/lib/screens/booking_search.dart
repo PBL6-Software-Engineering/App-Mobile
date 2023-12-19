@@ -7,6 +7,7 @@ import 'package:health_care/objects/location.dart';
 import 'package:health_care/providers/http_provider.dart';
 import 'package:health_care/screens/doctor_page.dart';
 import 'package:health_care/screens/hospital_page.dart';
+import 'package:health_care/utils/api_constant.dart';
 import 'package:health_care/utils/config.dart';
 
 class BookingSearchPage extends StatefulWidget {
@@ -15,12 +16,12 @@ class BookingSearchPage extends StatefulWidget {
 }
 
 class _BookingSearchPageState extends State<BookingSearchPage> {
-  final String _url = HttpProvider.url;
+  final String _url = ApiConstant.linkApi;
   Location? selectedLocation;
   int? selectedId = null;
   TextEditingController _searchController = TextEditingController();
   final _userEditTextController = TextEditingController();
-  bool isLoading = true;
+  bool isLoading = false;
 
   Map<String, List<Map<String, dynamic>>> categoryResults = {
     'departments': [],

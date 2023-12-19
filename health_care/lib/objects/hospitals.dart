@@ -1,3 +1,4 @@
+import 'package:health_care/utils/api_constant.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:health_care/providers/http_provider.dart';
@@ -8,7 +9,7 @@ import 'package:health_care/objects/timework.dart';
 
 class HospitalService {
   final HttpProvider _httpProvider = HttpProvider();
-  final String _url = HttpProvider.url;
+  final String _url = ApiConstant.linkApi;
 
   Future<List<Hospital>> fetchHospitals() async {
     final response =
@@ -77,7 +78,7 @@ class Hospital {
 
   factory Hospital.fromJson(Map<String, dynamic> json) {
     final HttpProvider _httpProvider = HttpProvider();
-    final String _url = HttpProvider.url;
+    final String _url = ApiConstant.linkApi;
     //List<String> infrastructureList = List<String>.from(json['infrastructure']);
     //print(json);
     return Hospital(
@@ -107,7 +108,7 @@ class HospitalDetail {
   int provinceCode;
   List<String> infrastructure;
   String description;
-  List<int> location;
+  List<double> location;
   int searchNumber;
   TimeWork timeWork;
   List<String> departments;
@@ -131,7 +132,7 @@ class HospitalDetail {
 
   factory HospitalDetail.fromJson(Map<String, dynamic> json) {
     final HttpProvider _httpProvider = HttpProvider();
-    final String _url = HttpProvider.url;
+    final String _url = ApiConstant.linkApi;
     return HospitalDetail(
       id: json['id'],
       email: json['email'],
@@ -142,11 +143,12 @@ class HospitalDetail {
       provinceCode: json['province_code'],
       infrastructure: List<String>.from(json['infrastructure']),
       description: json['description'],
-      location: List<int>.from(json['location']),
+      location: List<double>.from(json['location']),
       searchNumber: json['search_number'],
       timeWork: TimeWork.fromJson(json['time_work']),
       departments: List<String>.from(json['departments']),
-      cover_image: json['cover_hospital']==null ? '' : _url+json['cover_hospital'],
+      cover_image:
+          json['cover_hospital'] == null ? '' : _url + json['cover_hospital'],
     );
   }
 }

@@ -1,13 +1,16 @@
+import 'package:health_care/utils/api_constant.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:health_care/providers/http_provider.dart';
 import 'package:intl/intl.dart';
+
 class InsuranceService {
   final HttpProvider _httpProvider = HttpProvider();
-  final String _url = HttpProvider.url;
+  final String _url = ApiConstant.linkApi;
+
   Future<List<Insurance>> fetchInsurances(int id) async {
-    final response =
-        await _httpProvider.getData('api/health-insurace-hospital/hospital/${id.toString()}');
+    final response = await _httpProvider
+        .getData('api/health-insurace-hospital/hospital/${id.toString()}');
     //print(response);
     if (response.statusCode == 200) {
       final responseData = json.decode(response.body);
@@ -22,6 +25,7 @@ class InsuranceService {
     }
   }
 }
+
 class Insurance {
   int id;
   String name;
@@ -41,4 +45,3 @@ class Insurance {
     );
   }
 }
-

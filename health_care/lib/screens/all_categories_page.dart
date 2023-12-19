@@ -28,7 +28,7 @@ class AllCategoryPage extends StatelessWidget {
                 alignment: WrapAlignment.start,
                 //alignment: WrapAlignment.center,
                 spacing:
-                    60.0, // Khoảng cách giữa các component theo chiều ngang
+                    40.0, // Khoảng cách giữa các component theo chiều ngang
                 runSpacing: 16.0, // Khoảng cách giữa các hàng theo chiều dọc
                 children: List<Widget>.generate(categories.length, (index) {
                   return CategoryContainer(category: categories[index]);
