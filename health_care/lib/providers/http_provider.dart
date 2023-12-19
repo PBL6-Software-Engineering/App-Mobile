@@ -1,13 +1,15 @@
 import 'dart:convert';
 import 'package:health_care/providers/auth_manager.dart';
+import 'package:health_care/utils/api_constant.dart';
 import 'package:http/http.dart' as http;
 
 class HttpProvider {
-   static String url = 'https://vanmanh.azurewebsites.net/';
-  //static String url = 'http://192.168.11.250:8000/';
+  // static String url = 'https://vanmanh.azurewebsites.net/';
+
+  // // static String url = 'http://192.168.11.250:8000/';
 
   Future<http.Response> postData(data, apiUrl) async {
-    var fullUrl = url + apiUrl;
+    var fullUrl = ApiConstant.linkApi + apiUrl;
     Map<String, String> headers = _setHeaders();
 
     return await http.post(
@@ -18,7 +20,16 @@ class HttpProvider {
   }
 
   Future<http.Response> getData(apiUrl) async {
-    var fullUrl = url + apiUrl;
+    var fullUrl = ApiConstant.linkApi + apiUrl;
+    Map<String, String> headers = _setHeaders();
+
+    return await http.get(
+      Uri.parse(fullUrl),
+      headers: headers,
+    );
+  }
+
+  Future<http.Response> getMessageData(fullUrl) async {
     Map<String, String> headers = _setHeaders();
 
     return await http.get(
@@ -28,7 +39,7 @@ class HttpProvider {
   }
 
   Future<http.Response> deleteData(apiUrl) async {
-    var fullUrl = url + apiUrl;
+    var fullUrl = ApiConstant.linkApi + apiUrl;
     Map<String, String> headers = _setHeaders();
 
     return await http.delete(

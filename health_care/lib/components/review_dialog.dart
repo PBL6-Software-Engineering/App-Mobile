@@ -44,10 +44,10 @@ class _ReviewDialogState extends State<ReviewDialog> {
               children: [
                 Text(
                   'Tên dịch vụ: ',
-                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                  style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
                 ),
                 Config.gapSmall,
-                Text(widget.serviceName, style: TextStyle(fontSize: 16)),
+                Text(widget.serviceName, style: TextStyle(fontSize: 13)),
               ],
             ),
             SizedBox(height: 10),
@@ -55,10 +55,10 @@ class _ReviewDialogState extends State<ReviewDialog> {
               children: [
                 Text(
                   'Bác sĩ: ',
-                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                  style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
                 ),
                 Config.gapSmall,
-                Text(widget.doctorName, style: TextStyle(fontSize: 16)),
+                Text(widget.doctorName, style: TextStyle(fontSize: 12)),
               ],
             ),
             SizedBox(height: 20),

@@ -1,16 +1,18 @@
+import 'package:health_care/utils/api_constant.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:health_care/providers/http_provider.dart';
 import 'package:intl/intl.dart';
+
 class RatingService {
   final HttpProvider _httpProvider = HttpProvider();
-  final String _url = HttpProvider.url;
+  final String _url = ApiConstant.linkApi;
+
   Future<Rating> fetchRating(String api) async {
     //final response =
-      //  await _httpProvider.getData('api/infor-doctor/more-rating/${id.toString()}');
+    //  await _httpProvider.getData('api/infor-doctor/more-rating/${id.toString()}');
     //print(response);
-    final response =
-        await _httpProvider.getData(api);
+    final response = await _httpProvider.getData(api);
     if (response.statusCode == 200) {
       final responseData = json.decode(response.body);
       //print(responseData);
@@ -40,8 +42,8 @@ class RatingService {
   //     throw Exception('Failed to fetch rating service');
   //   }
   // }
-
 }
+
 class Rating {
   int countRating;
   double numberRating;
@@ -60,13 +62,14 @@ class Rating {
     return Rating(
       countRating: json['cout_rating'],
       numberRating: json['number_rating'].toDouble(),
-      countDetails: RatingDetails.fromJson(json['cout_details']) ?? RatingDetails(
-        oneStar: 0,
-        twoStar: 0,
-        threeStar: 0,
-        fourStar: 0,
-        fiveStar: 0,
-      ),
+      countDetails: RatingDetails.fromJson(json['cout_details']) ??
+          RatingDetails(
+            oneStar: 0,
+            twoStar: 0,
+            threeStar: 0,
+            fourStar: 0,
+            fiveStar: 0,
+          ),
       ratings: ratingsList.map((e) => RatingItem.fromJson(e)).toList() ?? [],
     );
   }
@@ -125,7 +128,7 @@ class RatingItem {
 
   factory RatingItem.fromJson(Map<String, dynamic> json) {
     final HttpProvider _httpProvider = HttpProvider();
-    final String _url = HttpProvider.url;
+    final String _url = ApiConstant.linkApi;
     return RatingItem(
       idRating: json['id_rating'],
       id: json['id'],
@@ -138,7 +141,8 @@ class RatingItem {
               .toString(),
       updatedAt: DateTime.parse(json['updated_at']),
       nameUser: json['name_user'],
-      avatarUser: json['avatar_user'] !=null ? (_url+json['avatar_user']) : '',
+      avatarUser:
+          json['avatar_user'] != null ? (_url + json['avatar_user']) : '',
     );
   }
 }

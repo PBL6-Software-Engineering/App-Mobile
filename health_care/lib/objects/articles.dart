@@ -1,3 +1,4 @@
+import 'package:health_care/utils/api_constant.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:health_care/providers/http_provider.dart';
@@ -5,7 +6,7 @@ import 'package:intl/intl.dart';
 
 class ArticleService {
   final HttpProvider _httpProvider = HttpProvider();
-  final String _url = HttpProvider.url;
+  final String _url = ApiConstant.linkApi;
 
   Future<List<Article>> fetchArticles(String apiUrl) async {
     // final response = await _httpProvider.getData('api/article');
@@ -41,7 +42,8 @@ class ArticleService {
 }
 
 class Article {
-  String _url = HttpProvider.url;
+  final String _url = ApiConstant.linkApi;
+
   int id;
   String title;
   String content;
@@ -60,10 +62,9 @@ class Article {
       required this.searchNumber,
       required this.categoryName});
 
-
   factory Article.fromJson(Map<String, dynamic> json) {
     final HttpProvider _httpProvider = HttpProvider();
-    final String _url = HttpProvider.url;
+    final String _url = ApiConstant.linkApi;
     return Article(
       id: json['id'],
       title: json['title'],
@@ -75,7 +76,6 @@ class Article {
           (DateFormat('dd/MM/yyyy').format(DateTime.parse(json['created_at'])))
               .toString(),
       categoryName: json['name_category'],
-              
     );
   }
 }

@@ -7,6 +7,7 @@ import 'package:health_care/components/search_results.dart';
 import 'package:health_care/objects/articles.dart';
 import 'package:health_care/objects/categories.dart';
 import 'package:health_care/providers/http_provider.dart';
+import 'package:health_care/screens/appointment_page.dart';
 import 'package:health_care/screens/category_page.dart';
 import 'package:health_care/screens/all_categories_page.dart';
 import 'package:health_care/utils/config.dart';
@@ -30,21 +31,21 @@ class _HomePageState extends State<HomePage> {
   ArticleService articleService = ArticleService();
   List<Category> categories = [];
   List<Article> articles = [];
-  List<Article> hotarticles =[];
+  List<Article> hotarticles = [];
   List<Article> articleResults = [];
   bool loading = true;
   //bool loading = true;
   final List<String> catNames = [
     "Đặt lịch hẹn",
     "Kiểm tra sức khoẻ",
-    "Cửa hàng",
-    "Cộng đồng",
+    // "Cửa hàng",
+    // "Cộng đồng",
   ];
   final List<String> catImageUrls = [
     'https://hhg-common.hellobacsi.com/common/nav-icons/shop.svg',
     'https://hhg-common.hellobacsi.com/common/nav-icons/care.svg',
-    'https://hhg-common.hellobacsi.com/common/nav-icons/community.svg',
-    'https://hhg-common.hellobacsi.com/common/nav-icons/health-tools.svg',
+    // 'https://hhg-common.hellobacsi.com/common/nav-icons/community.svg',
+    // 'https://hhg-common.hellobacsi.com/common/nav-icons/health-tools.svg',
   ];
 
   @override
@@ -227,25 +228,39 @@ class _HomePageState extends State<HomePage> {
                               ),
                             ),
                             Visibility(
-                                visible: _searchController.text.isEmpty,
-                                child: Padding(
-                                  padding: EdgeInsets.only(top: 20),
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: <Widget>[
-                                      GridView.builder(
-                                        itemCount: catNames.length,
-                                        shrinkWrap: true,
-                                        physics:
-                                            const NeverScrollableScrollPhysics(),
-                                        gridDelegate:
-                                            const SliverGridDelegateWithFixedCrossAxisCount(
-                                          crossAxisCount: 2,
-                                          childAspectRatio: 2,
-                                        ),
-                                        itemBuilder: (context, index) {
-                                          return Column(
+                              visible: _searchController.text.isEmpty,
+                              child: Padding(
+                                padding: EdgeInsets.only(top: 20),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: <Widget>[
+                                    GridView.builder(
+                                      itemCount: catNames.length,
+                                      shrinkWrap: true,
+                                      physics:
+                                          const NeverScrollableScrollPhysics(),
+                                      gridDelegate:
+                                          const SliverGridDelegateWithFixedCrossAxisCount(
+                                        crossAxisCount: 2,
+                                        childAspectRatio: 2,
+                                      ),
+                                      itemBuilder: (context, index) {
+                                        return GestureDetector(
+                                          onTap: () {
+                                            if (index == 0) {
+                                              // "Đặt lịch hẹn" is clicked
+                                              Navigator.push(
+                                                context,
+                                                MaterialPageRoute(
+                                                  builder: (context) =>
+                                                      AppointmentPage(),
+                                                ),
+                                              );
+                                            } else {
+                                              // Handle other categories if needed
+                                            }
+                                          },
+                                          child: Column(
                                             children: [
                                               Container(
                                                 height: 50,
@@ -269,12 +284,14 @@ class _HomePageState extends State<HomePage> {
                                                 ),
                                               ),
                                             ],
-                                          );
-                                        },
-                                      )
-                                    ],
-                                  ),
-                                )),
+                                          ),
+                                        );
+                                      },
+                                    )
+                                  ],
+                                ),
+                              ),
+                            ),
                           ],
                         ),
                       ),
@@ -350,7 +367,6 @@ class _HomePageState extends State<HomePage> {
                                           MainAxisAlignment.spaceBetween,
                                       children: [
                                         TagContainer(tag: 'Bài Viết Mới'),
-                                        
                                         TextButton(
                                           onPressed: () {
                                             Navigator.push(
@@ -406,7 +422,6 @@ class _HomePageState extends State<HomePage> {
                                           MainAxisAlignment.spaceBetween,
                                       children: [
                                         TagContainer(tag: 'Bài Viết Nổi Bật'),
-                                        
                                         TextButton(
                                           onPressed: () {
                                             Navigator.push(
@@ -443,7 +458,8 @@ class _HomePageState extends State<HomePage> {
                                               itemBuilder: (context, index) {
                                                 return InkWell(
                                                   child: ArticleContainer(
-                                                      article: hotarticles[index]),
+                                                      article:
+                                                          hotarticles[index]),
                                                 );
                                               },
                                             ),

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:health_care/utils/api_constant.dart';
 import 'package:health_care/utils/config.dart';
 import 'package:health_care/objects/user.dart';
 import 'package:health_care/providers/http_provider.dart';
@@ -39,6 +40,7 @@ class _UserInfoPageState extends State<UserInfoPage> {
   void initState() {
     super.initState();
   }
+
   String convertDateFormat(String inputDate) {
     // Định dạng đầu vào: dd/mm/yyyy
     DateFormat inputFormat = DateFormat('dd/MM/yyyy');
@@ -52,6 +54,7 @@ class _UserInfoPageState extends State<UserInfoPage> {
 
     return outputDate;
   }
+
   void updateUser(User updatedUser) {
     setState(() {
       widget.user = updatedUser;
@@ -85,45 +88,46 @@ class _UserInfoPageState extends State<UserInfoPage> {
   Future _getImage() async {
     final picker = ImagePicker();
     final pickedFile = await picker.getImage(source: ImageSource.gallery);
-    String _url = HttpProvider.url;
-    final data = http.MultipartRequest('POST', Uri.parse('https://vanmanh.azurewebsites.net/api/infor-user/update'));
+    final String _url = ApiConstant.linkApi;
+
+    final data = http.MultipartRequest('POST',
+        Uri.parse('https://vanmanh.azurewebsites.net/api/infor-user/update'));
     if (pickedFile != null) {
-    setState(() {
-      _image = File(pickedFile.path);
-      
-    });
-    UserService userService = UserService();
-    userService.uploadImage(File(pickedFile.path), widget.user);
-    
+      setState(() {
+        _image = File(pickedFile.path);
+      });
+      UserService userService = UserService();
+      userService.uploadImage(File(pickedFile.path), widget.user);
 
-    var map = new Map<String, dynamic>();
-    //map['avatar'] = _image;
-    map['avatar'] = await _image?.readAsBytes();
-    map['name'] = widget.user.name;
-    map['phone'] = widget.user.phone;
-    map['username'] = widget.user.username;
-    map['email'] = widget.user.email;
-    map['gender'] = widget.user.gender;
-    map['address'] = widget.user.address;
-    map['date_of_birth'] = convertDateFormat(widget.user.dateOfBirth);
+      var map = new Map<String, dynamic>();
+      //map['avatar'] = _image;
+      map['avatar'] = await _image?.readAsBytes();
+      map['name'] = widget.user.name;
+      map['phone'] = widget.user.phone;
+      map['username'] = widget.user.username;
+      map['email'] = widget.user.email;
+      map['gender'] = widget.user.gender;
+      map['address'] = widget.user.address;
+      map['date_of_birth'] = convertDateFormat(widget.user.dateOfBirth);
 
-    FormData formData = FormData.fromMap({
-      'name': widget.user.name,
-      'phone': widget.user.phone,
-      'username': widget.user.username,
-      'email': widget.user.email,
-      'gender': widget.user.gender,
-      'address': widget.user.address,
-      'date_of_birth': convertDateFormat(widget.user.dateOfBirth),
-      'avatar': await MultipartFile.fromFile(_image!.path, filename: 'avatar.jpg'),
-    });
-    // Dio dio = Dio();
-    // dio.options.headers['Authorization'] = AuthManager.getToken();
-    // var response = await dio.post('https://vanmanh.azurewebsites.net/api/infor-user/update',data: formData );
-    // print(json.decode(response.data));
-  } else {
-    print('No image selected.');
-  }
+      FormData formData = FormData.fromMap({
+        'name': widget.user.name,
+        'phone': widget.user.phone,
+        'username': widget.user.username,
+        'email': widget.user.email,
+        'gender': widget.user.gender,
+        'address': widget.user.address,
+        'date_of_birth': convertDateFormat(widget.user.dateOfBirth),
+        'avatar':
+            await MultipartFile.fromFile(_image!.path, filename: 'avatar.jpg'),
+      });
+      // Dio dio = Dio();
+      // dio.options.headers['Authorization'] = AuthManager.getToken();
+      // var response = await dio.post('https://vanmanh.azurewebsites.net/api/infor-user/update',data: formData );
+      // print(json.decode(response.data));
+    } else {
+      print('No image selected.');
+    }
   }
 
   @override
@@ -438,7 +442,6 @@ class UserProfileFormDialog extends StatelessWidget {
           onPressed: () async {
             isLoading = true;
             var updatedProfile = {
-              
               'name': nameController.text,
               'phone': phoneController.text,
               'username': user.username,

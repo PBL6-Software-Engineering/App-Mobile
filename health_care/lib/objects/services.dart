@@ -1,3 +1,4 @@
+import 'package:health_care/utils/api_constant.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:health_care/providers/http_provider.dart';
@@ -6,7 +7,7 @@ import 'package:health_care/objects/rating.dart';
 
 class ServiceService {
   final HttpProvider _httpProvider = HttpProvider();
-  final String _url = HttpProvider.url;
+  final String _url = ApiConstant.linkApi;
 
   Future<List<Service>> fetchServices() async {
     final response = await _httpProvider.getData('api/hospital-service/all');
@@ -82,7 +83,7 @@ class Service {
   });
   factory Service.fromJson(Map<String, dynamic> json) {
     final HttpProvider _httpProvider = HttpProvider();
-    final String _url = HttpProvider.url;
+    final String _url = ApiConstant.linkApi;
     return Service(
       id: json['id_hospital_service'],
       name: json['name'],

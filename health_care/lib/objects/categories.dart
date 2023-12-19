@@ -1,3 +1,4 @@
+import 'package:health_care/utils/api_constant.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:health_care/providers/http_provider.dart';
@@ -31,23 +32,23 @@ class Category {
   //DateTime createdAt;
   //DateTime updatedAt;
 
-  Category({
-    required this.id,
-    required this.name,
-    required this.thumbnail,
-    required this.searchNumber,
-    required this.description
-    //required this.createdAt,
-    //required this.updatedAt,
-  });
+  Category(
+      {required this.id,
+      required this.name,
+      required this.thumbnail,
+      required this.searchNumber,
+      required this.description
+      //required this.createdAt,
+      //required this.updatedAt,
+      });
 
   factory Category.fromJson(Map<String, dynamic> json) {
     final HttpProvider _httpProvider = HttpProvider();
-    final String _url = HttpProvider.url;
+    final String _url = ApiConstant.linkApi;
     return Category(
       id: json['id'],
       name: json['name'],
-      thumbnail: _url+json['thumbnail'],
+      thumbnail: _url + json['thumbnail'],
       searchNumber: json['search_number'],
       description: json['description_category'],
       //createdAt: DateTime.parse(json['created_at']),
