@@ -17,6 +17,7 @@ import 'package:health_care/screens/article_page.dart';
 import 'package:health_care/objects/articles.dart';
 import 'package:health_care/screens/appointment_page.dart';
 import 'package:health_care/screens/message_page.dart';
+import 'package:health_care/screens/home_page.dart';
 import 'package:http_interceptor/http_interceptor.dart';
 import 'package:http/http.dart' as http;
 
@@ -87,12 +88,14 @@ class MyApp extends StatelessWidget {
       routes: {
         //'/': (context) => const AppointmentPage(),
         // '/': (context) => const Welcome(),
+        //  '/': (context) => const HomePage(),
+        //'/': (context) => const LoginPage(),
         '/': (context) => const MainLayout(),
         'main': (context) => const MainLayout(),
         'login': (context) => const LoginPage(),
         'signup': (context) => const SignUpPage(),
         'forgotpassword': (context) => const ForgotPasswordPage(),
-        // 'setting': (context) => SettingPage(),
+        'setting': (context) => SettingPage(),
         'search': (context) => SearchPage(),
         'booking-search': (context) => BookingSearchPage(),
 

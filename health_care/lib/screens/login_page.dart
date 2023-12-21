@@ -35,6 +35,7 @@ class _LoginPageState extends State<LoginPage> {
         var token = responseData['access_token'];
 
         AuthManager.setToken(token);
+        AuthManager.setUser(await AuthManager.fetchUser());
         MessageDialog.showSuccess(context, body['message']);
         Navigator.of(context).pushNamed('main');
       } else {

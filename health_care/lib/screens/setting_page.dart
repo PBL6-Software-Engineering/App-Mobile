@@ -8,17 +8,19 @@ import 'package:health_care/screens/booking_history_page.dart';
 import 'package:health_care/screens/user_info.dart';
 import 'package:health_care/utils/config.dart';
 import 'package:health_care/objects/user.dart';
+import 'dart:io';
 
 class SettingPage extends StatefulWidget {
   @override
-  User user;
-  final Function(User) onUpdateUser;
-  SettingPage({required this.user, required this.onUpdateUser});
+  SettingPage({
+    Key? key,
+  }) : super(key: key);
   _SettingPageState createState() => _SettingPageState();
 }
 
 class _SettingPageState extends State<SettingPage> {
-  //bool loading = true;
+  User user = AuthManager.getUser();
+  File? avatar;
   void initState() {
     super.initState();
     //onUpdateUser : updateUser(widget.user);
@@ -27,14 +29,18 @@ class _SettingPageState extends State<SettingPage> {
 
   void dispose() {
     // Gọi hàm performActionOnHomePage khi thoát khỏi trang settingpage
-    widget.onUpdateUser(widget.user);
     super.dispose();
   }
 
   void updateUser(User updatedUser) {
     setState(() {
-      widget.user = updatedUser;
-      widget.onUpdateUser(updatedUser);
+      user = updatedUser;
+    });
+  }
+
+  void updateAvatar(File file) {
+    setState(() {
+      avatar = file;
     });
   }
 
@@ -45,6 +51,16 @@ class _SettingPageState extends State<SettingPage> {
     if (token != null) {
       MessageDialog.showSuccess(context, 'Đăng xuất thành công!');
       AuthManager.clearToken();
+      AuthManager.setUser(User(
+          id: 0,
+          name: '',
+          email: '',
+          phone: '',
+          gender: 0,
+          dateOfBirth: '',
+          address: '',
+          username: '',
+          avatar: ''));
     } else {
       MessageDialog.showError(context, 'Bạn chưa đăng nhập!');
     }
@@ -96,23 +112,27 @@ class _SettingPageState extends State<SettingPage> {
                     ),
                     child: Row(
                       children: <Widget>[
-                        widget.user.avatar == ''
+                        user.avatar != ''
                             ? CircleAvatar(
-                                backgroundImage:
-                                    AssetImage('assets/images/user.jpeg'),
-                                radius: 35,
+                                radius: 60,
+                                backgroundImage: avatar != null
+                                    ? FileImage(avatar!)
+                                        as ImageProvider<Object>?
+                                    : NetworkImage(user.avatar),
                               )
                             : CircleAvatar(
-                                backgroundImage:
-                                    NetworkImage(widget.user.avatar),
-                                radius: 35,
+                                radius: 60,
+                                backgroundImage: avatar != null
+                                    ? FileImage(avatar!)
+                                        as ImageProvider<Object>?
+                                    : AssetImage('assets/images/user.jpeg'),
                               ),
                         Config.gapSmall,
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: <Widget>[
                             Text(
-                              widget.user.name,
+                              user.name,
                               style: TextStyle(
                                 fontSize: 20.0,
                                 fontWeight: FontWeight.bold,
@@ -126,8 +146,9 @@ class _SettingPageState extends State<SettingPage> {
                                 Navigator.of(context).push(
                                   MaterialPageRoute(
                                     builder: (context) => UserInfoPage(
-                                        user: widget.user,
-                                        onUpdateUser: updateUser),
+                                        user: user,
+                                        onUpdateUser: updateUser,
+                                        onUpdateAvatar: updateAvatar),
                                   ),
                                 );
                               },

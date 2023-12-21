@@ -17,42 +17,11 @@ class MainLayout extends StatefulWidget {
 class _MainLayoutState extends State<MainLayout> {
   int currentPage = 0;
   final PageController _page = PageController();
-  UserService userservice = UserService();
   bool loading = true;
-  User user = User(
-    id: 0,
-    name: '',
-    username: '',
-    email: '',
-    phone: '',
-    gender: 0,
-    dateOfBirth: '',
-    avatar: '',
-    address: '',
-  );
   void initState() {
     super.initState();
-    fetchUser();
   }
 
-  void updateUser(User updatedUser) {
-    setState(() {
-      user = updatedUser;
-    });
-  }
-
-  void fetchUser() async {
-    try {
-      loading = true;
-      user = await userservice.fetchUser();
-      setState(() {
-        loading = false;
-      });
-      //print(hospitals);
-    } catch (e) {
-      print('Error fetch user: $e');
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -67,10 +36,10 @@ class _MainLayoutState extends State<MainLayout> {
           });
         },
         children: <Widget>[
-          HomePage(user: user),
+          HomePage(),
           MessagePage(),
           AppointmentPage(),
-          SettingPage(user: user, onUpdateUser: updateUser),
+          SettingPage(),
         ],
       ),
       bottomNavigationBar: BottomNavigationBar(

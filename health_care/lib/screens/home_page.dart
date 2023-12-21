@@ -14,18 +14,20 @@ import 'package:health_care/utils/config.dart';
 import 'package:health_care/objects/user.dart';
 import 'package:health_care/components/category.dart';
 import 'package:health_care/screens/all_articles_page.dart';
+import 'package:health_care/screens/bmi_page.dart';
+import 'package:health_care/providers/auth_manager.dart';
 
 class HomePage extends StatefulWidget {
-  final User user;
   const HomePage({
     Key? key,
-    required this.user,
   }) : super(key: key);
   @override
   _HomePageState createState() => _HomePageState();
 }
 
 class _HomePageState extends State<HomePage> {
+  User user = AuthManager.getUser();
+  
   TextEditingController _searchController = TextEditingController();
   CategoryService categoryService = CategoryService();
   ArticleService articleService = ArticleService();
@@ -50,6 +52,7 @@ class _HomePageState extends State<HomePage> {
 
   @override
   void initState() {
+    print(user.name);
     fetchArticleList();
     fetchCategoryList();
     super.initState();
@@ -156,9 +159,13 @@ class _HomePageState extends State<HomePage> {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: <Widget>[
-                          Row(
+                          GestureDetector(
+                          onTap: () {
+                              Navigator.of(context).pushNamed('setting');
+                            },
+                          child: Row(
                             children: <Widget>[
-                              widget.user.avatar == ''
+                              user.avatar == ''
                                   ? CircleAvatar(
                                       backgroundImage:
                                           AssetImage('assets/images/user.jpeg'),
@@ -166,18 +173,19 @@ class _HomePageState extends State<HomePage> {
                                     )
                                   : CircleAvatar(
                                       backgroundImage:
-                                          NetworkImage(widget.user.avatar),
+                                          NetworkImage(user.avatar),
                                       radius: 25,
                                     ),
                               Config.gapSmall,
                               Text(
-                                "Xin chào! \n" + widget.user.name,
+                                "Xin chào! \n" + user.name,
                                 style: TextStyle(
                                   color: Colors.black,
                                   fontSize: 14.0,
                                 ),
                               ),
                             ],
+                          ),
                           ),
                           Config.spaceSmall,
                           Row(
@@ -256,8 +264,14 @@ class _HomePageState extends State<HomePage> {
                                                       AppointmentPage(),
                                                 ),
                                               );
-                                            } else {
-                                              // Handle other categories if needed
+                                            } else if (index ==1){
+                                              Navigator.push(
+                                                context,
+                                                MaterialPageRoute(
+                                                  builder: (context) =>
+                                                      BMIPage(),
+                                                ),
+                                              );
                                             }
                                           },
                                           child: Column(

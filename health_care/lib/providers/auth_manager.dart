@@ -26,7 +26,32 @@ class AuthManager {
 
     await _prefs?.setString('access_token', token);
   }
-
+  static Future<void> setUser(User user) async {
+    await _prefs?.setString('id', user.id.toString() );
+    await _prefs?.setString('name', user.name );
+    await _prefs?.setString('username', user.username);
+    await _prefs?.setString('email', user.email );
+    await _prefs?.setString('phone', user.phone );
+    await _prefs?.setString('dateOfBirth', user.dateOfBirth );
+    await _prefs?.setString('avatar', user.avatar );
+    await _prefs?.setString('address', user.address );
+    await _prefs?.setString('gender', user.gender.toString());
+    print(_prefs?.getString('id') ?? '' + ' ' + (_prefs?.getString('gender') ??''));
+  }
+  static User getUser() {
+    print(_prefs?.getString('id') ?? '' + ' ' + (_prefs?.getString('gender') ??''));
+    return User(
+    id: int.tryParse(_prefs?.getString('id') ?? '0')!,
+    name: _prefs?.getString('name') ?? '',
+    username: _prefs?.getString('username') ?? '',
+    email: _prefs?.getString('email') ?? '',
+    phone: _prefs?.getString('phone') ?? '',
+    gender: int.tryParse(_prefs?.getString('gender') ?? '1')!,
+    dateOfBirth: _prefs?.getString('dateOfBirth') ?? '',
+    avatar: _prefs?.getString('avatar') ?? '',
+    address: _prefs?.getString('address') ?? '',
+  );
+  }
   static Future<void> clearToken() async {
     await _prefs?.remove('access_token');
   }
@@ -43,8 +68,10 @@ class AuthManager {
 
       if (response.statusCode == 200) {
         final responseData = json.decode(response.body);
-        User user = User.fromJson(responseData['data']);
-        return user;
+
+      User user = User.fromJson(responseData['data']);
+      print(user.name + ' '+ user.id.toString() + ' '+user.gender.toString());
+      return user;
       } else {
         throw Exception('Failed to fetch user information');
       }

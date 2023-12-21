@@ -12,6 +12,7 @@ import 'package:health_care/objects/insurance.dart';
 import 'package:health_care/utils/config.dart';
 import 'package:health_care/components/tag.dart';
 import 'package:health_care/components/footer.dart';
+import 'package:flutter_html/flutter_html.dart';
 
 import 'dart:math';
 
@@ -336,7 +337,8 @@ class _HospitalPageState extends State<HospitalPage>
                     height: 550,
                     padding: EdgeInsets.all(16.0),
                     child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
+                      //crossAxisAlignment: CrossAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: [
                         TagContainer(tag: "Thời gian làm việc"),
                         SizedBox(height: 8.0),
@@ -419,6 +421,7 @@ class _HospitalPageState extends State<HospitalPage>
                           padding: EdgeInsets.only(left: 16.0),
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
+                            //crossAxisAlignment: CrossAxisAlignment.stretch,
                             children: <Widget>[
                               TagContainer(tag: 'Bảo hiểm'),
                               SizedBox(height: 16.0),
@@ -427,17 +430,27 @@ class _HospitalPageState extends State<HospitalPage>
                                       itemCount: isExpanded2
                                           ? insurances.length
                                           : min(
-                                              4,
-                                              insurances.length), // Show only one item initially
+                                              2,
+                                              insurances
+                                                  .length), // Show only one item initially
                                       shrinkWrap: true,
                                       physics: NeverScrollableScrollPhysics(),
                                       itemBuilder: (context, index) {
-                                        return Text(
-                                          '• ' + insurances[index].name,
-                                          style: TextStyle(
-                                            fontSize: 16.0,
+                                        return Column(
+                                          crossAxisAlignment: CrossAxisAlignment.start,
+                                          children: [
+                                          Text(
+                                            '• ' + insurances[index].name,
+                                            style: TextStyle(
+                                              fontSize: 16.0,
+                                              fontWeight: FontWeight.bold,
+                                              
+                                            ),
                                           ),
-                                        );
+                                          Html(
+                                            data: insurances[index].description,                                            
+                                          )
+                                        ]);
                                       },
                                     )
                                   : Center(child: Text('Chưa cập nhật')),
