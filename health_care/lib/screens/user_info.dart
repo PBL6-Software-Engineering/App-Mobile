@@ -18,7 +18,8 @@ import 'package:dio/dio.dart';
 class UserInfoPage extends StatefulWidget {
   User user;
   final Function(User) onUpdateUser;
-  UserInfoPage({required this.user, required this.onUpdateUser});
+  final Function(File) onUpdateAvatar;
+  UserInfoPage({required this.user, required this.onUpdateUser, required this.onUpdateAvatar});
 
   @override
   _UserInfoPageState createState() => _UserInfoPageState();
@@ -88,43 +89,14 @@ class _UserInfoPageState extends State<UserInfoPage> {
   Future _getImage() async {
     final picker = ImagePicker();
     final pickedFile = await picker.getImage(source: ImageSource.gallery);
-    final String _url = ApiConstant.linkApi;
-
-    final data = http.MultipartRequest('POST',
-        Uri.parse('https://vanmanh.azurewebsites.net/api/infor-user/update'));
     if (pickedFile != null) {
       setState(() {
         _image = File(pickedFile.path);
       });
       UserService userService = UserService();
       userService.uploadImage(File(pickedFile.path), widget.user);
+      widget.onUpdateAvatar(_image!);
 
-      var map = new Map<String, dynamic>();
-      //map['avatar'] = _image;
-      map['avatar'] = await _image?.readAsBytes();
-      map['name'] = widget.user.name;
-      map['phone'] = widget.user.phone;
-      map['username'] = widget.user.username;
-      map['email'] = widget.user.email;
-      map['gender'] = widget.user.gender;
-      map['address'] = widget.user.address;
-      map['date_of_birth'] = convertDateFormat(widget.user.dateOfBirth);
-
-      FormData formData = FormData.fromMap({
-        'name': widget.user.name,
-        'phone': widget.user.phone,
-        'username': widget.user.username,
-        'email': widget.user.email,
-        'gender': widget.user.gender,
-        'address': widget.user.address,
-        'date_of_birth': convertDateFormat(widget.user.dateOfBirth),
-        'avatar':
-            await MultipartFile.fromFile(_image!.path, filename: 'avatar.jpg'),
-      });
-      // Dio dio = Dio();
-      // dio.options.headers['Authorization'] = AuthManager.getToken();
-      // var response = await dio.post('https://vanmanh.azurewebsites.net/api/infor-user/update',data: formData );
-      // print(json.decode(response.data));
     } else {
       print('No image selected.');
     }
@@ -473,6 +445,7 @@ class UserProfileFormDialog extends StatelessWidget {
                 avatar: user.avatar,
                 address: addressController.text,
               );
+              AuthManager.setUser(await AuthManager.fetchUser());
               onUpdateUser(new_user);
               // Hiển thị thông báo bằng Dialog mới
               // _showNotificationDialogOk(

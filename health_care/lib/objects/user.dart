@@ -45,7 +45,7 @@ class UserService {
 
   Future<void> uploadImage(File imageFile, User user) async {
     var request = http.MultipartRequest('POST',
-        Uri.parse('https://vanmanh.azurewebsites.net/api/infor-user/update'));
+        Uri.parse(_url + 'api/infor-user/update'));
 
     final mimeTypedata =
         lookupMimeType(imageFile.path, headerBytes: [0xFF, 0xD8])?.split('/');
@@ -81,6 +81,7 @@ class UserService {
     if (response.statusCode == 200) {
       // Upload thành công
       print('Upload thành công');
+      AuthManager.setUser(await AuthManager.fetchUser());
     } else {
       // Upload thất bại
       print('Upload thất bại');
