@@ -9,6 +9,9 @@ import 'package:health_care/components/timework.dart';
 import 'package:health_care/objects/doctors.dart';
 import 'package:health_care/objects/services.dart';
 import 'package:health_care/objects/insurance.dart';
+import 'package:health_care/objects/user.dart';
+import 'package:health_care/providers/auth_manager.dart';
+import 'package:health_care/screens/message_detail_page.dart';
 import 'package:health_care/utils/config.dart';
 import 'package:health_care/components/tag.dart';
 import 'package:health_care/components/footer.dart';
@@ -32,9 +35,10 @@ class _HospitalPageState extends State<HospitalPage>
   ServiceService serviceService = ServiceService();
   DoctorService doctorService = DoctorService();
   InsuranceService insuranceService = InsuranceService();
+  User user = AuthManager.getUser();
   bool loading = true;
-  bool loadingdoctors = true;
-  bool loadingservices = true;
+  bool loadingDoctors = true;
+  bool loadingServices = true;
   bool isExpanded1 = false;
   bool isExpanded2 = false;
   bool isExpanded3 = false;
@@ -96,11 +100,11 @@ class _HospitalPageState extends State<HospitalPage>
 
   void fetchDoctorsHospital() async {
     try {
-      loadingdoctors = true;
+      loadingDoctors = true;
       doctors = await doctorService.fetchDoctorsHospital(widget.id);
       print(doctors.length);
       setState(() {
-        loadingdoctors = false;
+        loadingDoctors = false;
       });
     } catch (e) {
       print('Error fetch doctors hospital: $e');
@@ -109,15 +113,28 @@ class _HospitalPageState extends State<HospitalPage>
 
   void fetchServicesHospital() async {
     try {
-      loadingservices = true;
+      loadingServices = true;
       services = await serviceService.fetchServicesHospital(widget.id);
       print(doctors.length);
       setState(() {
-        loadingservices = false;
+        loadingServices = false;
       });
     } catch (e) {
       print('Error fetch servcice hospital: $e');
     }
+  }
+
+  Map<String, dynamic> setConversation({
+    conversationId,
+    user,
+    admin,
+  }) {
+    conversationId ??= 'conversationId_${user.id}_${hospital.id}';
+    return {
+      'conversationId': conversationId,
+      'user': {'id': user.id, 'name': user.name, 'avatar': user.avatar},
+      'admin': {'id': admin.id, 'name': admin.name, 'avatar': admin.avatar},
+    };
   }
 
   @override
@@ -268,7 +285,7 @@ class _HospitalPageState extends State<HospitalPage>
                           children: [
                             TagContainer(tag: "Đội ngũ bác sĩ"),
                             SizedBox(height: 16),
-                            loadingdoctors == true
+                            loadingDoctors == true
                                 ? Center(
                                     child: CircularProgressIndicator(),
                                   )
@@ -311,7 +328,7 @@ class _HospitalPageState extends State<HospitalPage>
                           children: [
                             TagContainer(tag: "Dịch vụ nổi bật"),
                             SizedBox(height: 16),
-                            loadingservices == true
+                            loadingServices == true
                                 ? Center(
                                     child: CircularProgressIndicator(),
                                   )
@@ -437,20 +454,21 @@ class _HospitalPageState extends State<HospitalPage>
                                       physics: NeverScrollableScrollPhysics(),
                                       itemBuilder: (context, index) {
                                         return Column(
-                                          crossAxisAlignment: CrossAxisAlignment.start,
-                                          children: [
-                                          Text(
-                                            '• ' + insurances[index].name,
-                                            style: TextStyle(
-                                              fontSize: 16.0,
-                                              fontWeight: FontWeight.bold,
-                                              
-                                            ),
-                                          ),
-                                          Html(
-                                            data: insurances[index].description,                                            
-                                          )
-                                        ]);
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              Text(
+                                                '• ' + insurances[index].name,
+                                                style: TextStyle(
+                                                  fontSize: 16.0,
+                                                  fontWeight: FontWeight.bold,
+                                                ),
+                                              ),
+                                              Html(
+                                                data: insurances[index]
+                                                    .description,
+                                              )
+                                            ]);
                                       },
                                     )
                                   : Center(child: Text('Chưa cập nhật')),
@@ -586,6 +604,23 @@ class _HospitalPageState extends State<HospitalPage>
                 ],
               ),
             ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => MessageDetail(
+                conversation: setConversation(admin: hospital, user: user),
+              ),
+            ),
+          );
+          print('conversation ${setConversation(admin: hospital, user: user)}');
+        },
+        child: Icon(
+          Icons.message,
+        ),
+        backgroundColor: Colors.white,
+      ),
     );
   }
 }

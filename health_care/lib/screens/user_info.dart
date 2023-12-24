@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:health_care/components/message_dialog.dart';
 import 'package:health_care/utils/api_constant.dart';
 import 'package:health_care/utils/config.dart';
 import 'package:health_care/objects/user.dart';
@@ -19,7 +20,10 @@ class UserInfoPage extends StatefulWidget {
   User user;
   final Function(User) onUpdateUser;
   final Function(File) onUpdateAvatar;
-  UserInfoPage({required this.user, required this.onUpdateUser, required this.onUpdateAvatar});
+  UserInfoPage(
+      {required this.user,
+      required this.onUpdateUser,
+      required this.onUpdateAvatar});
 
   @override
   _UserInfoPageState createState() => _UserInfoPageState();
@@ -97,7 +101,9 @@ class _UserInfoPageState extends State<UserInfoPage> {
       userService.uploadImage(File(pickedFile.path), widget.user);
       widget.onUpdateAvatar(_image!);
 
+      MessageDialog.showSuccess(context, 'Cập nhật avatar thành công!');
     } else {
+      MessageDialog.showError(context, 'Cập nhật avatar thất bại!');
       print('No image selected.');
     }
   }
