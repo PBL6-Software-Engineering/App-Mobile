@@ -711,11 +711,12 @@ class _DoctorPageState extends State<DoctorPage> {
 
                   SizedBox(height: 16),
                   Center(
-                    child: BookingForm(
-                        id: doctor.idDoctor,
-                        name: doctor.name,
-                        hospitalName: doctor.hospital.name),
-                  ),
+                      child: BookingForm(
+                    id: doctor.idDoctor,
+                    name: doctor.name,
+                    hospitalName: doctor.hospital.name,
+                    bookingType: 'advise',
+                  )),
                   SizedBox(height: 16),
                   Footer(),
                 ],

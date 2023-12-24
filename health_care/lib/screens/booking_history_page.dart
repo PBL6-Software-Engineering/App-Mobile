@@ -39,9 +39,11 @@ class _BookingHistoryPageState extends State<BookingHistoryPage>
     ),
   ];
 
-  List<Widget> buildHistoryCards(List<dynamic> dataList, bool isUpcoming) {
+  List<Widget> buildHistoryCards(List<dynamic> dataList, String status,
+      {bool isConfirm = false}) {
     return dataList
-        .map((data) => HistoryCard(data: data, isUpcoming: isUpcoming))
+        .map((data) =>
+            HistoryCard(data: data, status: status, isConfirm: isConfirm))
         .toList();
   }
 
@@ -55,10 +57,11 @@ class _BookingHistoryPageState extends State<BookingHistoryPage>
     String start_date = '',
     String end_date = '',
     String status = '',
+    String is_confirm = 'both',
   }) async {
     try {
       final response = await HttpProvider().getData(
-        'api/work-schedule/user?search=$search&page=$page&paginate=$paginate&sortlatest=$sortlatest&is_service=$is_service&typesort=$typesort&start_date=$start_date&end_date=$end_date&status=$status',
+        'api/work-schedule/user?search=$search&page=$page&paginate=$paginate&sortlatest=$sortlatest&is_service=$is_service&typesort=$typesort&start_date=$start_date&end_date=$end_date&status=$status&is_confirm=$is_confirm',
       );
 
       if (response.statusCode == 200) {
@@ -171,15 +174,16 @@ class _BookingHistoryPageState extends State<BookingHistoryPage>
                       );
                       return SingleChildScrollView(
                         child: Column(
-                          children:
-                              buildHistoryCards(snapshot.data?['data'], true),
+                          children: buildHistoryCards(
+                              snapshot.data?['data'], 'upcoming'),
                         ),
                       );
                     }
                   },
                 ),
                 FutureBuilder<Map<String, dynamic>>(
-                  future: fetchBookingHistory(status: 'complete'),
+                  future:
+                      fetchBookingHistory(status: 'complete', is_confirm: '1'),
                   builder: (context, snapshot) {
                     if (snapshot.connectionState == ConnectionState.waiting) {
                       return Center(
@@ -227,15 +231,17 @@ class _BookingHistoryPageState extends State<BookingHistoryPage>
                       );
                       return SingleChildScrollView(
                         child: Column(
-                          children:
-                              buildHistoryCards(snapshot.data!['data'], false),
+                          children: buildHistoryCards(
+                              snapshot.data!['data'], 'complete',
+                              isConfirm: true),
                         ),
                       );
                     }
                   },
                 ),
                 FutureBuilder<Map<String, dynamic>>(
-                  future: fetchBookingHistory(),
+                  future:
+                      fetchBookingHistory(status: 'complete', is_confirm: '0'),
                   builder: (context, snapshot) {
                     if (snapshot.connectionState == ConnectionState.waiting) {
                       return Center(
@@ -283,8 +289,8 @@ class _BookingHistoryPageState extends State<BookingHistoryPage>
                       );
                       return SingleChildScrollView(
                         child: Column(
-                          children:
-                              buildHistoryCards(snapshot.data!['data'], false),
+                          children: buildHistoryCards(
+                              snapshot.data!['data'], 'complete'),
                         ),
                       );
                     }

@@ -13,12 +13,14 @@ import 'package:intl/intl.dart';
 
 class HistoryCard extends StatefulWidget {
   final Map<String, dynamic> data;
-  final bool isUpcoming;
+  final String status;
+  final bool isConfirm;
 
   const HistoryCard({
     Key? key,
     required this.data,
-    required this.isUpcoming,
+    required this.status,
+    required this.isConfirm,
   }) : super(key: key);
 
   @override
@@ -195,7 +197,7 @@ class _HistoryCardState extends State<HistoryCard> {
                               ),
                               child: Center(
                                 child: Text(
-                                  '${widget.data['work_schedule_time']?['interval'][0]} - ${widget.data?['work_schedule_time']?['interval'][1]}',
+                                  '${widget.data['work_schedule_time']?['interval'][0]} - ${widget.data['work_schedule_time']?['interval'][1]}',
                                   style: TextStyle(
                                     color: Config.primaryColor,
                                     fontSize: 13,
@@ -229,7 +231,7 @@ class _HistoryCardState extends State<HistoryCard> {
                         // SizedBox(
                         //   height: 5,
                         // ),
-                        !widget.isUpcoming
+                        (widget.status == 'complete' && widget.isConfirm)
                             ? widget.data['rating'] == null
                                 ? GestureDetector(
                                     onTap: () {
@@ -290,7 +292,7 @@ class _HistoryCardState extends State<HistoryCard> {
                         ),
                         Row(
                           children: [
-                            widget.isUpcoming
+                            widget.status == 'upcoming'
                                 ? Expanded(
                                     child: Button(
                                       height: 40,

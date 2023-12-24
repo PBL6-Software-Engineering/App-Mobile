@@ -4,24 +4,35 @@ import 'package:health_care/screens/home_page.dart';
 import 'package:health_care/screens/message_page.dart';
 import 'package:health_care/screens/setting_page.dart';
 import 'package:health_care/utils/config.dart';
-import 'package:health_care/screens/article_page.dart';
-import 'package:health_care/objects/user.dart';
 
 class MainLayout extends StatefulWidget {
-  const MainLayout({super.key});
+  final int initialPageIndex;
+
+  const MainLayout({
+    Key? key,
+    required this.initialPageIndex,
+  }) : super(key: key);
 
   @override
   State<MainLayout> createState() => _MainLayoutState();
 }
 
 class _MainLayoutState extends State<MainLayout> {
-  int currentPage = 0;
-  final PageController _page = PageController();
-  bool loading = true;
+  late int currentPage;
+  late PageController _pageController;
+  final List<Widget> pages = [
+    HomePage(),
+    MessagePage(),
+    AppointmentPage(),
+    SettingPage(),
+  ];
+
+  @override
   void initState() {
     super.initState();
+    currentPage = widget.initialPageIndex;
+    _pageController = PageController(initialPage: currentPage);
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -29,27 +40,24 @@ class _MainLayoutState extends State<MainLayout> {
 
     return Scaffold(
       body: PageView(
-        controller: _page,
+        controller: _pageController,
         onPageChanged: (value) {
           setState(() {
             currentPage = value;
           });
         },
-        children: <Widget>[
-          HomePage(),
-          MessagePage(),
-          AppointmentPage(),
-          SettingPage(),
-        ],
+        children: pages,
       ),
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: currentPage,
         onTap: (page) {
           setState(() {
             currentPage = page;
-            _page.animateToPage(page,
-                duration: const Duration(milliseconds: 500),
-                curve: Curves.easeInOut);
+            _pageController.animateToPage(
+              page,
+              duration: const Duration(milliseconds: 500),
+              curve: Curves.easeInOut,
+            );
           });
         },
         items: const <BottomNavigationBarItem>[

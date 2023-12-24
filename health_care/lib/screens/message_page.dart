@@ -67,35 +67,40 @@ class _MessagePageState extends State<MessagePage> {
   Widget build(BuildContext context) {
     Config().init(context);
     return Scaffold(
+      appBar: AppBar(
+        title: Text('Đoạn chat'),
+        backgroundColor: Config.blueColor,
+      ),
       body: Padding(
         padding: EdgeInsets.symmetric(horizontal: 10, vertical: 35),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            GestureDetector(
-              onTap: () {
-                Navigator.of(context).pushNamed('booking-search');
-              },
-              child: Container(
-                padding: const EdgeInsets.symmetric(horizontal: 5.0),
-                width: Config.screenWidth! * 0.9,
-                decoration: BoxDecoration(
-                  color: Config.primaryColor.withOpacity(.1),
-                  borderRadius: BorderRadius.circular(20),
-                ),
-                child: Row(
-                  children: [
-                    IconButton(
-                      icon: Icon(Icons.search),
-                      onPressed: () {
-                        Navigator.of(context).pushNamed('booking-search');
-                      },
-                    ),
-                    Text('Tìm kiếm đoạn chat'),
-                  ],
-                ),
-              ),
-            ),
+            // GestureDetector(
+            //   onTap: () {
+            //     Navigator.of(context).pushNamed('booking-search');
+            //   },
+            //   child: Container(
+            //     padding: const EdgeInsets.symmetric(horizontal: 5.0),
+            //     width: Config.screenWidth! * 0.9,
+            //     decoration: BoxDecoration(
+            //       color: Config.primaryColor.withOpacity(.1),
+            //       borderRadius: BorderRadius.circular(20),
+            //     ),
+            //     child: Row(
+            //       children: [
+            //         IconButton(
+            //           icon: Icon(Icons.search),
+            //           onPressed: () {
+            //             Navigator.of(context).pushNamed('booking-search');
+            //           },
+            //         ),
+            //         Text('Tìm kiếm đoạn chat'),
+            //       ],
+            //     ),
+            //   ),
+            // ),
+
             Expanded(
               child: FutureBuilder<List<Map<String, dynamic>>>(
                   future: Future.value(conversations),
@@ -118,7 +123,7 @@ class _MessagePageState extends State<MessagePage> {
                               conversation['admin']['name'] ?? "Người tư vấn";
                           final avatar = conversation['admin']['avatar'];
                           final lastMessage = conversation['lastMessage'];
-                          final time = conversation['createdAt'];
+                          final time = conversation['updatedAt'];
 
                           return InkWell(
                             onTap: () {

@@ -4,8 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:health_care/providers/chat_service.dart';
 import 'package:health_care/utils/api_constant.dart';
 import 'package:health_care/utils/config.dart';
-import 'package:web_socket_channel/io.dart';
-import 'package:web_socket_channel/web_socket_channel.dart';
+import 'package:socket_io_client/socket_io_client.dart' as socket_io;
 
 class MessageDetail extends StatefulWidget {
   final Map<String, dynamic> conversation;
@@ -22,11 +21,10 @@ class _MessageDetailState extends State<MessageDetail> {
   TextEditingController _textController = TextEditingController();
   List<Map<String, dynamic>> _messages = [];
   bool isLoading = true;
-  final _channel = WebSocketChannel.connect(
-    Uri.parse('wss://backend-chat-socket-production.up.railway.app:443'),
-  );
+  ScrollController _scrollController = ScrollController();
+  late socket_io.Socket _socket;
 
-  // String linkSocket = ApiConstant.linkSocket;
+  String linkSocket = ApiConstant.linkSocket;
 
   Future<void> fetchMessages() async {
     try {
@@ -46,6 +44,7 @@ class _MessageDetailState extends State<MessageDetail> {
             setState(() {
               _messages = typedMessages;
               isLoading = false;
+              _scrollToBottom();
             });
           } else {
             setState(() {
@@ -76,6 +75,43 @@ class _MessageDetailState extends State<MessageDetail> {
     }
   }
 
+  @override
+  void initState() {
+    super.initState();
+    fetchMessages();
+
+    _initializeSocket();
+  }
+
+  void _initializeSocket() {
+    _socket = socket_io.io(linkSocket, <String, dynamic>{
+      "transports": ["websocket"],
+    });
+
+    _socket.onConnect((_) {
+      print('Connected to WebSocket server');
+    });
+
+    _socket.onDisconnect((_) {
+      print('Disconnected from WebSocket server');
+    });
+
+    // Listen for incoming messages
+    _socket.on('message', (message) {
+      print('Received raw message: $message');
+      handleIncomingMessage(message);
+    });
+
+    _socket.onReconnect((_) {
+      print('Reconnected from WebSocket server');
+    });
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+  }
+
   Future<void> sendMessage(String messageText) async {
     try {
       if (messageText.trim().isNotEmpty) {
@@ -88,11 +124,7 @@ class _MessageDetailState extends State<MessageDetail> {
           'isUserSend': true,
         };
 
-        // Convert the message object to a JSON string
-        var payload = {'event': 'message', 'data': jsonEncode(msgSocket)};
-
-        // Send message through WebSocket
-        _channel.sink.add(payload);
+        _socket.emit('message', msgSocket);
 
         print('Message sent successfully: $msgSocket');
 
@@ -115,7 +147,7 @@ class _MessageDetailState extends State<MessageDetail> {
       // Parse the incoming message
       print('Received Message: $message');
 
-      final Map<String, dynamic> msgSocket = jsonDecode(message);
+      final Map<String, dynamic> msgSocket = message;
 
       // Check if the conversationId matches the current conversation
       if (msgSocket['conversationId'] ==
@@ -123,6 +155,7 @@ class _MessageDetailState extends State<MessageDetail> {
         setState(() {
           // Add the message to the local messages list
           _messages.add(msgSocket);
+          _scrollToBottom();
         });
       }
     } catch (e) {
@@ -130,32 +163,12 @@ class _MessageDetailState extends State<MessageDetail> {
     }
   }
 
-  @override
-  void initState() {
-    super.initState();
-    fetchMessages();
-
-    // Listen for incoming messages
-    _channel.stream.listen(
-      (message) {
-        print('Received raw message: $message'); // Add this line for debugging
-        handleIncomingMessage(message);
-      },
-      onError: (error) {
-        print('WebSocket error: $error');
-      },
-      onDone: () {
-        print('WebSocket connection closed');
-      },
+  void _scrollToBottom() {
+    _scrollController.animateTo(
+      _scrollController.position.maxScrollExtent,
+      duration: Duration(milliseconds: 300),
+      curve: Curves.easeOut,
     );
-    // Add this closing parenthesis
-  }
-
-  @override
-  void dispose() {
-    // Close the WebSocket channel when the widget is disposed
-    _channel.sink.close();
-    super.dispose();
   }
 
   @override
@@ -207,6 +220,7 @@ class _MessageDetailState extends State<MessageDetail> {
             children: [
               Expanded(
                 child: ListView.builder(
+                  controller: _scrollController,
                   itemCount: _messages.length,
                   itemBuilder: (context, index) {
                     final message = _messages[index];

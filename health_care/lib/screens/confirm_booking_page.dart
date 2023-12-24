@@ -13,14 +13,17 @@ class ConfirmBookingPage extends StatefulWidget {
   final String name;
   final int id;
   final String date;
+  final String bookingType;
   final List<dynamic> interval;
 
-  const ConfirmBookingPage(
-      {required this.hospitalName,
-      required this.name,
-      required this.id,
-      required this.date,
-      required this.interval});
+  const ConfirmBookingPage({
+    required this.hospitalName,
+    required this.name,
+    required this.id,
+    required this.date,
+    required this.interval,
+    required this.bookingType,
+  });
 
   @override
   _ConfirmBookingStatePage createState() => _ConfirmBookingStatePage();
@@ -49,7 +52,10 @@ class _ConfirmBookingStatePage extends State<ConfirmBookingPage> {
     String healthCondition,
   ) async {
     var data = {
-      "id_doctor": id,
+      if (widget.bookingType == 'advise')
+        "id_doctor": id
+      else
+        "id_hospital_service": id,
       "time": {"date": date, "interval": interval},
       "name_patient": name,
       "date_of_birth_patient": DateFormat('yyyy-MM-dd')
@@ -60,18 +66,17 @@ class _ConfirmBookingStatePage extends State<ConfirmBookingPage> {
       "address_patient": address,
       "health_condition": healthCondition,
     };
-    print('data:  $data');
     setState(() {
       isLoading = true;
     });
 
     try {
-      var res =
-          await HttpProvider().postData(data, 'api/work-schedule/add-advise');
+      var res = await HttpProvider()
+          .postData(data, 'api/work-schedule/add-${widget.bookingType}');
       var body = json.decode(res.body);
       if (res.statusCode == 201) {
         MessageDialog.showSuccess(context, body['message']);
-        Navigator.of(context).pushNamed('main');
+        Navigator.of(context).pushNamed('setting');
         isLoading = false;
       } else {
         if (body.containsKey('errors') && body['errors'] is List<String>) {
