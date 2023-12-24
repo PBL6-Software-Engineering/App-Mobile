@@ -19,7 +19,10 @@ class UserInfoPage extends StatefulWidget {
   User user;
   final Function(User) onUpdateUser;
   final Function(File) onUpdateAvatar;
-  UserInfoPage({required this.user, required this.onUpdateUser, required this.onUpdateAvatar});
+  UserInfoPage(
+      {required this.user,
+      required this.onUpdateUser,
+      required this.onUpdateAvatar});
 
   @override
   _UserInfoPageState createState() => _UserInfoPageState();
@@ -41,6 +44,25 @@ class _UserInfoPageState extends State<UserInfoPage> {
   void initState() {
     super.initState();
   }
+  void _showNotificationDialog(BuildContext context, String message) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Thông báo'),
+          content: Text(message),
+          actions: [
+            ElevatedButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: Text('Đóng'),
+            ),
+          ],
+        );
+      },
+    );
+  }
 
   String convertDateFormat(String inputDate) {
     // Định dạng đầu vào: dd/mm/yyyy
@@ -61,7 +83,6 @@ class _UserInfoPageState extends State<UserInfoPage> {
       widget.user = updatedUser;
     });
   }
-
   void _toggleEdit() {
     setState(() {
       isEditing = true;
@@ -96,7 +117,7 @@ class _UserInfoPageState extends State<UserInfoPage> {
       UserService userService = UserService();
       userService.uploadImage(File(pickedFile.path), widget.user);
       widget.onUpdateAvatar(_image!);
-
+      _showNotificationDialog(context, 'Cập nhật avatar thành công');
     } else {
       print('No image selected.');
     }
