@@ -58,6 +58,7 @@ class _ServicePageState extends State<ServicePage> {
 
   @override
   Widget build(BuildContext context) {
+    Config().init(context);
     return Scaffold(
       appBar: AppBar(
           leading: IconButton(
@@ -86,7 +87,7 @@ class _ServicePageState extends State<ServicePage> {
                 ),
               ),
             ),
-            SizedBox(height: 8),
+            Config.spaceSmall,
             Container(
                 padding: EdgeInsets.all(16.0),
                 child: Column(
@@ -99,7 +100,7 @@ class _ServicePageState extends State<ServicePage> {
                           fontWeight: FontWeight.bold,
                         ),
                       ),
-                      SizedBox(height: 8),
+                      Config.spaceSmall,
                       Row(
                         children: [
                           Icon(
@@ -148,7 +149,7 @@ class _ServicePageState extends State<ServicePage> {
                         ],
                       ),
                     ])),
-            SizedBox(height: 16),
+            Config.spaceSmall,
             Container(
               padding: EdgeInsets.all(16.0),
               child: Column(
@@ -229,54 +230,61 @@ class _ServicePageState extends State<ServicePage> {
                         ),
                       ],
                     ),
-                    loading == false
-                        ? Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: <Widget>[
-                                Row(children: [
-                                  Row(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: List.generate(5, (index) {
-                                      if (index < rating.numberRating) {
-                                        return Icon(Icons.star,
-                                            color: Colors.yellow);
-                                      } else {
-                                        return Icon(Icons.star,
-                                            color: Colors.grey);
-                                      }
-                                    }),
-                                  ),
-                                  SizedBox(width: 16.0),
-                                  Text('(' +
-                                      rating.countRating.toString() +
-                                      ' đánh giá)')
-                                ]),
-                                SizedBox(height: 16.0),
-                                rating.ratings.length != 0
-                                    ? ListView.builder(
-                                        itemCount: isExpanded
-                                            ? rating.ratings.length
-                                            : min(
-                                                3,
-                                                rating.ratings
-                                                    .length), // Show only one item initially
-                                        shrinkWrap: true,
-                                        physics: NeverScrollableScrollPhysics(),
-                                        itemBuilder: (context, index) {
-                                          return RatingComponent(
-                                              rating: rating.ratings[index]);
-                                        },
-                                      )
-                                    : Center(
-                                        child: Text('Chưa có đánh giá nào'),
-                                      )
-                              ])
-                        : Center(
-                            child: CircularProgressIndicator(),
-                          )
+                    // loading == false
+                    //     ?
+                    Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: <Widget>[
+                          Row(children: [
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: List.generate(5, (index) {
+                                if (index < rating.numberRating) {
+                                  return Icon(Icons.star, color: Colors.yellow);
+                                } else {
+                                  return Icon(Icons.star, color: Colors.grey);
+                                }
+                              }),
+                            ),
+                            SizedBox(width: 16.0),
+                            Text('(' +
+                                rating.countRating.toString() +
+                                ' đánh giá)')
+                          ]),
+                          SizedBox(height: 16.0),
+                          rating.ratings.length != 0
+                              ? ListView.builder(
+                                  itemCount: isExpanded
+                                      ? rating.ratings.length
+                                      : min(
+                                          3,
+                                          rating.ratings
+                                              .length), // Show only one item initially
+                                  shrinkWrap: true,
+                                  physics: NeverScrollableScrollPhysics(),
+                                  itemBuilder: (context, index) {
+                                    return RatingComponent(
+                                        rating: rating.ratings[index]);
+                                  },
+                                )
+                              : Center(
+                                  child: Text('Chưa có đánh giá nào'),
+                                )
+                        ])
+                    // : Center(
+                    //     child: CircularProgressIndicator(),
+                    //   )
                   ]),
             ),
-            SizedBox(height: 16),
+            Center(
+              child: BookingForm(
+                id: widget.service.id,
+                name: widget.service.name,
+                hospitalName: widget.service.hospital_name,
+                bookingType: 'service',
+              ),
+            ),
+            Config.spaceSmall,
             Footer()
           ],
         ),

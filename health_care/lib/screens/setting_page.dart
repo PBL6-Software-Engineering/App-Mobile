@@ -136,7 +136,7 @@ class _SettingPageState extends State<SettingPage> {
                             child: Text(
                               user.name,
                               style: TextStyle(
-                                fontSize: 20.0,
+                                fontSize: 18.0,
                                 fontWeight: FontWeight.bold,
                               ),
                               overflow: TextOverflow

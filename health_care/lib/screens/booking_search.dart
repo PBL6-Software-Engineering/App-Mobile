@@ -7,8 +7,10 @@ import 'package:health_care/objects/location.dart';
 import 'package:health_care/providers/http_provider.dart';
 import 'package:health_care/screens/doctor_page.dart';
 import 'package:health_care/screens/hospital_page.dart';
+import 'package:health_care/screens/service_page.dart';
 import 'package:health_care/utils/api_constant.dart';
 import 'package:health_care/utils/config.dart';
+import 'package:health_care/objects/services.dart';
 
 class BookingSearchPage extends StatefulWidget {
   @override
@@ -18,9 +20,8 @@ class BookingSearchPage extends StatefulWidget {
 class _BookingSearchPageState extends State<BookingSearchPage> {
   final String _url = ApiConstant.linkApi;
   Location? selectedLocation;
-  int? selectedId = null;
+  int? selectedId;
   TextEditingController _searchController = TextEditingController();
-  final _userEditTextController = TextEditingController();
   bool isLoading = false;
 
   Map<String, List<Map<String, dynamic>>> categoryResults = {
@@ -43,7 +44,7 @@ class _BookingSearchPageState extends State<BookingSearchPage> {
       locations = await LocationService().fetchLocation('api/province');
       if (locations.isNotEmpty) {
         setState(() {
-          selectedLocation = locations.first;
+          // selectedLocation = locations.first;
           selectedId = selectedLocation?.provinceCode;
         });
       }
@@ -53,15 +54,20 @@ class _BookingSearchPageState extends State<BookingSearchPage> {
   }
 
   Future<void> fetchAll() async {
-    if (selectedId == null) {
-      return;
-    }
     isLoading = true;
 
     try {
+      // Check if either selectedId is null or search field is empty
+      String searchValue = _searchController.text.trim();
+      int? provinceCode = selectedId;
+
+      if (searchValue.isEmpty) {
+        searchValue = '';
+      }
+
       // Make an HTTP request based on the selected location's ID
       final response = await HttpProvider().getData(
-        'api/public/search-home?search=${_searchController.text.isNotEmpty ? _searchController.text : ''}&province_code=${selectedId}',
+        'api/public/search-home?search=$searchValue&province_code=${provinceCode ?? ''}',
       );
 
       final responseData = json.decode(response.body);
@@ -83,11 +89,14 @@ class _BookingSearchPageState extends State<BookingSearchPage> {
               .map((item) => item as Map<String, dynamic>)
               .toList();
         });
-        isLoading = false;
       }
     } catch (e) {
       print('Error: $e');
-      isLoading = true;
+    } finally {
+      // Set isLoading to false after completing the request
+      setState(() {
+        isLoading = false;
+      });
     }
   }
 
@@ -169,24 +178,34 @@ class _BookingSearchPageState extends State<BookingSearchPage> {
                   else
                     Column(
                       children: [
-                        buildCategory(
-                          icon: Icons.category,
-                          label: 'Chuyên khoa',
-                          getAll: () {
-                            // Handle the getAll action here
-                          },
-                          getDetail: (int idx) {
-                            // Handle the getAll action here
-                          },
-                          items: categoryResults['departments']!,
-                        ),
+                        // buildCategory(
+                        //   icon: Icons.category,
+                        //   label: 'Chuyên khoa',
+                        //   getAll: () {
+                        //     // Handle the getAll action here
+                        //   },
+                        //   getDetail: (int idx) {
+                        //     // Handle the getAll action here
+                        //   },
+                        //   items: categoryResults['departments']!,
+                        // ),
                         buildCategory(
                           icon: Icons.medical_services,
                           label: 'Dịch vụ',
                           getAll: () {
                             // Handle the getAll action here
                           },
-                          getDetail: (int idx) {},
+                          getDetail: (int idx) {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => ServicePage(
+                                  service: Service.fromJson(
+                                      categoryResults['services']?[idx] ?? {}),
+                                ),
+                              ),
+                            );
+                          },
                           items: categoryResults['services']!,
                           thumbnail: 'thumbnail_department',
                         ),
@@ -257,27 +276,12 @@ class _BookingSearchPageState extends State<BookingSearchPage> {
             color: Colors.grey[200],
             padding: EdgeInsets.all(15),
             child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Row(
-                  children: [
-                    Icon(icon),
-                    SizedBox(width: 8),
-                    Text(
-                      label,
-                      style: TextStyle(fontWeight: FontWeight.w400),
-                    ),
-                  ],
-                ),
-                InkWell(
-                  child: Text(
-                    'Xem tất cả',
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      color: Colors.blue[300],
-                    ),
-                  ),
-                  onTap: getAll,
+                Icon(icon),
+                SizedBox(width: 8),
+                Text(
+                  label,
+                  style: TextStyle(fontWeight: FontWeight.w400),
                 ),
               ],
             ),
@@ -302,7 +306,7 @@ class _BookingSearchPageState extends State<BookingSearchPage> {
                               (items[idx][thumbnail] ??
                                   items[idx]["thumbnail"]))),
                       SizedBox(width: 20),
-                      Text(items[idx]["name"]),
+                      Text(items[idx]["name"] ?? 'Đang cập nhật'),
                     ],
                   ),
                 ),

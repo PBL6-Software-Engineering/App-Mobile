@@ -28,7 +28,7 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   User user = AuthManager.getUser();
-  
+
   TextEditingController _searchController = TextEditingController();
   CategoryService categoryService = CategoryService();
   ArticleService articleService = ArticleService();
@@ -53,7 +53,6 @@ class _HomePageState extends State<HomePage> {
 
   @override
   void initState() {
-    print(user.name);
     fetchArticleList();
     fetchCategoryList();
     super.initState();
@@ -160,23 +159,24 @@ class _HomePageState extends State<HomePage> {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: <Widget>[
-                          GestureDetector(
-                          onTap: () {
-                              Navigator.of(context).pushNamed('setting');
-                            },
-                          child: Row(
+                          Row(
                             children: <Widget>[
-                              user.avatar == ''
-                                  ? CircleAvatar(
-                                      backgroundImage:
-                                          AssetImage('assets/images/user.jpeg'),
-                                      radius: 25,
-                                    )
-                                  : CircleAvatar(
-                                      backgroundImage:
-                                          NetworkImage(user.avatar),
-                                      radius: 25,
-                                    ),
+                              GestureDetector(
+                                onTap: () {
+                                  Navigator.of(context).pushNamed('setting');
+                                },
+                                child: user.avatar == ''
+                                    ? CircleAvatar(
+                                        backgroundImage: AssetImage(
+                                            'assets/images/user.jpeg'),
+                                        radius: 25,
+                                      )
+                                    : CircleAvatar(
+                                        backgroundImage:
+                                            NetworkImage(user.avatar),
+                                        radius: 25,
+                                      ),
+                              ),
                               Config.gapSmall,
                               Text(
                                 "Xin chào! \n" + user.name,
@@ -186,7 +186,6 @@ class _HomePageState extends State<HomePage> {
                                 ),
                               ),
                             ],
-                          ),
                           ),
                           Config.spaceSmall,
                           Row(
@@ -265,7 +264,7 @@ class _HomePageState extends State<HomePage> {
                                                       AppointmentPage(),
                                                 ),
                                               );
-                                            } else if (index ==1){
+                                            } else if (index == 1) {
                                               Navigator.push(
                                                 context,
                                                 MaterialPageRoute(

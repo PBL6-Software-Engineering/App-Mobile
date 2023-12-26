@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:health_care/components/message_dialog.dart';
 import 'package:health_care/utils/api_constant.dart';
 import 'package:health_care/utils/config.dart';
 import 'package:health_care/objects/user.dart';
@@ -117,8 +118,10 @@ class _UserInfoPageState extends State<UserInfoPage> {
       UserService userService = UserService();
       userService.uploadImage(File(pickedFile.path), widget.user);
       widget.onUpdateAvatar(_image!);
-      _showNotificationDialog(context, 'Cập nhật avatar thành công');
+
+      MessageDialog.showSuccess(context, 'Cập nhật avatar thành công!');
     } else {
+      MessageDialog.showError(context, 'Cập nhật avatar thất bại!');
       print('No image selected.');
     }
   }

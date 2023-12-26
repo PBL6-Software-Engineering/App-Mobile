@@ -16,8 +16,12 @@ class BookingForm extends StatefulWidget {
   final int id;
   final String name;
   final String hospitalName;
+  final String bookingType;
   const BookingForm(
-      {required this.id, required this.name, required this.hospitalName});
+      {required this.id,
+      required this.name,
+      required this.hospitalName,
+      required this.bookingType});
 
   @override
   _BookingFormState createState() => _BookingFormState();
@@ -47,8 +51,8 @@ class _BookingFormState extends State<BookingForm> {
   Future<void> fetchBooking() async {
     isLoading = true;
     try {
-      final response =
-          await HttpProvider().getData('api/time-work/advise/${widget.id}');
+      final response = await HttpProvider()
+          .getData('api/time-work/${widget.bookingType}/${widget.id}');
 
       final responseData = json.decode(response.body);
       final data = responseData['data'];
@@ -258,7 +262,11 @@ class _BookingFormState extends State<BookingForm> {
                           return InkWell(
                             onTap: () {
                               setState(() {
-                                selectedDayData = getDayData(dayKey);
+                                if (dayData['enable'] == true) {
+                                  setState(() {
+                                    selectedDayData = getDayData(dayKey);
+                                  });
+                                }
                               });
                             },
                             child: Container(
@@ -347,6 +355,7 @@ class _BookingFormState extends State<BookingForm> {
                             id: widget.id,
                             date: selectedDayData['date'],
                             interval: selectedInterval,
+                            bookingType: widget.bookingType,
                           ),
                         ),
                       ),
