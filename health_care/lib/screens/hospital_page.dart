@@ -164,18 +164,22 @@ class _HospitalPageState extends State<HospitalPage>
                             ),
                           ),
                           Positioned(
-                            top: 210,
-                            left: 140,
+                            top: 205,
+                            left: 150,
+                            child: Container(
+                              width: Config.screenWidth!*0.6,
                             child: Text(
+                              //'sfsadasdasdasdasdasdasdsadhjkshfajksdhasjkdhasjkdhasjkdhaskj',
                               hospital.name,
                               style: TextStyle(
                                 color: const Color.fromARGB(255, 6, 5, 5),
-                                fontSize: 24,
+                                fontSize: 22,
                                 fontWeight: FontWeight.bold,
                               ),
                               overflow: TextOverflow
                                   .ellipsis, // Hiển thị dấu "..." nếu text quá dài
                               maxLines: 2,
+                            )
                             ),
                           ),
                         ],
@@ -444,11 +448,11 @@ class _HospitalPageState extends State<HospitalPage>
                                             style: TextStyle(
                                               fontSize: 16.0,
                                               fontWeight: FontWeight.bold,
-                                              
+
                                             ),
                                           ),
                                           Html(
-                                            data: insurances[index].description,                                            
+                                            data: insurances[index].description,
                                           )
                                         ]);
                                       },
@@ -589,3 +593,4 @@ class _HospitalPageState extends State<HospitalPage>
     );
   }
 }
+

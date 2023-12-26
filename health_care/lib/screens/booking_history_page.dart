@@ -145,6 +145,7 @@ class _BookingHistoryPageState extends State<BookingHistoryPage>
                           Config.spaceSmall,
                           Text(
                             'Không có lịch hẹn sắp đến',
+                            textAlign: TextAlign.center,
                             style: TextStyle(
                               fontSize: 18,
                               fontWeight: FontWeight.w500,
@@ -153,6 +154,7 @@ class _BookingHistoryPageState extends State<BookingHistoryPage>
                           Config.spaceSmall,
                           Text(
                             'Đừng lo lắng. Đặt lịch hẹn với một chuyên gia gần đó',
+                            textAlign: TextAlign.center,
                             style: TextStyle(
                               fontSize: 16,
                               color: Colors.grey,

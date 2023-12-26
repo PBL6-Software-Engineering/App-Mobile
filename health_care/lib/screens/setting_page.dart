@@ -114,14 +114,14 @@ class _SettingPageState extends State<SettingPage> {
                       children: <Widget>[
                         user.avatar != ''
                             ? CircleAvatar(
-                                radius: 60,
+                                radius: Config.screenWidth!*0.1,
                                 backgroundImage: avatar != null
                                     ? FileImage(avatar!)
                                         as ImageProvider<Object>?
                                     : NetworkImage(user.avatar),
                               )
                             : CircleAvatar(
-                                radius: 60,
+                                radius: Config.screenWidth!*0.1,
                                 backgroundImage: avatar != null
                                     ? FileImage(avatar!)
                                         as ImageProvider<Object>?
@@ -131,12 +131,19 @@ class _SettingPageState extends State<SettingPage> {
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: <Widget>[
-                            Text(
+                            Container(
+                            width: Config.screenWidth! * 0.5,
+                            child: Text(
                               user.name,
                               style: TextStyle(
                                 fontSize: 20.0,
                                 fontWeight: FontWeight.bold,
                               ),
+                              overflow: TextOverflow
+                                      .ellipsis, // Hiển thị dấu "..." nếu text quá dài
+                                  maxLines: 1,
+
+                            ),
                             ),
                             // Row(
                             // mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -157,7 +164,7 @@ class _SettingPageState extends State<SettingPage> {
                                   Text(
                                     'Thông tin cá nhân',
                                     style: TextStyle(
-                                      fontSize: 20.0,
+                                      fontSize: 16.0,
                                     ),
                                   ),
                                   Icon(
@@ -311,21 +318,21 @@ class _SettingPageState extends State<SettingPage> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
-                        const ListTile(
-                          leading: Icon(Icons.language),
-                          title: Text('Ngôn ngữ'),
-                          trailing: Icon(Icons.keyboard_arrow_right),
-                        ),
-                        const ListTile(
-                          leading: Icon(Icons.notifications),
-                          title: Text('Thông báo'),
-                          trailing: Icon(Icons.keyboard_arrow_right),
-                        ),
-                        const ListTile(
-                          leading: Icon(Icons.security),
-                          title: Text('Bảo mật'),
-                          trailing: Icon(Icons.keyboard_arrow_right),
-                        ),
+                        // const ListTile(
+                        //   leading: Icon(Icons.language),
+                        //   title: Text('Ngôn ngữ'),
+                        //   trailing: Icon(Icons.keyboard_arrow_right),
+                        // ),
+                        // const ListTile(
+                        //   leading: Icon(Icons.notifications),
+                        //   title: Text('Thông báo'),
+                        //   trailing: Icon(Icons.keyboard_arrow_right),
+                        // ),
+                        // const ListTile(
+                        //   leading: Icon(Icons.security),
+                        //   title: Text('Bảo mật'),
+                        //   trailing: Icon(Icons.keyboard_arrow_right),
+                        // ),
                         ListTile(
                           leading: const Icon(Icons.exit_to_app),
                           title: const Text('Đăng xuất'),
