@@ -36,6 +36,7 @@ class _LoginPageState extends State<LoginPage> {
 
         AuthManager.setToken(token);
         AuthManager.setUser(await AuthManager.fetchUser());
+        
         MessageDialog.showSuccess(context, body['message']);
         Navigator.of(context).pushNamed('main');
       } else {
@@ -89,9 +90,7 @@ class _LoginPageState extends State<LoginPage> {
           width: Config.screenWidth,
           height: Config.screenHeight,
           child: Padding(
-            padding: const EdgeInsets.symmetric(
-              horizontal: 15,
-            ),
+            padding:EdgeInsets.all(16.0),
             child: SafeArea(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.start,
@@ -106,7 +105,7 @@ class _LoginPageState extends State<LoginPage> {
                     child: Image.asset(
                       'assets/images/login3.jpg',
                       width: 250,
-                      height: 250,
+                      height: 150,
                       fit: BoxFit.contain,
                     ),
                   ),

@@ -17,12 +17,8 @@ class UserService {
     //print(response);
     if (response != null) {
       final responseData = json.decode(response.body);
-      //final List<dynamic> jsonList = responseData['data'];
-      //print('api/infor-doctor/view-profile/${id.toString()}');
-      //print(responseData);
 
       User user = User.fromJson(responseData['data']);
-      //print(doctorDetail);
       return user;
     } else {
       throw Exception('Failed to fetch infor user');

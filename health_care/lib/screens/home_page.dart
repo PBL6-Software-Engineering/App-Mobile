@@ -16,6 +16,7 @@ import 'package:health_care/components/category.dart';
 import 'package:health_care/screens/all_articles_page.dart';
 import 'package:health_care/screens/bmi_page.dart';
 import 'package:health_care/providers/auth_manager.dart';
+import 'dart:math';
 
 class HomePage extends StatefulWidget {
   const HomePage({
@@ -229,7 +230,7 @@ class _HomePageState extends State<HomePage> {
                                             .pushNamed('booking-search');
                                       },
                                     ),
-                                    Text('Tìm kiếm'),
+                                    Text('Tìm kiếm bệnh viện, bác sĩ...'),
                                   ],
                                 ),
                               ),
@@ -372,9 +373,10 @@ class _HomePageState extends State<HomePage> {
                               Config.spaceSmall,
                               Container(
                                 height: 500,
-                                child: Column(
+                                child: 
+                                Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
+                                  children: <Widget>[
                                     Row(
                                       mainAxisAlignment:
                                           MainAxisAlignment.spaceBetween,
@@ -402,7 +404,7 @@ class _HomePageState extends State<HomePage> {
                                         ),
                                       ],
                                     ),
-                                    //Config.spaceSmall,
+                                    Config.spaceSmall,
                                     loading
                                         ? Expanded(
                                             child: Center(
@@ -411,8 +413,9 @@ class _HomePageState extends State<HomePage> {
                                             ),
                                           )
                                         : Expanded(
-                                            child: ListView.builder(
-                                              itemCount: articles.length,
+                                            child:  
+                                            ListView.builder(
+                                              itemCount: min(5,articles.length),
                                               itemBuilder: (context, index) {
                                                 return InkWell(
                                                   child: ArticleContainer(
@@ -467,7 +470,7 @@ class _HomePageState extends State<HomePage> {
                                           )
                                         : Expanded(
                                             child: ListView.builder(
-                                              itemCount: hotarticles.length,
+                                              itemCount: min(5,hotarticles.length),
                                               itemBuilder: (context, index) {
                                                 return InkWell(
                                                   child: ArticleContainer(

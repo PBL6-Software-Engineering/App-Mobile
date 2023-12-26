@@ -45,6 +45,25 @@ class _UserInfoPageState extends State<UserInfoPage> {
   void initState() {
     super.initState();
   }
+  void _showNotificationDialog(BuildContext context, String message) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Thông báo'),
+          content: Text(message),
+          actions: [
+            ElevatedButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: Text('Đóng'),
+            ),
+          ],
+        );
+      },
+    );
+  }
 
   String convertDateFormat(String inputDate) {
     // Định dạng đầu vào: dd/mm/yyyy
@@ -65,7 +84,6 @@ class _UserInfoPageState extends State<UserInfoPage> {
       widget.user = updatedUser;
     });
   }
-
   void _toggleEdit() {
     setState(() {
       isEditing = true;

@@ -8,6 +8,7 @@ import 'package:health_care/components/service.dart';
 import 'package:health_care/components/tag.dart';
 import 'package:health_care/objects/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:health_care/utils/config.dart';
 
 //import 'package:health_care/screens/hospital_page.dart';
 class AppointmentPage extends StatefulWidget {
@@ -74,28 +75,57 @@ class _AppointmentPageState extends State<AppointmentPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          leading: IconButton(
-            icon: Icon(Icons.arrow_back),
-            onPressed: () {
-              {
-                Navigator.of(context).pushNamed('main');
-              }
-            },
-          ),
-          backgroundColor: Color(0xFF59D4E9),
-        ),
+        // appBar: AppBar(
+        //   leading: IconButton(
+        //     icon: Icon(Icons.arrow_back),
+        //     onPressed: () {
+        //       {
+        //         Navigator.of(context).pushNamed('main');
+        //       }
+        //     },
+        //   ),
+        //   backgroundColor: Color(0xFF59D4E9),
+        // ),
         body: SingleChildScrollView(
             child: Padding(
-                padding: EdgeInsets.all(16),
+                padding: EdgeInsets.all(Config.screenWidth! * 0.05),
                 child: Column(children: [
+                  GestureDetector(
+                    onTap: () {
+                      Navigator.of(context).pushNamed('booking-search');
+                    },
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 5.0),
+                      width: Config.screenWidth! * 0.9,
+                      decoration: BoxDecoration(
+                        color: Config.primaryColor.withOpacity(.1),
+                        borderRadius: BorderRadius.circular(20),
+                      ),
+                      child: Row(
+                        children: [
+                          IconButton(
+                            icon: Icon(Icons.search),
+                            onPressed: () {
+                              Navigator.of(context).pushNamed('booking-search');
+                            },
+                          ),
+                          Text(
+                            'Tìm kiếm bệnh viện, bác sĩ...',
+                          overflow: TextOverflow.ellipsis,
+                          maxLines: 1,
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                  SizedBox(height: 16),
                   Container(
                     height: 550,
                     child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           TagContainer(tag: "Top Bệnh Viện/Phòng Khám nổi bật"),
-                          SizedBox(height: 8),
+                          //SizedBox(height: 8),
                           loading
                               ? Expanded(
                                   child: Center(
@@ -120,7 +150,6 @@ class _AppointmentPageState extends State<AppointmentPage> {
                     child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          
                           TagContainer(tag: "Đội Ngũ Bác Sĩ"),
                           SizedBox(height: 8),
                           // Expanded(
@@ -159,7 +188,6 @@ class _AppointmentPageState extends State<AppointmentPage> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           TagContainer(tag: "Top dịch vụ nổi bật"),
-                          
                           SizedBox(height: 8),
                           loading
                               ? Expanded(

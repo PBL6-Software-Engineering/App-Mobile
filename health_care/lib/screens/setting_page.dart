@@ -114,14 +114,14 @@ class _SettingPageState extends State<SettingPage> {
                       children: <Widget>[
                         user.avatar != ''
                             ? CircleAvatar(
-                                radius: 30,
+                                radius: Config.screenWidth!*0.1,
                                 backgroundImage: avatar != null
                                     ? FileImage(avatar!)
                                         as ImageProvider<Object>?
                                     : NetworkImage(user.avatar),
                               )
                             : CircleAvatar(
-                                radius: 30,
+                                radius: Config.screenWidth!*0.1,
                                 backgroundImage: avatar != null
                                     ? FileImage(avatar!)
                                         as ImageProvider<Object>?
@@ -131,12 +131,19 @@ class _SettingPageState extends State<SettingPage> {
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: <Widget>[
-                            Text(
+                            Container(
+                            width: Config.screenWidth! * 0.5,
+                            child: Text(
                               user.name,
                               style: TextStyle(
                                 fontSize: 18.0,
                                 fontWeight: FontWeight.bold,
                               ),
+                              overflow: TextOverflow
+                                      .ellipsis, // Hiển thị dấu "..." nếu text quá dài
+                                  maxLines: 1,
+
+                            ),
                             ),
                             // Row(
                             // mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -157,7 +164,7 @@ class _SettingPageState extends State<SettingPage> {
                                   Text(
                                     'Thông tin cá nhân',
                                     style: TextStyle(
-                                      fontSize: 18.0,
+                                      fontSize: 16.0,
                                     ),
                                   ),
                                   Icon(

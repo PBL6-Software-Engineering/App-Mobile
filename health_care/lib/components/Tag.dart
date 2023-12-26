@@ -18,13 +18,16 @@ class TagContainer extends StatelessWidget {
           ),
         ),
       ),
-      child: Text(
-        " "+ tag,
+      child: Container(
+        padding:EdgeInsets.only(left: 8),
+        child: Text(
+        tag,
         style: TextStyle(
           fontSize: 20.0,
           fontWeight: FontWeight.bold,
         ),
       ),
+      )
     );
   }
 }

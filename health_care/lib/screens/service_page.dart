@@ -78,7 +78,7 @@ class _ServicePageState extends State<ServicePage> {
               height: 300,
               width: MediaQuery.of(context).size.width,
               decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(40),
+                //borderRadius: BorderRadius.circular(40),
                 //borderRadius: BorderRadius.circular(40),
                 image: DecorationImage(
                   image: NetworkImage(widget.service
@@ -201,11 +201,13 @@ class _ServicePageState extends State<ServicePage> {
               child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
-                    //TagContainer(tag: 'Đánh giá khách hàng'),
-                    Row(
+                    rating.countRating <= 3 ?
+                    TagContainer(tag: 'Đánh giá khách hàng')
+                    : Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         TagContainer(tag: 'Đánh giá khách hàng'),
+
                         TextButton(
                           onPressed: () {
                             Navigator.push(

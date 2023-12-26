@@ -161,9 +161,9 @@ class _DoctorPageState extends State<DoctorPage> {
                           ),
                           Positioned(
                               top: 205,
-                              left: 140,
+                              left: 150,
                               child: Container(
-                                constraints: BoxConstraints(maxWidth: 215),
+                                width: Config.screenWidth!*0.6,
                                 child: Text(
                                   doctor.name,
                                   style: TextStyle(
@@ -643,8 +643,9 @@ class _DoctorPageState extends State<DoctorPage> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
-                        //TagContainer(tag: "Đánh gía khách hàng"),
-                        Row(
+                        doctor.rating.countRating <= 3 ?
+                        TagContainer(tag: "Đánh gía khách hàng")
+                        :Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             TagContainer(tag: 'Đánh giá khách hàng'),
