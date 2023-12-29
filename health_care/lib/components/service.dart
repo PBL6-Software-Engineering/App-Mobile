@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:health_care/objects/services.dart';
 import 'package:health_care/screens/service_page.dart';
+import 'package:health_care/utils/config.dart';
 
 class ServiceComponent extends StatelessWidget {
   final Service service;
@@ -24,10 +25,18 @@ class ServiceComponent extends StatelessWidget {
           width: 250,
           decoration: BoxDecoration(
             color: Colors.white,
-             border: Border.all(
-               color: Colors.blue,
-               width: 4,
-             ),
+            border: Border.all(
+              color: Colors.blue,
+              width: Config.screenWidth! * 0.01,
+            ),
+            boxShadow: [
+            BoxShadow(
+              color: Colors.grey.withOpacity(0.5),
+              spreadRadius: 2,
+              blurRadius: 4,
+              offset: const Offset(0, 2),
+            ),
+          ],
             borderRadius: BorderRadius.circular(10.0),
           ),
           child: Center(
@@ -87,7 +96,7 @@ class ServiceComponent extends StatelessWidget {
                     ),
                     SizedBox(width: 4.0),
                     Text(
-                      'Giá dịch vụ: ' + service.price.toString() + ' vnđ',
+                      'Giá: ' + service.price.toString() ,
                       style: TextStyle(fontSize: 16.0),
                     ),
                   ],

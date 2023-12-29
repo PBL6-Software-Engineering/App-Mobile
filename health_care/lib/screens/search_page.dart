@@ -48,11 +48,22 @@ class _SearchPageState extends State<SearchPage> {
         ),
         backgroundColor: Config.blueColor,
       ),
-      body: isSearching || _searchController.text.isEmpty
+      body: 
+      _searchController.text.isEmpty
+      ? Center(
+              child: Text('Nhập từ khoá tìm kiếm'),
+            ):
+      isSearching  
           ? Center(
               child: CircularProgressIndicator(),
             )
-          : articleResults.isNotEmpty
+          : 
+      // isSearching || _searchController.text.isEmpty
+      //     ? Center(
+      //         child: CircularProgressIndicator(),
+      //       )
+      //     : 
+          articleResults.isNotEmpty
               ? Container(
                   margin: EdgeInsets.only(top: 16.0),
                   child: Column(

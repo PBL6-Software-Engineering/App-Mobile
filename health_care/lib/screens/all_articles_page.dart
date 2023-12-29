@@ -23,8 +23,7 @@ class AllArticlePage extends StatelessWidget {
             backgroundColor: Color(0xFF59D4E9)),
         body: Padding(
             padding: EdgeInsets.all(16.0),
-            child: Expanded(
-              child: ListView.builder(
+            child: ListView.builder(
                 itemCount: articles.length,
                 itemBuilder: (context, index) {
                   return InkWell(
@@ -32,6 +31,6 @@ class AllArticlePage extends StatelessWidget {
                   );
                 },
               ),
-            )));
+            ));
   }
 }

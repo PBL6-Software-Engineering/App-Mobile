@@ -33,7 +33,7 @@ class _BookingHistoryPageState extends State<BookingHistoryPage>
     ),
     Tab(
       child: Text(
-        'Đặt chỗ',
+        'Tất cả',
         style: TextStyle(fontSize: 12.0), // Set the font size
       ),
     ),

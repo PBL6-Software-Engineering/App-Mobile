@@ -31,7 +31,7 @@ class _ArticlePageState extends State<ArticlePage> {
     try {
       articles = await articleService.fetchArticles(
           'api/article?name_category=${widget.article.categoryName}');
-      
+
       setState(() {
         loading = false;
       });
@@ -156,23 +156,26 @@ class _ArticlePageState extends State<ArticlePage> {
                               child: CircularProgressIndicator(),
                             ),
                           )
-                        : articles.length != 0 ? Container(height: 360, child: Expanded(
-                            child: ListView.builder(
-                              itemCount: articles.length,
-                              itemBuilder: (context, index) {
-                                return InkWell(
-                                  child: ArticleContainer(
-                                      article: articles[index]),
-                                );
-                              },
-                            ),
-                          )
-                        ): Center(
-                                        child: Text(
-                                          "Không có bài viết liên quan",
-                                        ),
-                                      ),
-
+                        : articles.length != 0
+                            ? 
+                            //Container(
+                              //  height: 450,
+                                Expanded(
+                                  child: ListView.builder(
+                                    itemCount: articles.length,
+                                    itemBuilder: (context, index) {
+                                      return InkWell(
+                                        child: ArticleContainer(
+                                            article: articles[index]),
+                                      );
+                                    },
+                                  ),
+                                )
+                            : Center(
+                                child: Text(
+                                  "Không có bài viết liên quan",
+                                ),
+                              ),
                   ],
                 ),
               ),

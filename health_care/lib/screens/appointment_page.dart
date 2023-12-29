@@ -9,6 +9,7 @@ import 'package:health_care/components/tag.dart';
 import 'package:health_care/objects/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:health_care/utils/config.dart';
+import 'dart:math';
 
 //import 'package:health_care/screens/hospital_page.dart';
 class AppointmentPage extends StatefulWidget {
@@ -37,6 +38,7 @@ class _AppointmentPageState extends State<AppointmentPage> {
     try {
       loading = true;
       hospitals = await hospitalService.fetchHospitals();
+      hospitals.sort((a, b) => b.searchNumber.compareTo(a.searchNumber));
       setState(() {
         loading = false;
       });
@@ -63,6 +65,7 @@ class _AppointmentPageState extends State<AppointmentPage> {
     try {
       loading = true;
       doctors = await doctorService.fetchDoctors();
+      doctors.sort((a, b) => b.searchNumber.compareTo(a.searchNumber));
       setState(() {
         loading = false;
       });
@@ -111,8 +114,8 @@ class _AppointmentPageState extends State<AppointmentPage> {
                           ),
                           Text(
                             'Tìm kiếm bệnh viện, bác sĩ...',
-                          overflow: TextOverflow.ellipsis,
-                          maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                            maxLines: 1,
                           ),
                         ],
                       ),
@@ -125,7 +128,7 @@ class _AppointmentPageState extends State<AppointmentPage> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           TagContainer(tag: "Top Bệnh Viện/Phòng Khám nổi bật"),
-                          //SizedBox(height: 8),
+                          SizedBox(height: 8),
                           loading
                               ? Expanded(
                                   child: Center(
@@ -134,7 +137,7 @@ class _AppointmentPageState extends State<AppointmentPage> {
                                 )
                               : Expanded(
                                   child: ListView.separated(
-                                  itemCount: hospitals.length,
+                                  itemCount: min(6, hospitals.length),
                                   separatorBuilder: (context, index) =>
                                       SizedBox(height: 16),
                                   itemBuilder: (context, index) {
@@ -172,7 +175,7 @@ class _AppointmentPageState extends State<AppointmentPage> {
                               : Expanded(
                                   child: ListView.builder(
                                     scrollDirection: Axis.horizontal,
-                                    itemCount: doctors.length,
+                                    itemCount: min(6, doctors.length),
                                     itemBuilder: (context, index) {
                                       return DoctorContainer(
                                           doctor: doctors[index]);
@@ -198,7 +201,7 @@ class _AppointmentPageState extends State<AppointmentPage> {
                               : Expanded(
                                   child: ListView.builder(
                                     scrollDirection: Axis.horizontal,
-                                    itemCount: services.length,
+                                    itemCount: min(6, services.length),
                                     itemBuilder: (context, index) {
                                       return ServiceComponent(
                                           service: services[index]);

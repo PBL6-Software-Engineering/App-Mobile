@@ -72,12 +72,14 @@ class Doctor {
   String avatar;
   String phone;
   String department;
+  int searchNumber;
   Doctor({
     required this.id,
     required this.name,
     required this.avatar,
     required this.phone,
     required this.department,
+    required this.searchNumber,
   });
 
   factory Doctor.fromJson(json) {
@@ -90,7 +92,9 @@ class Doctor {
         name: json['name_doctor'] ?? '',
         phone: json['phone'] ?? 'Chưa cập nhật',
         avatar: json['avatar'] != null ? _url + json['avatar'] : '',
-        department: json['name_department'] ?? '');
+        department: json['name_department'] ?? '',
+        searchNumber: json['search_number_doctor']);
+        
   }
 }
 

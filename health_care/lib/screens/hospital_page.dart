@@ -172,19 +172,20 @@ class _HospitalPageState extends State<HospitalPage>
                           ),
                           Positioned(
                             top: 140,
-                            left: 16,
+                            left: Config.screenWidth!*0.03,
                             child: CircleAvatar(
-                              radius: 60,
+                              radius: Config.screenWidth!*0.15,
                               backgroundImage: NetworkImage(
                                 hospital.avatar,
                               ),
+                              
                             ),
                           ),
                           Positioned(
                             top: 205,
-                            left: 150,
+                            left: Config.screenWidth!*0.4,
                             child: Container(
-                              width: Config.screenWidth!*0.6,
+                              width: Config.screenWidth!*0.55,
                             child: Text(
                               //'sfsadasdasdasdasdasdasdsadhjkshfajksdhasjkdhasjkdhasjkdhaskj',
                               hospital.name,
@@ -297,7 +298,7 @@ class _HospitalPageState extends State<HospitalPage>
                                     ? Container(
                                         padding: EdgeInsets.all(16.0),
                                         height: 360,
-                                        child: Expanded(
+                                        
                                             child: ListView.builder(
                                           scrollDirection: Axis.horizontal,
                                           itemCount: doctors.length,
@@ -305,7 +306,7 @@ class _HospitalPageState extends State<HospitalPage>
                                             return DoctorContainer(
                                                 doctor: doctors[index]);
                                           },
-                                        )))
+                                        ))
                                     : Center(
                                         child: Text(
                                           "Chưa cập nhật",
@@ -340,7 +341,7 @@ class _HospitalPageState extends State<HospitalPage>
                                     ? Container(
                                         padding: EdgeInsets.all(16.0),
                                         height: 340,
-                                        child: Expanded(
+                                        
                                             child: ListView.builder(
                                           scrollDirection: Axis.horizontal,
                                           itemCount: services.length,
@@ -348,7 +349,7 @@ class _HospitalPageState extends State<HospitalPage>
                                             return ServiceComponent(
                                                 service: services[index]);
                                           },
-                                        )))
+                                        ))
                                     : Center(
                                         child: Text("Chưa cập nhật"),
                                       ),

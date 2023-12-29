@@ -58,19 +58,19 @@ class Rating {
   });
 
   factory Rating.fromJson(Map<String, dynamic> json) {
-    var ratingsList = json['ratings']['data'] as List;
+    //var ratingsList = json['ratings']['data'] as List;
     return Rating(
       countRating: json['cout_rating'],
       numberRating: json['number_rating'].toDouble(),
-      countDetails: RatingDetails.fromJson(json['cout_details']) ??
+      countDetails: json['cout_details'] == null ?
           RatingDetails(
             oneStar: 0,
             twoStar: 0,
             threeStar: 0,
             fourStar: 0,
             fiveStar: 0,
-          ),
-      ratings: ratingsList.map((e) => RatingItem.fromJson(e)).toList() ?? [],
+          ):  RatingDetails.fromJson(json['cout_details']),
+      ratings: json['ratings'] != null ? json['ratings']['data'].map((e) => RatingItem.fromJson(e)).toList() : [],
     );
   }
 }

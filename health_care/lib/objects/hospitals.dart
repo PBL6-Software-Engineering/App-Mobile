@@ -60,7 +60,7 @@ class Hospital {
   // List<String> infrastructure;
   String description;
   // List<int> location;
-  // int searchNumber;
+   int searchNumber;
 
   Hospital({
     required this.id,
@@ -73,7 +73,7 @@ class Hospital {
     // required this.infrastructure,
     required this.description,
     // required this.location,
-    // required this.searchNumber,
+     required this.searchNumber,
   });
 
   factory Hospital.fromJson(Map<String, dynamic> json) {
@@ -92,7 +92,7 @@ class Hospital {
       //infrastructure: List<String>.from(json['infrastructure']),
       description: json['description'],
       //location: List<int>.from(json['location']),
-      //searchNumber: json['search_number'],
+      searchNumber: json['search_number'],
     );
   }
 }

@@ -66,7 +66,7 @@ class ServiceService {
 class Service {
   int id;
   String name;
-  int price;
+  String price;
   String hospital_name;
   String thumbnail;
   ServiceInformation infor;
@@ -87,7 +87,7 @@ class Service {
     return Service(
       id: json['id_hospital_service'],
       name: json['name'],
-      price: json['price'],
+      price: json['price'] != null ? NumberFormat.currency(locale: 'vi_VN', symbol: '₫').format(json['price']) : 'Chưa cập nhật',
       hospital_name: json['name_hospital'],
       infor: ServiceInformation.fromJson(json['infor']),
       thumbnail: json['thumbnail_service'] == null

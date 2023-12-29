@@ -1,5 +1,5 @@
 import 'dart:convert';
-
+import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:health_care/providers/chat_service.dart';
 import 'package:health_care/utils/api_constant.dart';
@@ -25,6 +25,23 @@ class _MessageDetailState extends State<MessageDetail> {
   late socket_io.Socket _socket;
 
   String linkSocket = ApiConstant.linkSocket;
+  double calculateContainerWidth(String text) {
+    final textPainter = TextPainter(
+      text: TextSpan(
+        text: text,
+        style: TextStyle(color: Colors.white),
+      ),
+      textDirection: TextDirection.ltr,
+    );
+
+    textPainter.layout();
+
+    double desiredWidth = textPainter.width + 25;
+
+    double maxWidth = Config.screenWidth! * 0.7;
+
+    return desiredWidth > maxWidth ? maxWidth : desiredWidth;
+  }
 
   Future<void> fetchMessages() async {
     try {
@@ -243,22 +260,29 @@ class _MessageDetailState extends State<MessageDetail> {
                                 'https://img2.thuthuatphanmem.vn/uploads/2019/01/04/hinh-anh-dep-co-gai-de-thuong_025103410.jpg'),
                           ),
                         Config.gapSmall,
-                        Container(
-                          margin: EdgeInsets.symmetric(vertical: 4),
-                          padding: EdgeInsets.all(8),
-                          decoration: BoxDecoration(
-                            color: (isUserSend)
-                                ? Colors.blue.shade500
-                                : Colors.grey,
-                            borderRadius: BorderRadius.circular(12),
-                          ),
-                          child: Text(
-                            message['message'],
-                            style: TextStyle(
-                              color: Colors.white,
+                        Flexible(
+                          child: Container(
+                            //width: calculateContainerWidth(message['message']),
+                            margin: EdgeInsets.symmetric(vertical: 4),
+                            padding: EdgeInsets.all(8),
+                            decoration: BoxDecoration(
+                              color: (isUserSend)
+                                  ? Colors.blue.shade500
+                                  : Colors.grey,
+                              borderRadius: BorderRadius.circular(12),
                             ),
-                            textAlign:
-                                (isUserSend) ? TextAlign.right : TextAlign.left,
+                            child: Text(
+                              message['message'],
+                              style: TextStyle(
+                                color: Colors.white,
+                              ),
+                              textAlign: (isUserSend)
+                                  ? TextAlign.right
+                                  : TextAlign.left,
+                              overflow: TextOverflow
+                                  .visible, // Để cho phép hiển thị tràn nếu quá dài
+                              maxLines: null,
+                            ),
                           ),
                         ),
                       ],
