@@ -71,7 +71,26 @@ class _MessagePageState extends State<MessagePage> {
         title: Text('Đoạn chat'),
         backgroundColor: Config.blueColor,
       ),
-      body: Padding(
+      body: AuthManager.getToken() == null
+          ? Center(
+              child: ElevatedButton(
+                onPressed: () {
+                  // Xử lý sự kiện khi nhấn nút Đăng nhập
+                  Navigator.of(context).pushNamed('login');
+                },
+                style: ElevatedButton.styleFrom(
+                  padding: EdgeInsets.symmetric(horizontal: 40, vertical: 16),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                ),
+                child: Text(
+                  'Đăng nhập',
+                  style: TextStyle(fontSize: 18),
+                ),
+              ),
+            )
+          :Padding(
         padding: EdgeInsets.symmetric(horizontal: 10, vertical: 35),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,

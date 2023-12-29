@@ -21,7 +21,20 @@ class ArticleContainer extends StatelessWidget {
         );
       },
       child: Container(
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(20.0),
+          // boxShadow: [
+          //   BoxShadow(
+          //     color: Colors.grey.withOpacity(0.5),
+          //     spreadRadius: 2,
+          //     blurRadius: 4,
+          //     offset: const Offset(0, 2),
+          //   ),
+          // ],
+        ),
         padding: EdgeInsets.all(16),
+        margin: EdgeInsets.all(8.0),
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -31,9 +44,11 @@ class ArticleContainer extends StatelessWidget {
                     decoration: BoxDecoration(
                       image: DecorationImage(
                         image: NetworkImage(article.thumbnail),
+                        
                         fit: BoxFit.cover,
                       ),
                       borderRadius: BorderRadius.circular(8),
+
                     ),
                   ),
                   SizedBox(width: 16),

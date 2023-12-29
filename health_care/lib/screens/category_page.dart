@@ -76,6 +76,10 @@ class _CategoryPageState extends State<CategoryPage> {
                     Text(widget.category.description,
                         style: TextStyle(fontSize: 16)),
                     SizedBox(height: 16),
+                    articles.length == 0 ?
+                    Center(
+                      child: Text('Chưa có bài viết nào thuộc chủ đề này'),
+                    ):
                     Expanded(
                       child: ListView.builder(
                         itemCount: articles.length,

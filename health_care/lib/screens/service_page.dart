@@ -109,9 +109,7 @@ class _ServicePageState extends State<ServicePage> {
                           ),
                           SizedBox(width: 4.0),
                           Text(
-                            'Giá dịch vụ: ' +
-                                widget.service.price.toString() +
-                                ' vnđ',
+                            'Giá dịch vụ: ' + widget.service.price.toString(),
                             style: TextStyle(fontSize: 16.0),
                           ),
                         ],
@@ -201,81 +199,82 @@ class _ServicePageState extends State<ServicePage> {
               child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
-                    rating.countRating <= 3 ?
-                    TagContainer(tag: 'Đánh giá khách hàng')
-                    : Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        TagContainer(tag: 'Đánh giá khách hàng'),
-
-                        TextButton(
-                          onPressed: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => AllRatingPage(
-                                    api:
-                                        'api/hospital-service/more-rating/${widget.service.id.toString()}'),
+                    rating.countRating <= 3
+                        ? TagContainer(tag: 'Đánh giá khách hàng')
+                        : Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              TagContainer(tag: 'Đánh giá khách hàng'),
+                              TextButton(
+                                onPressed: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => AllRatingPage(
+                                          api:
+                                              'api/hospital-service/more-rating/${widget.service.id.toString()}'),
+                                    ),
+                                  );
+                                },
+                                child: Text(
+                                  'Xem thêm >>',
+                                  style: TextStyle(
+                                    fontSize: 16,
+                                    color: Config.blueColor,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
                               ),
-                            );
-                          },
-                          child: Text(
-                            'Xem thêm >>',
-                            style: TextStyle(
-                              fontSize: 16,
-                              color: Config.blueColor,
-                              fontWeight: FontWeight.bold,
-                            ),
+                            ],
                           ),
-                        ),
-                      ],
-                    ),
-                    // loading == false
-                    //     ?
-                    Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: <Widget>[
-                          Row(children: [
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: List.generate(5, (index) {
-                                if (index < rating.numberRating) {
-                                  return Icon(Icons.star, color: Colors.yellow);
-                                } else {
-                                  return Icon(Icons.star, color: Colors.grey);
-                                }
-                              }),
-                            ),
-                            SizedBox(width: 16.0),
-                            Text('(' +
-                                rating.countRating.toString() +
-                                ' đánh giá)')
-                          ]),
-                          SizedBox(height: 16.0),
-                          rating.ratings.length != 0
-                              ? ListView.builder(
-                                  itemCount: isExpanded
-                                      ? rating.ratings.length
-                                      : min(
-                                          3,
-                                          rating.ratings
-                                              .length), // Show only one item initially
-                                  shrinkWrap: true,
-                                  physics: NeverScrollableScrollPhysics(),
-                                  itemBuilder: (context, index) {
-                                    return RatingComponent(
-                                        rating: rating.ratings[index]);
-                                  },
-                                )
-                              : Center(
-                                  child: Text('Chưa có đánh giá nào'),
-                                )
-                        ])
-                    // : Center(
-                    //     child: CircularProgressIndicator(),
-                    //   )
+                    loading == false
+                        ? Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: <Widget>[
+                                Row(children: [
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: List.generate(5, (index) {
+                                      if (index < rating.numberRating) {
+                                        return Icon(Icons.star,
+                                            color: Colors.yellow);
+                                      } else {
+                                        return Icon(Icons.star,
+                                            color: Colors.grey);
+                                      }
+                                    }),
+                                  ),
+                                  SizedBox(width: 16.0),
+                                  Text('(' +
+                                      rating.countRating.toString() +
+                                      ' đánh giá)')
+                                ]),
+                                SizedBox(height: 16.0),
+                                rating.ratings.length != 0
+                                    ? ListView.builder(
+                                        itemCount: isExpanded
+                                            ? rating.ratings.length
+                                            : min(
+                                                3,
+                                                rating.ratings
+                                                    .length), // Show only one item initially
+                                        shrinkWrap: true,
+                                        physics: NeverScrollableScrollPhysics(),
+                                        itemBuilder: (context, index) {
+                                          return RatingComponent(
+                                              rating: rating.ratings[index]);
+                                        },
+                                      )
+                                    : Center(
+                                        child: Text('Chưa có đánh giá nào'),
+                                      )
+                              ])
+                        : Center(
+                            child: CircularProgressIndicator(),
+                          )
                   ]),
             ),
+            Config.spaceSmall,
             Center(
               child: BookingForm(
                 id: widget.service.id,

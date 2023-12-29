@@ -347,6 +347,7 @@ class _ServiceBookingFormState extends State<ServiceBookingForm> {
                             id: widget.id,
                             date: selectedDayData['date'],
                             interval: selectedInterval,
+                            bookingType: 'service'
                           ),
                         ),
                       ),

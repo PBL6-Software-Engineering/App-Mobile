@@ -17,22 +17,30 @@ class CategoryContainer extends StatelessWidget {
           Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) =>
-                  CategoryPage(category: category),
+              builder: (context) => CategoryPage(category: category),
             ),
           );
         },
         child: Container(
-          width: 150,
+          width: Config.screenWidth! * 0.35,
           height: 200,
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Container(
-                width: 120,
+                width: Config.screenWidth! * 0.3,
                 height: 120,
                 decoration: BoxDecoration(
+                  color: Colors.white,
                   borderRadius: BorderRadius.circular(40),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.grey.withOpacity(0.5),
+                      spreadRadius: 2,
+                      blurRadius: 4,
+                      offset: const Offset(0, 2),
+                    ),
+                  ],
                   image: DecorationImage(
                     image: NetworkImage(category.thumbnail),
                     fit: BoxFit.cover,

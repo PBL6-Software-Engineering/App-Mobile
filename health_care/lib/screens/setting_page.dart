@@ -299,7 +299,7 @@ class _SettingPageState extends State<SettingPage> {
                                             Icon(Icons.list,
                                                 size: 60.0,
                                                 color: Colors.black),
-                                            Text('Đặt chỗ',
+                                            Text('Tất cả',
                                                 style:
                                                     TextStyle(fontSize: 16.0)),
                                           ],

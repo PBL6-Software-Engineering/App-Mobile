@@ -22,31 +22,27 @@ class DoctorContainer extends StatelessWidget {
           );
         },
         child: Container(
+
           //height: 200,
           padding: EdgeInsets.all(16.0),
           width: 200,
           margin: EdgeInsets.all(8.0),
-          // decoration: BoxDecoration(
-          //   color: Colors.white,
-          //   border: Border(
-          //     left: BorderSide(
-          //       color: Color(0xFF0B8AA0),
-          //       width: 8.0,
-          //     ),
-          //     right: BorderSide(
-          //       color: Color(0xFF11B3CF),
-          //       width: 2.0,
-          //     ),
-          //     top: BorderSide(
-          //       color: Color(0xFF11B3CF),
-          //       width: 2.0,
-          //     ),
-          //     bottom: BorderSide(
-          //       color: Color(0xFF11B3CF),
-          //       width: 2.0,
-          //     ),
-          //   ),
-          // ),
+          decoration: BoxDecoration(
+            color: Colors.white,
+            border: Border.all(
+              color: Colors.blue,
+              width: Config.screenWidth! * 0.01,
+            ),
+            boxShadow: [
+            BoxShadow(
+              color: Colors.grey.withOpacity(0.5),
+              spreadRadius: 2,
+              blurRadius: 4,
+              offset: const Offset(0, 2),
+            ),
+          ],
+            borderRadius: BorderRadius.circular(10.0),
+          ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: <Widget>[
