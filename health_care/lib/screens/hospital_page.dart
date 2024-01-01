@@ -280,8 +280,12 @@ class _HospitalPageState extends State<HospitalPage>
                           children: [
                             TagContainer(tag: "Thông tin bệnh viện"),
                             SizedBox(height: 16),
-                            Text(hospital.description,
-                                style: TextStyle(fontSize: 16.0))
+                            
+                            Html(
+                              data: hospital.description,
+                            )
+                            // Text('hospital.description',
+                            //     style: TextStyle(fontSize: 16.0))
                           ])),
                   Container(
                       padding: EdgeInsets.all(16.0),
@@ -356,7 +360,7 @@ class _HospitalPageState extends State<HospitalPage>
                           ])),
 
                   Container(
-                    height: 550,
+                    height: 520,
                     padding: EdgeInsets.all(16.0),
                     child: Column(
                       //crossAxisAlignment: CrossAxisAlignment.start,

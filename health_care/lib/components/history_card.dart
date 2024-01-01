@@ -149,7 +149,7 @@ class _HistoryCardState extends State<HistoryCard> {
                         ),
                         Text(
                           widget.data['doctor_name'] ??
-                              "Đang cập nhật tên bác sĩ",
+                              "Đợi bệnh viện chỉ định bác sĩ",
                           style: TextStyle(
                             fontSize: 14,
                             color: Color.fromARGB(255, 6, 6, 6),

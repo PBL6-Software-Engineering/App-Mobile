@@ -22,7 +22,7 @@ class ServiceService {
       //print(HospitalList);
       return ServiceList;
     } else {
-      throw Exception('Failed to fetch hospitals');
+      throw Exception('Failed to fetch service');
     }
   }
 
@@ -40,7 +40,7 @@ class ServiceService {
       //print(HospitalList);
       return ServiceList;
     } else {
-      throw Exception('Failed to fetch hospitals');
+      throw Exception('Failed to fetch service hospitals');
     }
   }
 
@@ -58,7 +58,7 @@ class ServiceService {
       //print(doctorDetail);
       return rating;
     } else {
-      throw Exception('Failed to fetch doctor detail');
+      throw Exception('Failed to fetch service ratings');
     }
   }
 }
@@ -86,9 +86,9 @@ class Service {
     final String _url = ApiConstant.linkApi;
     return Service(
       id: json['id_hospital_service'],
-      name: json['name'],
+      name: json['name'] ?? '',
       price: json['price'] != null ? NumberFormat.currency(locale: 'vi_VN', symbol: '₫').format(json['price']) : 'Chưa cập nhật',
-      hospital_name: json['name_hospital'],
+      hospital_name: json['name_hospital'] ?? '',
       infor: ServiceInformation.fromJson(json['infor']),
       thumbnail: json['thumbnail_service'] == null
           ? ''
@@ -99,7 +99,7 @@ class Service {
 }
 
 class ServiceInformation {
-  List<int> location;
+  List<double> location;
   String aboutService;
   String prepareProcess;
   String serviceDetails;
@@ -113,10 +113,10 @@ class ServiceInformation {
 
   factory ServiceInformation.fromJson(Map<String, dynamic> json) {
     return ServiceInformation(
-      location: List<int>.from(json['location']),
-      aboutService: json['about_service'],
-      prepareProcess: json['prepare_process'],
-      serviceDetails: json['service_details'],
+      location: json['location'] != null ? List<double>.from(json['location']) : [],
+      aboutService: json['about_service'] ?? '',
+      prepareProcess: json['prepare_process'] ?? '',
+      serviceDetails: json['service_details'] ?? '',
     );
   }
 }
@@ -136,13 +136,18 @@ class ServiceRating {
   });
 
   factory ServiceRating.fromJson(Map<String, dynamic> json) {
-    var ratingsList = json['ratings']['data'] as List;
     return ServiceRating(
       id: json['id_hospital_service'],
-      countRating: json['cout_rating'],
-      numberRating: json['number_rating'].toDouble(),
-      countDetails: RatingDetails.fromJson(json['cout_details']),
-      ratings: ratingsList.map((e) => RatingItem.fromJson(e)).toList() ?? [],
+      countRating: json['cout_rating'] ?? 0,
+      numberRating: json['number_rating'] != null ? json['number_rating'].toDouble() : 0.0,
+      countDetails: json['cout_details'] != null ? RatingDetails.fromJson(json['cout_details']) : RatingDetails(
+            oneStar: 0,
+            twoStar: 0,
+            threeStar: 0,
+            fourStar: 0,
+            fiveStar: 0,
+          ) ,
+      ratings: (json['ratings'] == null || json['ratings']['data'] ==[]) ? [] : (json['ratings']['data'] as List).map((e) => RatingItem.fromJson(e)).toList(),
     );
   }
 }

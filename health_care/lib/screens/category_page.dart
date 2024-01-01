@@ -3,6 +3,10 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:health_care/components/article.dart';
 import 'package:health_care/objects/articles.dart';
 import 'package:health_care/objects/categories.dart';
+import 'dart:math';
+import 'package:health_care/utils/config.dart';
+import 'package:health_care/components/Tag.dart';
+import 'package:health_care/screens/all_articles_page.dart';
 
 class CategoryPage extends StatefulWidget {
   final Category category;
@@ -68,7 +72,7 @@ class _CategoryPageState extends State<CategoryPage> {
                           widget.category.name,
                           style: TextStyle(
                             fontWeight: FontWeight.bold,
-                            fontSize: 24,
+                            fontSize: 30,
                             color: Color.fromARGB(255, 7, 8, 8),
                           ),
                         )),
@@ -76,18 +80,48 @@ class _CategoryPageState extends State<CategoryPage> {
                     Text(widget.category.description,
                         style: TextStyle(fontSize: 16)),
                     SizedBox(height: 16),
-                    articles.length == 0 ?
-                    Center(
-                      child: Text('Chưa có bài viết nào thuộc chủ đề này'),
-                    ):
-                    Expanded(
-                      child: ListView.builder(
-                        itemCount: articles.length,
-                        itemBuilder: (context, index) {
-                          return ArticleContainer(article: articles[index]);
-                        },
-                      ),
-                    )
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        TagContainer(tag: 'Bài viết chủ đề này'),
+                        TextButton(
+                          onPressed: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) =>
+                                    AllArticlePage(articles: articles),
+                              ),
+                            );
+                          },
+                          child: articles.length > 3
+                              ? Text(
+                                  'Xem thêm >>',
+                                  style: TextStyle(
+                                    fontSize: 16,
+                                    color: Config.blueColor,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                )
+                              : Text(''),
+                        ),
+                      ],
+                    ),
+                    SizedBox(height: 16),
+                    articles.length == 0
+                        ? Center(
+                            child:
+                                Text('Chưa có bài viết nào thuộc chủ đề này'),
+                          )
+                        : Expanded(
+                            child: ListView.builder(
+                              itemCount: min(articles.length, 3),
+                              itemBuilder: (context, index) {
+                                return ArticleContainer(
+                                    article: articles[index]);
+                              },
+                            ),
+                          )
                   ],
                 ),
         ));

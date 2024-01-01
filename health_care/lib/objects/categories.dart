@@ -49,8 +49,8 @@ class Category {
       id: json['id'],
       name: json['name'],
       thumbnail: _url + json['thumbnail'],
-      searchNumber: json['search_number'],
-      description: json['description_category'],
+      searchNumber: json['search_number']?? 0,
+      description: json['description_category'] ?? 'Chưa cập nhật',
       //createdAt: DateTime.parse(json['created_at']),
       //updatedAt: DateTime.parse(json['updated_at']),
     );

@@ -46,7 +46,7 @@ class TimeWorkContainer extends StatelessWidget {
                   ' - ' +
                   (timeWork.times['monday']?.night?.time[1] ?? '' + '.'),
               style: TextStyle(
-                fontSize: 16.0,
+                fontSize: 14.0
               ),
             ),
           ]
@@ -71,7 +71,7 @@ class TimeWorkContainer extends StatelessWidget {
                   ' - ' +
                   (timeWork.times['tuesday']?.night?.time[1] ?? '' + '.'),
               style: TextStyle(
-                fontSize: 16.0,
+                fontSize: 14.0,
               ),
             ),
           ]
@@ -96,7 +96,7 @@ class TimeWorkContainer extends StatelessWidget {
                   ' - ' +
                   (timeWork.times['wednesday']?.night?.time[1] ?? '' + '.'),
               style: TextStyle(
-                fontSize: 16.0,
+                fontSize: 14.0,
               ),
             ),
           ]
@@ -121,7 +121,7 @@ class TimeWorkContainer extends StatelessWidget {
                   ' - ' +
                   (timeWork.times['thursday']?.night?.time[1] ?? '' + '.'),
               style: TextStyle(
-                fontSize: 16.0,
+                fontSize: 14.0,
               ),
             ),
           ]
@@ -146,7 +146,7 @@ class TimeWorkContainer extends StatelessWidget {
                   ' - ' +
                   (timeWork.times['friday']?.night?.time[1] ?? '' + '.'),
               style: TextStyle(
-                fontSize: 16.0,
+                fontSize: 14.0,
               ),
             ),
           ]
@@ -171,7 +171,7 @@ class TimeWorkContainer extends StatelessWidget {
                   ' - ' +
                   (timeWork.times['saturday']?.night?.time[1] ?? '' + '.'),
               style: TextStyle(
-                fontSize: 16.0,
+                fontSize: 14.0,
               ),
             ),
           ]
@@ -196,7 +196,7 @@ class TimeWorkContainer extends StatelessWidget {
                   ' - ' +
                   (timeWork.times['sunday']?.night?.time[1] ?? '' + '.'),
               style: TextStyle(
-                fontSize: 16.0,
+                fontSize: 14.0,
               ),
             ),
           ]
