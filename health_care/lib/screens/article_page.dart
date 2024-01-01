@@ -127,7 +127,7 @@ class _ArticlePageState extends State<ArticlePage> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        TagContainer(tag: 'Bài Viết cùng chủ đề'),
+                        TagContainer(tag: 'Bài viết cùng chủ đề'),
                         TextButton(
                           onPressed: () {
                             Navigator.push(

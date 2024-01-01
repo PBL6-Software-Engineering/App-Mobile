@@ -36,8 +36,9 @@ class _HomePageState extends State<HomePage> {
   List<Article> articles = [];
   List<Article> hotarticles = [];
   List<Article> articleResults = [];
-  bool loading = true;
-  //bool loading = true;
+  bool loadingcate = true;
+  bool loadingart = true;
+  bool loadingsearch = true;
   final List<String> catNames = [
     "Đặt lịch hẹn",
     "Kiểm tra sức khoẻ",
@@ -53,19 +54,20 @@ class _HomePageState extends State<HomePage> {
 
   @override
   void initState() {
-    fetchArticleList();
+    
     fetchCategoryList();
+    fetchArticleList();
     super.initState();
   }
 
   void fetchArticleList() async {
-    loading = true;
+    loadingart = true;
     try {
       articles = await articleService.fetchArticles('api/article');
       hotarticles = [...articles];
       hotarticles.sort((a, b) => b.searchNumber.compareTo(a.searchNumber));
       setState(() {
-        loading = false;
+        loadingart = false;
       });
     } catch (e) {
       print('Error fetch article: $e');
@@ -73,11 +75,11 @@ class _HomePageState extends State<HomePage> {
   }
 
   void fetchCategoryList() async {
-    loading = true;
+    loadingcate = true;
     try {
       categories = await categoryService.fetchCategories();
       setState(() {
-        loading = false;
+        loadingcate = false;
       });
       // Sử dụng danh sách category ở đây
     } catch (e) {
@@ -86,7 +88,7 @@ class _HomePageState extends State<HomePage> {
   }
 
   void fetchSearchArticleList() async {
-    loading = true;
+    loadingsearch = true;
 
     try {
       List<Article> fetchedArticles = await articleService.fetchArticles(
@@ -94,7 +96,7 @@ class _HomePageState extends State<HomePage> {
       );
       setState(() {
         articleResults = fetchedArticles;
-        loading = false;
+        loadingsearch = false;
       });
     } catch (e) {
       print('Error: $e');
@@ -347,7 +349,7 @@ class _HomePageState extends State<HomePage> {
                                       ],
                                     ),
                                     //Config.spaceSmall,
-                                    loading
+                                    loadingcate
                                         ? Expanded(
                                             child: Center(
                                               child:
@@ -405,7 +407,7 @@ class _HomePageState extends State<HomePage> {
                                       ],
                                     ),
                                     Config.spaceSmall,
-                                    loading
+                                    loadingart
                                         ? Expanded(
                                             child: Center(
                                               child:
@@ -461,7 +463,7 @@ class _HomePageState extends State<HomePage> {
                                       ],
                                     ),
                                     //Config.spaceSmall,
-                                    loading
+                                    loadingart
                                         ? Expanded(
                                             child: Center(
                                               child:

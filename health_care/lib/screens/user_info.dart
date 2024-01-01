@@ -296,7 +296,8 @@ class UserProfileFormDialog extends StatelessWidget {
       title: Text('Chỉnh sửa thông tin'),
       backgroundColor: Colors.white,
       contentPadding: EdgeInsets.all(16.0),
-      content: Column(
+      content: SingleChildScrollView(
+        child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
           TextFormField(
@@ -432,6 +433,7 @@ class UserProfileFormDialog extends StatelessWidget {
             // ),
           ),
         ],
+      )
       ),
       actions: [
         ElevatedButton(

@@ -85,16 +85,13 @@ class Doctor {
   factory Doctor.fromJson(json) {
     final HttpProvider _httpProvider = HttpProvider();
     final String _url = ApiConstant.linkApi;
-    //List<String> infrastructureList = List<String>.from(json['infrastructure']);
-    //print(json);
     return Doctor(
         id: json['id_doctor'],
         name: json['name_doctor'] ?? '',
         phone: json['phone'] ?? 'Chưa cập nhật',
         avatar: json['avatar'] != null ? _url + json['avatar'] : '',
         department: json['name_department'] ?? '',
-        searchNumber: json['search_number_doctor']);
-        
+        searchNumber: json['search_number_doctor']?? 0);
   }
 }
 
@@ -106,13 +103,13 @@ class DoctorDetail {
   String phone;
   String address;
   String avatar;
-  int isAccept;
-  String role;
+  //int isAccept;
+  //String role;
   int idDoctor;
   int idDepartment;
   int idHospital;
-  int isConfirm;
-  int provinceCode;
+  //int isConfirm;
+  //int provinceCode;
   String dateOfBirth;
   int experience;
   int gender;
@@ -130,13 +127,13 @@ class DoctorDetail {
     required this.phone,
     required this.address,
     required this.avatar,
-    required this.isAccept,
-    required this.role,
+    //required this.isAccept,
+    //required this.role,
     required this.idDoctor,
     required this.idDepartment,
     required this.idHospital,
-    required this.isConfirm,
-    required this.provinceCode,
+    //required this.isConfirm,
+    //required this.provinceCode,
     required this.dateOfBirth,
     required this.experience,
     required this.gender,
@@ -159,13 +156,13 @@ class DoctorDetail {
       phone: json['phone'] ?? 'Chưa cập nhật',
       address: json['address'] ?? 'Chưa cập nhật',
       avatar: json['avatar'] != null ? _url + json['avatar'] : '',
-      isAccept: json['is_accept'],
-      role: json['role'],
+      //isAccept: json['is_accept'],
+      //role: json['role'] ?? 0,
       idDoctor: json['id_doctor'],
-      idDepartment: json['id_department'],
-      idHospital: json['id_hospital'],
-      isConfirm: json['is_confirm'],
-      provinceCode: json['province_code'],
+      idDepartment: json['id_department'] ?? 0,
+      idHospital: json['id_hospital'] ?? 0,
+      //isConfirm: json['is_confirm'],
+      //provinceCode: json['province_code'],
       dateOfBirth: json['date_of_birth'] != null
           ? (DateFormat('dd/MM/yyyy')
                   .format(DateTime.parse(json['date_of_birth'])))
@@ -173,7 +170,7 @@ class DoctorDetail {
           : '',
       experience: json['experience'] ?? 0,
       gender: json['gender'] ?? 1,
-      searchNumber: json['search_number'],
+      searchNumber: json['search_number'] ?? 0,
       inforExtend: InforExtend.fromJson(json['infor_extend']),
       rating: Rating.fromJson(json['rating']),
       department: Department.fromJson(json['department']),
@@ -213,28 +210,23 @@ class InforExtend {
   });
 
   factory InforExtend.fromJson(Map<String, dynamic> json) {
-    var prominentList = json['prominent'] as List;
-    var workExperienceList = json['work_experience'] as List;
-    var trainingProcessList = json['training_process'] as List;
-    var awardsRecognitionList = json['awards_recognition'] as List;
-    var researchWorkList = json['research_work'] as List;
 
     return InforExtend(
       id: json['id'],
       idDoctor: json['id_doctor'],
-      prominent: prominentList.map((e) => Prominent.fromJson(e)).toList(),
+      prominent: (json['prominent'] == null || json['prominent'] ==[]) ? [] :(json['prominent'] as List).map((e) => Prominent.fromJson(e)).toList(),
       information: json['information'] ?? '',
       strengths: json['strengths']?.cast<String>() ?? [],
       workExperience:
-          workExperienceList.map((e) => WorkExperience.fromJson(e)).toList(),
+          (json['work_experience'] == null || json['work_experience'] ==[]) ? [] :(json['work_experience'] as List).map((e) => WorkExperience.fromJson(e)).toList(),
       trainingProcess:
-          trainingProcessList.map((e) => TrainingProcess.fromJson(e)).toList(),
+          (json['training_process'] == null || json['training_process'] ==[]) ? [] :(json['training_process'] as List).map((e) => TrainingProcess.fromJson(e)).toList(),
       language: json['language']?.cast<String>() ?? [],
-      awardsRecognition: awardsRecognitionList
+      awardsRecognition: (json['prominent'] == null || json['awards_recognition'] ==[]) ? [] :(json['awards_recognition'] as List)
           .map((e) => AwardsRecognition.fromJson(e))
           .toList(),
       researchWork:
-          researchWorkList.map((e) => ResearchWork.fromJson(e)).toList(),
+          (json['research_work'] == null || json['research_work'] ==[]) ? [] :(json['research_work'] as List).map((e) => ResearchWork.fromJson(e)).toList(),
       createdAt: DateTime.parse(json['created_at']),
       updatedAt: DateTime.parse(json['updated_at']),
     );
@@ -249,7 +241,7 @@ class Prominent {
 
   factory Prominent.fromJson(Map<String, dynamic> json) {
     return Prominent(
-      title: json['title'],
+      title: json['title'] ?? '',
       subtitle: json['subtitle']?.cast<String>(),
     );
   }
@@ -263,7 +255,7 @@ class WorkExperience {
 
   factory WorkExperience.fromJson(Map<String, dynamic> json) {
     return WorkExperience(
-      title: json['title'],
+      title: json['title'] ?? '',
       subtitle: json['subtitle']?.cast<String>(),
     );
   }
@@ -277,7 +269,7 @@ class TrainingProcess {
 
   factory TrainingProcess.fromJson(Map<String, dynamic> json) {
     return TrainingProcess(
-      title: json['title'],
+      title: json['title'] ?? '',
       subtitle: json['subtitle'].cast<String>(),
     );
   }
@@ -291,7 +283,7 @@ class AwardsRecognition {
 
   factory AwardsRecognition.fromJson(Map<String, dynamic> json) {
     return AwardsRecognition(
-      title: json['title'],
+      title: json['title'] ?? '',
       subtitle: json['subtitle']?.cast<String>(),
     );
   }
@@ -305,7 +297,7 @@ class ResearchWork {
 
   factory ResearchWork.fromJson(Map<String, dynamic> json) {
     return ResearchWork(
-      title: json['title'],
+      title: json['title'] ?? '',
       subtitle: json['subtitle'].cast<String>(),
     );
   }
@@ -326,8 +318,8 @@ class Hospitalinfor {
     final String _url = ApiConstant.linkApi;
 
     return Hospitalinfor(
-      id: json['id_hospital'],
-      name: json['name'],
+      id: json['id_hospital'] ?? 0,
+      name: json['name'] ?? '',
       coverimage:
           json['cover_hospital'] == null ? '' : _url + json['cover_hospital'],
     );
@@ -356,10 +348,10 @@ class Department {
   factory Department.fromJson(Map<String, dynamic> json) {
     return Department(
       id: json['id'],
-      name: json['name'],
-      description: json['description'],
-      thumbnail: json['thumbnail'],
-      searchNumber: json['search_number'],
+      name: json['name'] ?? 'Chưa cập nhật',
+      description: json['description'] ?? 'Chưa cập nhật',
+      thumbnail: json['thumbnail'] ?? '',
+      searchNumber: json['search_number'] ?? 0,
       createdAt: DateTime.parse(json['created_at']),
       updatedAt: DateTime.parse(json['updated_at']),
     );

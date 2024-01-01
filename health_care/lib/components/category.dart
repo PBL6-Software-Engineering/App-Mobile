@@ -30,17 +30,18 @@ class CategoryContainer extends StatelessWidget {
               Container(
                 width: Config.screenWidth! * 0.3,
                 height: 120,
+                
                 decoration: BoxDecoration(
                   color: Colors.white,
                   borderRadius: BorderRadius.circular(40),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.grey.withOpacity(0.5),
-                      spreadRadius: 2,
-                      blurRadius: 4,
-                      offset: const Offset(0, 2),
-                    ),
-                  ],
+                  // boxShadow: [
+                  //   BoxShadow(
+                  //     color: Colors.grey.withOpacity(0.5),
+                  //     spreadRadius: 2,
+                  //     blurRadius: 4,
+                  //     offset: const Offset(0, 2),
+                  //   ),
+                  // ],
                   image: DecorationImage(
                     image: NetworkImage(category.thumbnail),
                     fit: BoxFit.cover,

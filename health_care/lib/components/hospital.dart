@@ -3,6 +3,7 @@ import 'package:health_care/utils/config.dart';
 import 'package:health_care/objects/hospitals.dart';
 import 'package:health_care/screens/hospital_page.dart';
 import 'package:health_care/components/button.dart';
+import 'package:html/parser.dart' as htmlParser;
 
 class HospitalContainer extends StatelessWidget {
   final Hospital hospital;
@@ -106,7 +107,8 @@ class HospitalContainer extends StatelessWidget {
               ),
               SizedBox(height: Config.screenWidth! * 0.04),
               Text(
-                hospital.description,
+                htmlParser.parse(hospital.description).body!.text.split('\n').first.trim(),
+                //hospital.description,
                 style: TextStyle(fontSize: Config.screenWidth! * 0.032),
                 overflow: TextOverflow.ellipsis,
                 maxLines: 1,

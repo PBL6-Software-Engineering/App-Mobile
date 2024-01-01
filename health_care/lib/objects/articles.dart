@@ -68,14 +68,14 @@ class Article {
     return Article(
       id: json['id'],
       title: json['title'],
-      content: json['content'],
-      thumbnail: _url + json['thumbnail_article'],
+      content: json['content'] ?? 'Chưa cập nhật',
+      thumbnail: json['thumbnail_article']!= null ? _url + json['thumbnail_article'] : '',
       author: json['name_user'] ?? '',
-      searchNumber: json['search_number'],
+      searchNumber: json['search_number'] ?? 0,
       createdAt:
           (DateFormat('dd/MM/yyyy').format(DateTime.parse(json['created_at'])))
               .toString(),
-      categoryName: json['name_category'],
+      categoryName: json['name_category'] ?? 'Chưa cập nhật',
     );
   }
 }

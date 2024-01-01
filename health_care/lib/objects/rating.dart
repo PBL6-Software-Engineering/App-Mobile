@@ -58,7 +58,7 @@ class Rating {
   });
 
   factory Rating.fromJson(Map<String, dynamic> json) {
-    //var ratingsList = json['ratings']['data'] as List;
+    
     return Rating(
       countRating: json['cout_rating'],
       numberRating: json['number_rating'].toDouble(),
@@ -70,7 +70,7 @@ class Rating {
             fourStar: 0,
             fiveStar: 0,
           ):  RatingDetails.fromJson(json['cout_details']),
-      ratings: json['ratings'] != null ? json['ratings']['data'].map((e) => RatingItem.fromJson(e)).toList() : [],
+      ratings: (json['ratings'] == null || json['ratings']['data'] ==[]) ? [] : (json['ratings']['data'] as List).map((e) => RatingItem.fromJson(e)).toList() ,
     );
   }
 }
@@ -134,13 +134,13 @@ class RatingItem {
       id: json['id'],
       idUser: json['id_user'],
       idWorkSchedule: json['id_work_schedule'],
-      numberRating: json['number_rating'],
-      detailRating: json['detail_rating'],
+      numberRating: json['number_rating'] ?? 0,
+      detailRating: json['detail_rating'] ?? '',
       createdAt:
           (DateFormat('dd/MM/yyyy').format(DateTime.parse(json['created_at'])))
               .toString(),
       updatedAt: DateTime.parse(json['updated_at']),
-      nameUser: json['name_user'],
+      nameUser: json['name_user'] ?? '',
       avatarUser:
           json['avatar_user'] != null ? (_url + json['avatar_user']) : '',
     );
