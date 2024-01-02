@@ -149,7 +149,7 @@ class _HistoryCardState extends State<HistoryCard> {
                         ),
                         Text(
                           widget.data['doctor_name'] ??
-                              "Đợi bệnh viện chỉ định bác sĩ",
+                              "Đang đợi bệnh viện chỉ định bác sĩ",
                           style: TextStyle(
                             fontSize: 14,
                             color: Color.fromARGB(255, 6, 6, 6),
@@ -292,22 +292,31 @@ class _HistoryCardState extends State<HistoryCard> {
                         ),
                         Row(
                           children: [
-                            widget.status == 'upcoming'
-                                ? Expanded(
-                                    child: Button(
-                                      height: 40,
-                                      title: isLoading ? 'Đang huỷ ...' : 'Huỷ',
-                                      fontSize: 13,
-                                      backgroundColor:
-                                          isLoading ? Colors.grey : Colors.red,
-                                      foregroundColor: Colors.white,
-                                      onPressed: () {
-                                        cancelBooking(context);
-                                      },
-                                      disable: false,
-                                    ),
-                                  )
-                                : Container(),
+                            Container(
+                              child: widget.status == 'upcoming'
+                                  ? widget.data['work_schedule_is_confirm'] == 1
+                                      ? Icon(
+                                          Icons.check_circle,
+                                          color: Colors.green,
+                                          size: 40,
+                                        )
+                                      : Button(
+                                          height: 40,
+                                          title: isLoading
+                                              ? 'Đang huỷ ...'
+                                              : 'Huỷ',
+                                          fontSize: 12,
+                                          backgroundColor: isLoading
+                                              ? Colors.grey
+                                              : Colors.red,
+                                          foregroundColor: Colors.white,
+                                          onPressed: () {
+                                            cancelBooking(context);
+                                          },
+                                          disable: false,
+                                        )
+                                  : Container(),
+                            ),
                             SizedBox(width: 5),
                             Expanded(
                               child: Button(

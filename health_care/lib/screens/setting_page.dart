@@ -3,12 +3,15 @@ import 'package:flutter/material.dart';
 import 'package:health_care/components/message_dialog.dart';
 import 'package:health_care/providers/auth_intercetor.dart';
 import 'package:health_care/providers/auth_manager.dart';
+import 'package:health_care/providers/google_sign_in.dart';
 import 'package:health_care/providers/http_provider.dart';
 import 'package:health_care/screens/booking_history_page.dart';
 import 'package:health_care/screens/user_info.dart';
 import 'package:health_care/utils/config.dart';
 import 'package:health_care/objects/user.dart';
 import 'dart:io';
+
+import 'package:provider/provider.dart';
 
 class SettingPage extends StatefulWidget {
   @override
@@ -18,7 +21,7 @@ class SettingPage extends StatefulWidget {
   _SettingPageState createState() => _SettingPageState();
 }
 
-class _SettingPageState extends State<SettingPage> {
+class _SettingPageState extends State<SettingPage> with ChangeNotifier {
   User user = AuthManager.getUser();
   File? avatar;
   void initState() {
@@ -114,36 +117,33 @@ class _SettingPageState extends State<SettingPage> {
                       children: <Widget>[
                         user.avatar != ''
                             ? CircleAvatar(
-                                radius: Config.screenWidth!*0.1,
+                                radius: Config.screenWidth! * 0.1,
                                 backgroundImage: avatar != null
                                     ? FileImage(avatar!)
                                         as ImageProvider<Object>?
                                     : NetworkImage(user.avatar),
                               )
                             : CircleAvatar(
-                                radius: Config.screenWidth!*0.1,
+                                radius: Config.screenWidth! * 0.1,
                                 backgroundImage: avatar != null
                                     ? FileImage(avatar!)
                                         as ImageProvider<Object>?
                                     : AssetImage('assets/images/user.jpeg'),
                               ),
-                        Config.gapSmall,
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: <Widget>[
-                            Container(
-                            width: Config.screenWidth! * 0.5,
-                            child: Text(
-                              user.name,
+                            Config.gapSmall,
+
+                            Text(
+                              '  ${user.name}',
                               style: TextStyle(
                                 fontSize: 18.0,
                                 fontWeight: FontWeight.bold,
                               ),
                               overflow: TextOverflow
-                                      .ellipsis, // Hiển thị dấu "..." nếu text quá dài
-                                  maxLines: 1,
-
-                            ),
+                                  .ellipsis, // Hiển thị dấu "..." nếu text quá dài
+                              maxLines: 1,
                             ),
                             // Row(
                             // mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -339,6 +339,10 @@ class _SettingPageState extends State<SettingPage> {
                           trailing: const Icon(Icons.keyboard_arrow_right),
                           onTap: () async {
                             await _logOut(context);
+                            final provider = Provider.of<GoogleSignInProvider>(
+                                context,
+                                listen: false);
+                            provider.googleLogout();
                           },
                         ),
                       ],

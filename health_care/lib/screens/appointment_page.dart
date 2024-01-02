@@ -91,7 +91,11 @@ class _AppointmentPageState extends State<AppointmentPage> {
         // ),
         body: SingleChildScrollView(
             child: Padding(
-                padding: EdgeInsets.all(Config.screenWidth! * 0.05),
+                padding: EdgeInsets.only(
+                    bottom: 5,
+                    top: 50,
+                    left: Config.screenWidth! * 0.05,
+                    right: Config.screenWidth! * 0.05),
                 child: Column(children: [
                   GestureDetector(
                     onTap: () {

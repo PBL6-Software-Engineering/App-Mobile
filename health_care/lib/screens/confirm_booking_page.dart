@@ -139,7 +139,10 @@ class _ConfirmBookingStatePage extends State<ConfirmBookingPage> {
                     Config.spaceSmall,
                     Row(
                       children: [
-                        Text('Bác sĩ: ',
+                        Text(
+                            widget.bookingType == 'advice'
+                                ? 'Bác sĩ: '
+                                : 'Dịch vụ: ',
                             style: TextStyle(fontWeight: FontWeight.bold)),
                         Text(widget.name),
                       ],

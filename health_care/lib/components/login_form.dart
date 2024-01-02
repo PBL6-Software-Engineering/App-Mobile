@@ -4,8 +4,11 @@ import 'package:health_care/components/custom_text_field.dart';
 import 'package:health_care/utils/config.dart';
 
 class LoginForm extends StatefulWidget {
-  const LoginForm({Key? key, required this.onPressed}) : super(key: key);
   final Function(String email, String password) onPressed;
+  final bool isLoading;
+
+  const LoginForm({Key? key, required this.onPressed, required this.isLoading})
+      : super(key: key);
 
   @override
   _LoginFormState createState() => _LoginFormState();
@@ -53,6 +56,7 @@ class _LoginFormState extends State<LoginForm> {
               }
             },
             disable: false,
+            isLoading: widget.isLoading,
           )
         ],
       ),

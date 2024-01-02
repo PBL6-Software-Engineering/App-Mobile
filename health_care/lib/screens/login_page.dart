@@ -1,16 +1,16 @@
 import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:health_care/components/login_form.dart';
 import 'package:health_care/components/message_dialog.dart';
 import 'package:health_care/components/social_button.dart';
 import 'package:health_care/providers/auth_manager.dart';
+import 'package:health_care/providers/google_sign_in.dart';
 import 'package:health_care/providers/http_provider.dart';
 import 'package:health_care/utils/config.dart';
 import 'package:health_care/utils/text.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-// import 'package:firebase_auth/firebase_auth.dart';
-// import 'package:google_sign_in/google_sign_in.dart';
-// import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
+import 'package:provider/provider.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
@@ -19,8 +19,14 @@ class LoginPage extends StatefulWidget {
   State<LoginPage> createState() => _LoginPageState();
 }
 
-class _LoginPageState extends State<LoginPage> {
+class _LoginPageState extends State<LoginPage> with ChangeNotifier {
+  late bool isLoading = false;
+
   _login(String email, String password) async {
+    setState(() {
+      isLoading = true;
+    });
+
     var data = {
       'email': email,
       'password': password,
@@ -36,7 +42,7 @@ class _LoginPageState extends State<LoginPage> {
 
         AuthManager.setToken(token);
         AuthManager.setUser(await AuthManager.fetchUser());
-        
+
         MessageDialog.showSuccess(context, body['message']);
         Navigator.of(context).pushNamed('main');
       } else {
@@ -44,40 +50,17 @@ class _LoginPageState extends State<LoginPage> {
       }
     } catch (error) {
       MessageDialog.showError(context, "Đã xảy ra lỗi khi đăng nhập.");
+    } finally {
+      setState(() {
+        isLoading = false;
+      });
     }
   }
 
-  // Future<UserCredential?> signInWithGoogle() async {
-  //   try {
-  //     final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
-  //     final GoogleSignInAuthentication googleAuth =
-  //         await googleUser!.authentication;
-  //     final AuthCredential credential = GoogleAuthProvider.credential(
-  //       accessToken: googleAuth.accessToken,
-  //       idToken: googleAuth.idToken,
-  //     );
-  //     final UserCredential authResult =
-  //         await FirebaseAuth.instance.signInWithCredential(credential);
-  //     final User? user = authResult.user;
-  //     return user;
-  //   } catch (e) {
-  //     print("Error signing in with Google: $e");
-  //     return null;
-  //   }
-  // }
+  final googleSignIn = GoogleSignIn();
 
-  // Future<UserCredential?> signInWithFacebook() async {
-  //   final result = await FacebookAuth.instance.login();
-  //   if (result.status == LoginStatus.success) {
-  //     final AuthCredential credential =
-  //         FacebookAuthProvider.credential(result.accessToken!.token);
-  //     final UserCredential authResult =
-  //         await FirebaseAuth.instance.signInWithCredential(credential);
-  //     final User? user = authResult.user;
-  //     return user;
-  //   }
-  //   return null;
-  // }
+  GoogleSignInAccount? _user;
+  GoogleSignInAccount get user => _user!;
 
   @override
   Widget build(BuildContext context) {
@@ -87,10 +70,13 @@ class _LoginPageState extends State<LoginPage> {
       body: SingleChildScrollView(
         child: Container(
           color: Colors.white,
-          width: Config.screenWidth,
-          height: Config.screenHeight,
+          // width: Config.screenWidth,
+          // height: Config.screenHeight,
           child: Padding(
-            padding:EdgeInsets.all(16.0),
+            padding: const EdgeInsets.symmetric(
+              horizontal: 15,
+              vertical: 20,
+            ),
             child: SafeArea(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.start,
@@ -115,7 +101,7 @@ class _LoginPageState extends State<LoginPage> {
                         fontWeight: FontWeight.bold,
                       )),
                   Config.spaceSmall,
-                  LoginForm(onPressed: _login),
+                  LoginForm(onPressed: _login, isLoading: isLoading),
                   Config.spaceSmall,
                   GestureDetector(
                       onTap: () {
@@ -148,25 +134,13 @@ class _LoginPageState extends State<LoginPage> {
                     children: <Widget>[
                       SocialButton(
                         social: 'google',
-                        onPressed: () async {
-                          // User? user = await signInWithGoogle();
-                          // if (user != null) {
-                          //   // User is logged in with Google
-                          // } else {
-                          //   // Handle login failure
-                          // }
+                        onPressed: () {
+                          final provider = Provider.of<GoogleSignInProvider>(
+                              context,
+                              listen: false);
+                          provider.googleLogin(context);
                         },
-                      ),
-                      SocialButton(
-                        social: 'facebook',
-                        onPressed: () async {
-                          // User? user = await signInWithFacebook();
-                          // if (user != null) {
-                          //   // User is logged in with Facebook
-                          // } else {
-                          //   // Handle login failure
-                          // }
-                        },
+                        loadingWidget: CircularProgressIndicator(),
                       ),
                     ],
                   ),

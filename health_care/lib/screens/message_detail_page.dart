@@ -201,10 +201,20 @@ class _MessageDetailState extends State<MessageDetail> {
           child: Row(
             children: [
               CircleAvatar(
-                radius: 20,
-                backgroundImage: NetworkImage(widget.conversation['admin']
-                        ['avatar'] ??
-                    'https://img2.thuthuatphanmem.vn/uploads/2019/01/04/hinh-anh-dep-co-gai-de-thuong_025103410.jpg'),
+                radius: 25,
+                child: ClipOval(
+                  child: Image.network(
+                    widget.conversation['admin']['avatar'] ??
+                        'assets/images/user.jpeg',
+                    width: 55,
+                    height: 55,
+                    fit: BoxFit.cover,
+                    errorBuilder: (context, error, stackTrace) {
+                      return Image.asset('assets/images/user.jpeg',
+                          width: 55, height: 55);
+                    },
+                  ),
+                ),
               ),
               SizedBox(width: 8),
               Text(
@@ -253,11 +263,27 @@ class _MessageDetailState extends State<MessageDetail> {
                           : MainAxisAlignment.start,
                       children: [
                         if (isAdminSend)
+                          // CircleAvatar(
+                          //   radius: 20,
+                          //   backgroundImage: NetworkImage(widget
+                          //           .conversation['admin']['avatar'] ??
+                          //       'https://img2.thuthuatphanmem.vn/uploads/2019/01/04/hinh-anh-dep-co-gai-de-thuong_025103410.jpg'),
+                          // ),
                           CircleAvatar(
                             radius: 20,
-                            backgroundImage: NetworkImage(widget
-                                    .conversation['admin']['avatar'] ??
-                                'https://img2.thuthuatphanmem.vn/uploads/2019/01/04/hinh-anh-dep-co-gai-de-thuong_025103410.jpg'),
+                            child: ClipOval(
+                              child: Image.network(
+                                widget.conversation['admin']['avatar'] ??
+                                    'assets/images/user.jpeg',
+                                width: 55,
+                                height: 55,
+                                fit: BoxFit.cover,
+                                errorBuilder: (context, error, stackTrace) {
+                                  return Image.asset('assets/images/user.jpeg',
+                                      width: 55, height: 55);
+                                },
+                              ),
+                            ),
                           ),
                         Config.gapSmall,
                         Flexible(

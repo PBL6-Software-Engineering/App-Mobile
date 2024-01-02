@@ -1,8 +1,9 @@
 class ApiConstant {
-  static String linkApi = 'https://423b-2405-4802-95c0-1b0f-e92a-f9e0-3a2c-86f9.ngrok-free.app/';
+  static String linkApi = 'https://vanmanh.azurewebsites.net/';
   // static String linkApi = 'http://192.168.28.250:8000/';
 
-  // static String linkApi = 'http://192.168.28.250:8000/';
+  // static String linkApi =
+  //     'https://0cb1-2405-4802-95c0-1b0f-8892-c51a-f77f-f7c5.ngrok-free.app/';
 
   static const String linkApiChat =
       'https://backend-chat-socket-production.up.railway.app/api/v1';
