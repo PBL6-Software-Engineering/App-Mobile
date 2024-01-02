@@ -345,6 +345,7 @@ class _BookingFormState extends State<BookingForm> {
                       width: Config.screenWidth,
                       title: 'TIẾP TỤC ĐẶT LỊCH',
                       disable: false,
+
                       // onPressed: () => _confirmBooking(context),
                       onPressed: () => Navigator.push(
                         context,

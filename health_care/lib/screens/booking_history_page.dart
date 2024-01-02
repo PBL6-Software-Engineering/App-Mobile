@@ -67,8 +67,14 @@ class _BookingHistoryPageState extends State<BookingHistoryPage>
       if (response.statusCode == 200) {
         final responseData = json.decode(response.body);
         final data = responseData['data'];
-        print('data $data');
-        return data is Map<String, dynamic> ? data : {};
+
+        if (data != null && data is Map<String, dynamic>) {
+          print('data $data');
+          return data;
+        } else {
+          print('Error: Invalid data format');
+          return {};
+        }
       } else {
         print(
             'Error fetch booking history - Status Code: ${response.statusCode}');
@@ -125,7 +131,8 @@ class _BookingHistoryPageState extends State<BookingHistoryPage>
               controller: _tabController,
               children: [
                 FutureBuilder<Map<String, dynamic>>(
-                  future: fetchBookingHistory(status: 'upcoming'),
+                  future: fetchBookingHistory(
+                      status: 'upcoming', is_confirm: 'both'),
                   builder: (context, snapshot) {
                     if (snapshot.connectionState == ConnectionState.waiting) {
                       return Center(
@@ -242,8 +249,7 @@ class _BookingHistoryPageState extends State<BookingHistoryPage>
                   },
                 ),
                 FutureBuilder<Map<String, dynamic>>(
-                  future:
-                      fetchBookingHistory(status: 'complete', is_confirm: '0'),
+                  future: fetchBookingHistory(status: '', is_confirm: 'both'),
                   builder: (context, snapshot) {
                     if (snapshot.connectionState == ConnectionState.waiting) {
                       return Center(
@@ -284,7 +290,7 @@ class _BookingHistoryPageState extends State<BookingHistoryPage>
                       // Update the tab text with the count
                       _tabs[2] = Tab(
                         child: Text(
-                          'Đặt chỗ ',
+                          'Tất cả ',
                           style: TextStyle(
                               fontSize: 12.0), // Set the desired font size
                         ),

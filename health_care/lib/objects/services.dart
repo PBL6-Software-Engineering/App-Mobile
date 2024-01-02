@@ -87,7 +87,10 @@ class Service {
     return Service(
       id: json['id_hospital_service'],
       name: json['name'] ?? '',
-      price: json['price'] != null ? NumberFormat.currency(locale: 'vi_VN', symbol: '₫').format(json['price']) : 'Chưa cập nhật',
+      price: json['price'] != null
+          ? NumberFormat.currency(locale: 'vi_VN', symbol: '₫')
+              .format(json['price'])
+          : 'Chưa cập nhật',
       hospital_name: json['name_hospital'] ?? '',
       infor: ServiceInformation.fromJson(json['infor']),
       thumbnail: json['thumbnail_service'] == null
@@ -113,7 +116,8 @@ class ServiceInformation {
 
   factory ServiceInformation.fromJson(Map<String, dynamic> json) {
     return ServiceInformation(
-      location: json['location'] != null ? List<double>.from(json['location']) : [],
+      location:
+          json['location'] != null ? List<double>.from(json['location']) : [],
       aboutService: json['about_service'] ?? '',
       prepareProcess: json['prepare_process'] ?? '',
       serviceDetails: json['service_details'] ?? '',
@@ -139,15 +143,23 @@ class ServiceRating {
     return ServiceRating(
       id: json['id_hospital_service'],
       countRating: json['cout_rating'] ?? 0,
-      numberRating: json['number_rating'] != null ? json['number_rating'].toDouble() : 0.0,
-      countDetails: json['cout_details'] != null ? RatingDetails.fromJson(json['cout_details']) : RatingDetails(
-            oneStar: 0,
-            twoStar: 0,
-            threeStar: 0,
-            fourStar: 0,
-            fiveStar: 0,
-          ) ,
-      ratings: (json['ratings'] == null || json['ratings']['data'] ==[]) ? [] : (json['ratings']['data'] as List).map((e) => RatingItem.fromJson(e)).toList(),
+      numberRating: json['number_rating'] != null
+          ? json['number_rating'].toDouble()
+          : 0.0,
+      countDetails: json['cout_details'] != null
+          ? RatingDetails.fromJson(json['cout_details'])
+          : RatingDetails(
+              oneStar: 0,
+              twoStar: 0,
+              threeStar: 0,
+              fourStar: 0,
+              fiveStar: 0,
+            ),
+      ratings: (json['ratings'] == null || json['ratings']['data'] == [])
+          ? []
+          : (json['ratings']['data'] as List)
+              .map((e) => RatingItem.fromJson(e))
+              .toList(),
     );
   }
 }

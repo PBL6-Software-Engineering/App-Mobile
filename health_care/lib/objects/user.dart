@@ -40,8 +40,8 @@ class UserService {
   }
 
   Future<void> uploadImage(File imageFile, User user) async {
-    var request = http.MultipartRequest('POST',
-        Uri.parse(_url + 'api/infor-user/update'));
+    var request = http.MultipartRequest(
+        'POST', Uri.parse(_url + 'api/infor-user/update'));
 
     final mimeTypedata =
         lookupMimeType(imageFile.path, headerBytes: [0xFF, 0xD8])?.split('/');
@@ -114,8 +114,8 @@ class User {
     final String _url = ApiConstant.linkApi;
     return User(
       id: json['id'],
-      name: json['name'],
-      username: json['username'],
+      name: json['name'] ?? '',
+      username: json['username'] ?? '',
       email: json['email'] ?? 'Chưa cập nhật',
       phone: json['phone'] ?? 'Chưa cập nhật',
       gender: json['gender'] ?? 0,
@@ -124,7 +124,9 @@ class User {
           : (DateFormat('dd/MM/yyyy')
                   .format(DateTime.parse(json['date_of_birth'])))
               .toString(),
-      avatar: json['avatar'] != null ? _url + json['avatar'] : '',
+      avatar: json['avatar'] != null && !json['avatar'].startsWith('https://')
+          ? _url + json['avatar']
+          : json['avatar'] ?? '',
       address: json['address'] ?? 'Chưa cập nhật',
     );
   }
