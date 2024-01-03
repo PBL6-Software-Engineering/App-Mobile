@@ -172,33 +172,30 @@ class _HospitalPageState extends State<HospitalPage>
                           ),
                           Positioned(
                             top: 140,
-                            left: Config.screenWidth!*0.03,
+                            left: Config.screenWidth! * 0.03,
                             child: CircleAvatar(
-                              radius: Config.screenWidth!*0.15,
+                              radius: Config.screenWidth! * 0.15,
                               backgroundImage: NetworkImage(
                                 hospital.avatar,
                               ),
-                              
                             ),
                           ),
                           Positioned(
                             top: 205,
-                            left: Config.screenWidth!*0.4,
+                            left: Config.screenWidth! * 0.4,
                             child: Container(
-                              width: Config.screenWidth!*0.55,
-                            child: Text(
-                              //'sfsadasdasdasdasdasdasdsadhjkshfajksdhasjkdhasjkdhasjkdhaskj',
-                              hospital.name,
-                              style: TextStyle(
-                                color: const Color.fromARGB(255, 6, 5, 5),
-                                fontSize: 22,
-                                fontWeight: FontWeight.bold,
-                              ),
-                              overflow: TextOverflow
-                                  .ellipsis, // Hiển thị dấu "..." nếu text quá dài
-                              maxLines: 2,
-                            )
-                            ),
+                                width: Config.screenWidth! * 0.55,
+                                child: Text(
+                                  hospital.name,
+                                  style: TextStyle(
+                                    color: const Color.fromARGB(255, 6, 5, 5),
+                                    fontSize: 22,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                  overflow: TextOverflow
+                                      .ellipsis, // Hiển thị dấu "..." nếu text quá dài
+                                  maxLines: 2,
+                                )),
                           ),
                         ],
                       )),
@@ -280,7 +277,7 @@ class _HospitalPageState extends State<HospitalPage>
                           children: [
                             TagContainer(tag: "Thông tin bệnh viện"),
                             SizedBox(height: 16),
-                            
+
                             Html(
                               data: hospital.description,
                             )
@@ -302,8 +299,7 @@ class _HospitalPageState extends State<HospitalPage>
                                     ? Container(
                                         padding: EdgeInsets.all(16.0),
                                         height: 360,
-                                        
-                                            child: ListView.builder(
+                                        child: ListView.builder(
                                           scrollDirection: Axis.horizontal,
                                           itemCount: doctors.length,
                                           itemBuilder: (context, index) {
@@ -345,8 +341,7 @@ class _HospitalPageState extends State<HospitalPage>
                                     ? Container(
                                         padding: EdgeInsets.all(16.0),
                                         height: 340,
-                                        
-                                            child: ListView.builder(
+                                        child: ListView.builder(
                                           scrollDirection: Axis.horizontal,
                                           itemCount: services.length,
                                           itemBuilder: (context, index) {
@@ -463,20 +458,21 @@ class _HospitalPageState extends State<HospitalPage>
                                       physics: NeverScrollableScrollPhysics(),
                                       itemBuilder: (context, index) {
                                         return Column(
-                                          crossAxisAlignment: CrossAxisAlignment.start,
-                                          children: [
-                                          Text(
-                                            '• ' + insurances[index].name,
-                                            style: TextStyle(
-                                              fontSize: 16.0,
-                                              fontWeight: FontWeight.bold,
-
-                                            ),
-                                          ),
-                                          Html(
-                                            data: insurances[index].description,
-                                          )
-                                        ]);
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              Text(
+                                                '• ' + insurances[index].name,
+                                                style: TextStyle(
+                                                  fontSize: 16.0,
+                                                  fontWeight: FontWeight.bold,
+                                                ),
+                                              ),
+                                              Html(
+                                                data: insurances[index]
+                                                    .description,
+                                              )
+                                            ]);
                                       },
                                     )
                                   : Center(child: Text('Chưa cập nhật')),
@@ -622,14 +618,13 @@ class _HospitalPageState extends State<HospitalPage>
               ),
             ),
           );
-          print('conversation ${setConversation(admin: hospital, user: user)}');
         },
         child: Icon(
           Icons.message,
+          color: Colors.white,
         ),
-        backgroundColor: Colors.white,
+        backgroundColor: Config.lightBlueColor,
       ),
     );
   }
 }
-

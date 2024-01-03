@@ -23,6 +23,7 @@ class DoctorPage extends StatefulWidget {
 }
 
 class _DoctorPageState extends State<DoctorPage> {
+  final ScrollController _scrollController = ScrollController();
   DoctorService doctorService = DoctorService();
   bool loading = true;
   DoctorDetail doctor = DoctorDetail(
@@ -128,6 +129,7 @@ class _DoctorPageState extends State<DoctorPage> {
               child: CircularProgressIndicator(),
             )
           : SingleChildScrollView(
+              controller: _scrollController,
               child: Column(
                 children: [
                   // Container chứa ảnh và thông tin bác sĩ
@@ -163,7 +165,7 @@ class _DoctorPageState extends State<DoctorPage> {
                               top: 205,
                               left: 150,
                               child: Container(
-                                width: Config.screenWidth!*0.6,
+                                width: Config.screenWidth! * 0.6,
                                 child: Text(
                                   doctor.name,
                                   style: TextStyle(
@@ -643,34 +645,35 @@ class _DoctorPageState extends State<DoctorPage> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
-                        doctor.rating.countRating <= 3 ?
-                        TagContainer(tag: "Đánh gía khách hàng")
-                        :Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            TagContainer(tag: 'Đánh giá khách hàng'),
-                            TextButton(
-                              onPressed: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) => AllRatingPage(
-                                        api:
-                                            'api/infor-doctor/more-rating/${doctor.id.toString()}'),
+                        doctor.rating.countRating <= 3
+                            ? TagContainer(tag: "Đánh gía khách hàng")
+                            : Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  TagContainer(tag: 'Đánh giá khách hàng'),
+                                  TextButton(
+                                    onPressed: () {
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) => AllRatingPage(
+                                              api:
+                                                  'api/infor-doctor/more-rating/${doctor.id.toString()}'),
+                                        ),
+                                      );
+                                    },
+                                    child: Text(
+                                      'Xem thêm >>',
+                                      style: TextStyle(
+                                        fontSize: 16,
+                                        color: Config.blueColor,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
                                   ),
-                                );
-                              },
-                              child: Text(
-                                'Xem thêm >>',
-                                style: TextStyle(
-                                  fontSize: 16,
-                                  color: Config.blueColor,
-                                  fontWeight: FontWeight.bold,
-                                ),
+                                ],
                               ),
-                            ),
-                          ],
-                        ),
                         Row(children: [
                           Row(
                             mainAxisAlignment: MainAxisAlignment.center,
@@ -723,6 +726,24 @@ class _DoctorPageState extends State<DoctorPage> {
                 ],
               ),
             ),
+      floatingActionButton: FloatingActionButton.extended(
+        onPressed: () {
+          _scrollController.animateTo(
+            _scrollController.position.maxScrollExtent,
+            duration: Duration(milliseconds: 500),
+            curve: Curves.easeInOut,
+          );
+        },
+        label: Text(
+          'Đặt lịch ngay!',
+          style: TextStyle(
+            color: Colors.white,
+            fontSize: 16.0,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        backgroundColor: Colors.blue, // Thay đổi màu sắc theo ý muốn
+      ),
     );
   }
 }
