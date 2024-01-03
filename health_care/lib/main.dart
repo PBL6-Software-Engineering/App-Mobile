@@ -92,11 +92,13 @@ class MyApp extends StatelessWidget {
           ),
           initialRoute: '/',
           routes: {
-            //'/': (context) => const AppointmentPage(),
-            '/': (context) => const Welcome(),
-            //  '/': (context) => const HomePage(),
-            //'/': (context) => const LoginPage(),
-            // '/': (context) => const MainLayout(initialPageIndex: 0),
+            '/': (context) {
+              if (AuthManager.getToken() != null) {
+                return const MainLayout(initialPageIndex: 0);
+              } else {
+                return const Welcome();
+              }
+            },
             'main': (context) => const MainLayout(initialPageIndex: 0),
             'login': (context) => const LoginPage(),
             'signup': (context) => const SignUpPage(),
