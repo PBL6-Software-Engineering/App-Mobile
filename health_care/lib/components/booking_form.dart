@@ -35,6 +35,7 @@ class _BookingFormState extends State<BookingForm> {
   List<MapEntry<String, dynamic>> sortedEntries = [];
   List<dynamic> selectedInterval = [];
   bool isLoading = true;
+  bool isInterval = false;
 
   Map<String, String> dayNames = {
     'sunday': 'Chủ Nhật',
@@ -262,7 +263,8 @@ class _BookingFormState extends State<BookingForm> {
                           return InkWell(
                             onTap: () {
                               setState(() {
-                                if (dayData['enable'] == true) {
+                                if (dayData['enable'] == true ||
+                                    dayData['space'] != 0) {
                                   setState(() {
                                     selectedDayData = getDayData(dayKey);
                                   });
@@ -336,6 +338,9 @@ class _BookingFormState extends State<BookingForm> {
                         dayNameData: selectedDayData,
                         onIntervalSelected: (interval) {
                           selectedInterval = interval;
+                          setState(() {
+                            isInterval = true;
+                          });
                         },
                       ),
                     ),
@@ -344,7 +349,7 @@ class _BookingFormState extends State<BookingForm> {
                       height: 50,
                       width: Config.screenWidth,
                       title: 'TIẾP TỤC ĐẶT LỊCH',
-                      disable: false,
+                      disable: !isInterval ? true : false,
 
                       // onPressed: () => _confirmBooking(context),
                       onPressed: () => Navigator.push(
