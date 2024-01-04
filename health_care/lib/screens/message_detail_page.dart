@@ -224,13 +224,13 @@ class _MessageDetailState extends State<MessageDetail> {
                   fontSize: 16,
                 ),
               ),
-              Spacer(),
-              IconButton(
-                icon: Icon(Icons.info),
-                onPressed: () {
-                  // Handle action when tapping the info icon
-                },
-              ),
+              // Spacer(),
+              // IconButton(
+              //   icon: Icon(Icons.info),
+              //   onPressed: () {
+              //     // Handle action when tapping the info icon
+              //   },
+              // ),
             ],
           ),
         ),

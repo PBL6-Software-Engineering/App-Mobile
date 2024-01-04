@@ -22,6 +22,8 @@ class ServicePage extends StatefulWidget {
 }
 
 class _ServicePageState extends State<ServicePage> {
+  final ScrollController _scrollController = ScrollController();
+
   ServiceService serviceService = ServiceService();
   ServiceRating rating = ServiceRating(
     id: 0,
@@ -69,7 +71,7 @@ class _ServicePageState extends State<ServicePage> {
           ),
           backgroundColor: Color(0xFF59D4E9)),
       body: SingleChildScrollView(
-        //padding: EdgeInsets.all(16.0),
+        controller: _scrollController,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
@@ -287,6 +289,24 @@ class _ServicePageState extends State<ServicePage> {
             Footer()
           ],
         ),
+      ),
+      floatingActionButton: FloatingActionButton.extended(
+        onPressed: () {
+          _scrollController.animateTo(
+            _scrollController.position.maxScrollExtent,
+            duration: Duration(milliseconds: 500),
+            curve: Curves.easeInOut,
+          );
+        },
+        label: Text(
+          'Đặt lịch ngay!',
+          style: TextStyle(
+            color: Colors.white,
+            fontSize: 16.0,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        backgroundColor: Colors.blue, // Thay đổi màu sắc theo ý muốn
       ),
     );
   }

@@ -36,18 +36,18 @@ class _LoginPageState extends State<LoginPage> with ChangeNotifier {
       var res = await HttpProvider().postData(data, 'api/user/login');
       var body = json.decode(res.body);
 
-      // if (res.statusCode == 200) {
-      var responseData = body['data'];
-      var token = responseData['access_token'];
+      if (res.statusCode == 200) {
+        var responseData = body['data'];
+        var token = responseData['access_token'];
 
-      AuthManager.setToken(token);
-      AuthManager.setUser(await AuthManager.fetchUser());
+        AuthManager.setToken(token);
+        AuthManager.setUser(await AuthManager.fetchUser());
 
-      MessageDialog.showSuccess(context, body['message']);
-      Navigator.of(context).pushNamed('main');
-      // } else {
-      //   MessageDialog.showError(context, body['message']);
-      // }
+        MessageDialog.showSuccess(context, body['message']);
+        Navigator.of(context).pushNamed('main');
+      } else {
+        MessageDialog.showError(context, body['message']);
+      }
     } catch (error) {
       MessageDialog.showError(context, "Đã xảy ra lỗi khi đăng nhập.");
     } finally {
